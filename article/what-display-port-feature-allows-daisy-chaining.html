@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What DisplayPort Feature Allows Daisy Chaining? - dp</title>
+    <meta name="description" content="DisplayPort 1.2 introduced Multi-Stream Transport (MST), a feature that allows a source computer to drive multiple independent displays through a single video output. Prior to this standard, each display required a dedicated video cable running directly">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/what-display-port-feature-allows-daisy-chaining">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What DisplayPort Feature Allows Daisy Chaining? - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/what-display-port-feature-allows-daisy-chaining" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="DisplayPort 1.2 introduced Multi-Stream Transport (MST), a feature that allows a source computer to drive multiple independent displays through a single video output. Prior to this standard, each display required a dedicated video cable running directly" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="what-displayport-feature-allows-daisy-chaining">What DisplayPort
+Feature Allows Daisy Chaining?</h1>
+<p>DisplayPort 1.2 introduced Multi-Stream Transport (MST), a feature
+that allows a source computer to drive multiple independent displays
+through a single video output. Prior to this standard, each display
+required a dedicated video cable running directly from the graphics card
+or system port. With MST, video signals are routed in a daisy-chain
+arrangement from monitor to monitor or distributed via an external MST
+hub, simplifying desk cabling and expanding multi-monitor
+flexibility.</p>
+<h3 id="understanding-multi-stream-transport-mst">Understanding
+Multi-Stream Transport (MST)</h3>
+<p>Multi-Stream Transport operates by multiplexing several distinct,
+uncompressed video and audio streams into a single data stream over
+DisplayPort connections. The initial standard, Single-Stream Transport
+(SST), could carry only one video stream per port. If an SST signal was
+duplicated across a chain or splitter, every attached screen showed an
+identical cloned picture.</p>
+<p>MST changes this by assigning unique stream routing tags within the
+connection packets. When the primary monitor receives the data stream,
+its internal DisplayPort controller extracts its assigned video feed and
+passes the remaining data downstream to the next connected display. The
+operating system recognizes each screen as an independent desktop
+endpoint, enabling full desktop extension across displays.</p>
+<h3 id="hardware-requirements-for-daisy-chaining">Hardware Requirements
+for Daisy Chaining</h3>
+<p>Setting up a DisplayPort daisy chain requires specific hardware
+capabilities at each point in the chain:</p>
+<ul>
+<li><strong>Source System:</strong> The host computer must have a GPU
+and video output (DisplayPort 1.2 or later, or USB-C with DisplayPort
+Alternate Mode) that explicitly supports MST.</li>
+<li><strong>Intermediate Monitors:</strong> Any monitor serving as a
+middle link must feature both a DisplayPort In port and a dedicated
+DisplayPort Out (downstream) port. MST must also be toggled on within
+the monitor's on-screen display (OSD) settings if not enabled by
+default.</li>
+<li><strong>End-of-Chain Monitor:</strong> The final display in the
+chain only requires a standard DisplayPort input (or a compatible
+adapter such as DP-to-HDMI) since it does not need to forward video data
+further downstream.</li>
+</ul>
+<h3 id="bandwidth-allocation-and-limitations">Bandwidth Allocation and
+Limitations</h3>
+<p>The maximum number of daisy-chained screens depends directly on total
+link bandwidth and display resolution. DisplayPort 1.2 provides an
+effective video data rate of up to 17.28 Gbps (via High Bit Rate 2, or
+HBR2 mode). Because all connected monitors share this single pipeline,
+running multiple high-resolution displays requires balancing refresh
+rates and pixel density. For example, a standard DisplayPort 1.2 link
+comfortably supports dual 1440p displays at 60 Hz or up to four 1080p
+monitors at 60 Hz, but driving multiple 4K panels requires the higher
+bandwidth of newer standards like DisplayPort 1.4 or 2.1.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

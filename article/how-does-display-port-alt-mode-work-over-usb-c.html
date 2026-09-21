@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Does DisplayPort Alt Mode Work Over USB-C? - dp</title>
+    <meta name="description" content="DisplayPort Alternate Mode (DP Alt Mode) allows a standard USB Type-C connector to transmit native DisplayPort audio and video signals alongside regular USB data and power. By repurposing the physical high-speed differential lanes inside a USB-C cable th">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/how-does-display-port-alt-mode-work-over-usb-c">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Does DisplayPort Alt Mode Work Over USB-C? - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/how-does-display-port-alt-mode-work-over-usb-c" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="DisplayPort Alternate Mode (DP Alt Mode) allows a standard USB Type-C connector to transmit native DisplayPort audio and video signals alongside regular USB data and power. By repurposing the physical high-speed differential lanes inside a USB-C cable th" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-does-displayport-alt-mode-work-over-usb-c">How Does
+DisplayPort Alt Mode Work Over USB-C?</h1>
+<p>DisplayPort Alternate Mode (DP Alt Mode) allows a standard USB Type-C
+connector to transmit native DisplayPort audio and video signals
+alongside regular USB data and power. By repurposing the physical
+high-speed differential lanes inside a USB-C cable through dynamic
+hardware negotiation, DP Alt Mode enables direct video output from host
+devices like laptops, tablets, and phones to external monitors without
+requiring proprietary drivers or active signal conversion.</p>
+<h2 id="the-architecture-of-usb-type-c">The Architecture of USB
+Type-C</h2>
+<p>A standard USB Type-C connector contains 24 pins arranged
+symmetrically, designed to support reversible plug orientation and
+multiple communication protocols simultaneously. Central to video
+transmission are the four high-speed differential pairs, designated as
+TX1/RX1, TX2/RX2, and their inverted counterparts. Under standard
+operation, these lanes carry high-speed USB data (such as USB 3.2 Gen
+1/Gen 2 or USB4).</p>
+<p>In addition to the high-speed lanes, the USB-C interface
+includes:</p>
+<ul>
+<li><strong>Configuration Channel (CC) Pins:</strong> Two pins (CC1 and
+CC2) responsible for detecting plug orientation, negotiating power
+roles, and establishing alternate protocol modes.</li>
+<li><strong>Sideband Use (SBU) Pins:</strong> Auxiliary low-speed signal
+paths (SBU1 and SBU2) utilized for specific secondary features depending
+on the active operational mode.</li>
+<li><strong>Legacy USB 2.0 Pins:</strong> Dedicated differential data
+lines (D+ and D-) running down the center of the connector to ensure
+backward compatibility independent of high-speed lane
+configuration.</li>
+<li><strong>Power and Ground Pins:</strong> VBUS and GND connections
+supporting USB Power Delivery (USB PD) up to 240W.</li>
+</ul>
+<h2 id="the-handshake-and-mode-negotiation">The Handshake and Mode
+Negotiation</h2>
+<p>DP Alt Mode cannot function until the host and the display agree on
+configuration parameters. This initialization process occurs strictly
+over the CC line using USB Power Delivery structured vendor-defined
+messages (VDMs).</p>
+<ol type="1">
+<li><strong>Cable and Sink Detection:</strong> When a cable connects a
+host to a peripheral, the host measures voltage drops across the CC pins
+to establish cable orientation and identify whether the sink device
+supports alternate modes.</li>
+<li><strong>Discover Identity:</strong> The host sends a VDM query
+requesting the connected device's Standard/Vendor ID (SVID). The Video
+Electronics Standards Association (VESA) holds a specific SVID (0xFF01)
+dedicated to DisplayPort.</li>
+<li><strong>Discover Modes:</strong> If the display responds with the
+VESA SVID, the host issues a command to list all supported DisplayPort
+capabilities, including supported pin assignments, signaling rates (such
+as HBR2, HBR3, or UHBR10), and bidirectional audio/video support.</li>
+<li><strong>Enter Mode:</strong> The host transmits an "Enter Mode" VDM
+command. Both physical interfaces switch their internal multiplexers
+(muxes) to remap the designated USB data paths to the DisplayPort
+controller.</li>
+</ol>
+<h2 id="physical-lane-mapping-and-pin-assignments">Physical Lane Mapping
+and Pin Assignments</h2>
+<p>Once DP Alt Mode activates, the physical high-speed transmission
+lines are reassigned according to predefined VESA pin assignments. The
+two primary configurations encountered in consumer hardware are 4-lane
+mode and 2-lane mode.</p>
+<h3 id="4-lane-configuration-pin-assignment-ec">4-Lane Configuration
+(Pin Assignment E/C)</h3>
+<p>All four high-speed differential pairs in the USB-C cable are
+assigned to DisplayPort main link traffic. This configuration maximizes
+available video bandwidth, enabling high-resolution and
+high-refresh-rate displays (such as 4K at 120Hz or 8K at 60Hz with
+Display Stream Compression). Because all high-speed lanes are dedicated
+to video, standard data transfers drop down to legacy USB 2.0 speeds
+using the dedicated D+/D- lines. The SBU1 and SBU2 pins are remapped to
+handle the DisplayPort Auxiliary (AUX) channel, which carries display
+configuration data, EDID handshakes, and HDCP encryption handshakes.</p>
+<h3 id="2-lane-configuration-pin-assignment-d">2-Lane Configuration (Pin
+Assignment D)</h3>
+<p>To balance video output with fast data transfer, two high-speed
+differential pairs are mapped to DisplayPort, while the remaining two
+differential pairs retain standard USB 3.x or USB4 functionality. This
+setup is common in multi-port USB-C docks and hubs, allowing an external
+4K monitor to run at 60Hz while simultaneously operating gigabit
+Ethernet ports, external solid-state drives, and USB webcams at high
+data transfer rates.</p>
+<h2 id="native-signaling-vs-active-conversion">Native Signaling vs.
+Active Conversion</h2>
+<p>A key technical advantage of DP Alt Mode is that the video signal
+remains pure DisplayPort throughout the cable. Unlike software-based
+display protocols (such as DisplayLink), which compress desktop frames
+at the CPU/OS level and stream them as packets over standard USB
+endpoints, DP Alt Mode routes native pixel clocks directly from the host
+GPU's display engine to the physical pins.</p>
+<p>Because the transmission is electrically native DisplayPort:</p>
+<ul>
+<li><strong>Zero Latency Overhead:</strong> The display pipeline incurs
+no frame-compression lag or system memory overhead.</li>
+<li><strong>Direct GPU Feature Support:</strong> Technologies such as
+variable refresh rate (Adaptive-Sync/G-Sync Compatible), HDR metadata,
+High-Bandwidth Digital Content Protection (HDCP), and multi-channel
+uncompressed audio pass through unhindered.</li>
+<li><strong>Multi-Stream Transport (MST):</strong> A single USB-C port
+operating in DP Alt Mode can daisy-chain multiple independent monitors
+or route them through an MST hub, provided the host operating system
+supports the feature.</li>
+<li><strong>Passive Conversion to HDMI:</strong> When connecting a USB-C
+port to an HDMI monitor using a simple Type-C to HDMI cable, a level
+shifter or active converter chip inside the cable assembly translates
+the DisplayPort signaling into HDMI TDMS/FRL signals at the cable
+end.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

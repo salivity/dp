@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Does DisplayPort Over USB-C Work on Hardware? - dp</title>
+    <meta name="description" content="Transmitting a DisplayPort video signal across a USB Type-C connector requires a coordinated hardware pipeline rather than a simple mechanical adapter. While the standard Type-C receptacle carries high-speed differential data lines, repurposing those lin">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/how-does-display-port-over-usb-c-work-on-hardware">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Does DisplayPort Over USB-C Work on Hardware? - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/how-does-display-port-over-usb-c-work-on-hardware" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Transmitting a DisplayPort video signal across a USB Type-C connector requires a coordinated hardware pipeline rather than a simple mechanical adapter. While the standard Type-C receptacle carries high-speed differential data lines, repurposing those lin" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-does-displayport-over-usb-c-work-on-hardware">How Does
+DisplayPort Over USB-C Work on Hardware?</h1>
+<p>Transmitting a DisplayPort video signal across a USB Type-C connector
+requires a coordinated hardware pipeline rather than a simple mechanical
+adapter. While the standard Type-C receptacle carries high-speed
+differential data lines, repurposing those lines for native audio and
+video output demands specific silicon: a DisplayPort-capable graphics
+processor, high-speed physical multiplexers, and dedicated Type-C Power
+Delivery controllers. Understanding the exact hardware architecture
+implemented on motherboards and graphics cards clarifies why video
+output is never guaranteed on every USB-C port.</p>
+<h3 id="the-display-source-gpu-and-displayport-phy">The Display Source:
+GPU and DisplayPort PHY</h3>
+<p>Every DisplayPort signal must originate from a graphics processor
+capable of generating the standard’s native packet structure. On a
+dedicated GPU, this comes directly from the display controller block
+inside the main processor silicon. On a motherboard, this source is
+either an Integrated GPU (iGPU) embedded in the CPU or an external
+DisplayPort input port (often seen on motherboards designed for
+Thunderbolt expansion cards). The graphics core routes the uncompressed
+video data through physical layer transmitters (PHYs), which generate
+the high-speed differential signals formatted for DisplayPort Main Link
+lanes.</p>
+<h3 id="usb-type-c-and-power-delivery-pd-controller">USB Type-C and
+Power Delivery (PD) Controller</h3>
+<p>The USB-C connector relies on two Configuration Channel (CC) pins
+(CC1 and CC2) to negotiate orientation, cable capability, power roles,
+and operational modes. A physical USB Type-C / Power Delivery controller
+chip (such as controllers manufactured by Texas Instruments, Realtek, or
+Intel) is wired directly to these pins. When a display cable is plugged
+in, the PD controller executes a hardware-level handshake using
+Structured Vendor Defined Messages (VDMs). It identifies that the
+connected sink (monitor or dock) supports the VESA DisplayPort Alternate
+Mode standard and commands the rest of the board's routing logic to
+reconfigure the physical pins.</p>
+<h3 id="high-speed-multiplexer-and-crossbar-switch">High-Speed
+Multiplexer and Crossbar Switch</h3>
+<p>A standard USB-C port possesses four high-speed differential pairs
+(TX1/RX1 and TX2/RX2). To enable DisplayPort Alternate Mode, the system
+must be capable of dynamically reassigning these physical pins. A
+high-speed bi-directional multiplexer or crossbar switch sits between
+the host controllers and the USB-C receptacle.</p>
+<p>Depending on the operational mode negotiated by the PD controller,
+the multiplexer dynamically routes signals in one of two
+configurations:</p>
+<ul>
+<li><strong>4-Lane DisplayPort Mode:</strong> All four high-speed pairs
+are disconnected from the USB 3/4 data controller and connected directly
+to the GPU's DisplayPort PHY lanes, delivering maximum video bandwidth
+while restricting USB data to legacy USB 2.0 speeds via the dedicated
+D+/D- pins.</li>
+<li><strong>2-Lane DisplayPort + 2-Lane USB 3.x Mode:</strong> Two
+differential pairs carry native DisplayPort signals, while the remaining
+two pairs maintain a 5 Gbps, 10 Gbps, or 20 Gbps SuperSpeed USB data
+link, enabling simultaneous video and peripheral connectivity on
+multi-function docks.</li>
+</ul>
+<p>The multiplexer also handles cable orientation flipping. Because the
+USB-C plug is reversible, the crossbar switch automatically routes the
+GPU lanes to the proper physical pins regardless of which way the cable
+is inserted.</p>
+<h3 id="signal-conditioning-redrivers-and-retimers">Signal Conditioning:
+ReDrivers and ReTimers</h3>
+<p>Routing high-speed DisplayPort signals across dense motherboard PCB
+traces introduces trace attenuation, jitter, and signal integrity loss.
+To preserve eye diagrams over extended PCB runs between the GPU/chipset
+and the I/O shield, hardware designers integrate active signal
+conditioners:</p>
+<ul>
+<li><strong>ReDrivers:</strong> Analog amplifiers that compensate for
+channel attenuation across higher frequencies.</li>
+<li><strong>ReTimers:</strong> Digital components containing clock and
+data recovery (CDR) circuits that eliminate accumulated jitter before
+retransmitting the raw bitstream to the receptacle.</li>
+</ul>
+<h3 id="auxiliary-channel-aux-and-hot-plug-detect-hpd-routing">Auxiliary
+Channel (AUX) and Hot Plug Detect (HPD) Routing</h3>
+<p>DisplayPort requires sideband communication for Extended Display
+Identification Data (EDID), link training, and HDCP handshake via an
+Auxiliary (AUX) channel. In USB-C, the native DP AUX channel is
+multiplexed onto the connector's Sideband Use (SBU1 and SBU2) pins. The
+hardware must include logic to switch these lines to the GPU's AUX
+buffer. Additionally, the Hot Plug Detect (HPD) line—used by monitors to
+signal their connection status—is translated into digital PD controller
+messaging or routed via designated GPIO pins back to the graphics
+processor to initiate the display link.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

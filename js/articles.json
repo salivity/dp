@@ -1,0 +1,128 @@
+[
+  [
+    21,
+    "How Does DisplayPort Transmit Audio and Video?",
+    "DisplayPort carries high-definition digital audio alongside uncompressed video streams across a single cable by packaging both data types into micro-packets. Rather than dedicating separate physical pins to sound, the interface uses time-division multipl",
+    false
+  ],
+  [
+    20,
+    "How Does DisplayPort Over USB-C Work on Hardware?",
+    "Transmitting a DisplayPort video signal across a USB Type-C connector requires a coordinated hardware pipeline rather than a simple mechanical adapter. While the standard Type-C receptacle carries high-speed differential data lines, repurposing those lin",
+    false
+  ],
+  [
+    19,
+    "How Does DisplayPort Alt Mode Work Over USB-C?",
+    "DisplayPort Alternate Mode (DP Alt Mode) allows a standard USB Type-C connector to transmit native DisplayPort audio and video signals alongside regular USB data and power. By repurposing the physical high-speed differential lanes inside a USB-C cable th",
+    false
+  ],
+  [
+    18,
+    "What Is the Difference Between UHBR10, UHBR13.5, and UHBR20?",
+    "DisplayPort 2.1 introduces three distinct Ultra-High Bit Rate (UHBR) transmission tiers: UHBR10, UHBR13.5, and UHBR20. The primary differences among them lie in per-lane signaling speeds, overall raw bandwidth, effective payload capacity, and the cable c",
+    false
+  ],
+  [
+    17,
+    "How Do DP 2.0 and 2.1 Cable Certifications Differ?",
+    "When VESA introduced DisplayPort 2.1 to supersede DisplayPort 2.0, the primary focus was not increasing maximum bandwidth, but overhauling physical layer specifications and tightening cable certification criteria. While DisplayPort 2.0 established the Ul",
+    false
+  ],
+  [
+    16,
+    "What Is the Maximum Bandwidth of DisplayPort 2.0?",
+    "The DisplayPort 2.0 standard dramatically expands display connection capabilities, delivering a theoretical maximum link bandwidth of 80 Gbps across four lanes. With the introduction of the more efficient 128b/132b channel encoding, it achieves a maximum",
+    false
+  ],
+  [
+    15,
+    "How Does Display Stream Compression Work on DisplayPort?",
+    "Display Stream Compression (DSC) enables high-resolution, high-refresh-rate video over DisplayPort cables without perceptible degradation in image quality by combining low-latency, line-based intra-frame coding with advanced prediction models. Unlike sta",
+    false
+  ],
+  [
+    14,
+    "What Compression Tech Is in DisplayPort 1.4?",
+    "Display Stream Compression (DSC) is the standard compression technology formally integrated into the DisplayPort 1.4 specification by VESA. Published in March 2016, DisplayPort 1.4 incorporated DSC version 1.2 to drastically increase effective display ba",
+    false
+  ],
+  [
+    13,
+    "What Bandwidth Increase Came With DisplayPort 1.3?",
+    "The introduction of DisplayPort 1.3 marked a major milestone in display interface technology by significantly expanding data transfer capacity. By increasing the raw maximum link rate from 21.6 Gbps to 32.4 Gbps, DisplayPort 1.3 delivered an overall band",
+    false
+  ],
+  [
+    12,
+    "What Is the Difference Between SST and MST in DisplayPort?",
+    "DisplayPort connections handle multi-monitor setups using two primary transport modes: Single-Stream Transport (SST) and Multi-Stream Transport (MST). The fundamental difference between them lies in how video data travels across a single cable: SST trans",
+    false
+  ],
+  [
+    11,
+    "How Does DisplayPort Multi-Stream Transport Work?",
+    "DisplayPort Multi-Stream Transport (MST) enables a single video output to drive multiple independent displays through daisy-chaining or hub-based routing. Introduced in the DisplayPort 1.2 standard, MST replaces traditional point-to-point display links w",
+    false
+  ],
+  [
+    10,
+    "What DisplayPort Feature Allows Daisy Chaining?",
+    "DisplayPort 1.2 introduced Multi-Stream Transport (MST), a feature that allows a source computer to drive multiple independent displays through a single video output. Prior to this standard, each display required a dedicated video cable running directly",
+    false
+  ],
+  [
+    9,
+    "How Did DisplayPort 1.1 Support Legacy Video Formats?",
+    "When the Video Electronics Standards Association (VESA) ratified DisplayPort 1.1 in 2007, it solved a critical adoption hurdle by introducing Dual-Mode DisplayPort (DP++), enabling seamless compatibility with legacy digital video formats such as HDMI and",
+    false
+  ],
+  [
+    8,
+    "What Is the Maximum Raw Bandwidth of DisplayPort 1.0?",
+    "DisplayPort 1.0 delivers a maximum raw bandwidth of 10.8 Gbps across a standard four-lane connection. Introduced by VESA in May 2006 to succeed legacy display standards like VGA and DVI, the specification established the foundation for modern digital dis",
+    false
+  ],
+  [
+    7,
+    "How Does DisplayPort Hot-Plug Detection Work?",
+    "Hot-plug detection (HPD) in DisplayPort is a hardware and protocol mechanism that notifies a source device when a display is connected, disconnected, or requesting attention. When a monitor attaches, a dedicated physical line shifts from low to high volt",
+    false
+  ],
+  [
+    6,
+    "What Does DisplayPort Auxiliary Channel Do?",
+    "The DisplayPort Auxiliary Channel (AUX CH) is a dedicated, bidirectional communication link that enables essential handshaking, configuration, and device management between a video source and a display. While high-speed main link lanes carry bulk audiovi",
+    false
+  ],
+  [
+    5,
+    "How Does DisplayPort Use Packetized Data Transmission?",
+    "This article explores how DisplayPort departed from legacy display standards by replacing continuous raster-scan signalling with packetized data transmission. While traditional interfaces like VGA, DVI, and HDMI stream uncompressed pixel data synchronize",
+    false
+  ],
+  [
+    4,
+    "What Are the Differences Between DisplayPort and VGA?",
+    "The transition from Video Graphics Array (VGA) to DisplayPort represents a fundamental shift in how visual data travels from a host system to a display. While VGA relies on continuous analog voltage levels vulnerable to attenuation and noise, DisplayPort",
+    false
+  ],
+  [
+    3,
+    "How Does DisplayPort Pinout Differ From HDMI?",
+    "Standard full-size DisplayPort and HDMI connectors both feature 19 or 20 operational physical pins designed to transmit high-definition digital audio and video, yet their internal architectures reflect entirely different transmission standards. While HDM",
+    false
+  ],
+  [
+    2,
+    "When Was DisplayPort First Released?",
+    "The first official DisplayPort standard, version 1.0, was released to the public in May 2006 by the Video Electronics Standards Association (VESA). Designed as a royalty-free, high-performance replacement for older visual display interfaces like VGA and",
+    false
+  ],
+  [
+    1,
+    "What Is DisplayPort and Who Developed It?",
+    "DisplayPort is a high-performance digital display interface designed to transmit video, audio, and other data between a source device—such as a computer—and a display device like a monitor. Originally developed in 2006 by the Video Electronics Standa",
+    false
+  ]
+]

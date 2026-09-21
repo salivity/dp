@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Compression Tech Is in DisplayPort 1.4? - dp</title>
+    <meta name="description" content="Display Stream Compression (DSC) is the standard compression technology formally integrated into the DisplayPort 1.4 specification by VESA. Published in March 2016, DisplayPort 1.4 incorporated DSC version 1.2 to drastically increase effective display ba">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/what-compression-tech-is-in-display-port-1-4">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What Compression Tech Is in DisplayPort 1.4? - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/what-compression-tech-is-in-display-port-1-4" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Display Stream Compression (DSC) is the standard compression technology formally integrated into the DisplayPort 1.4 specification by VESA. Published in March 2016, DisplayPort 1.4 incorporated DSC version 1.2 to drastically increase effective display ba" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="what-compression-tech-is-in-displayport-14">What Compression
+Tech Is in DisplayPort 1.4?</h1>
+<p>Display Stream Compression (DSC) is the standard compression
+technology formally integrated into the DisplayPort 1.4 specification by
+VESA. Published in March 2016, DisplayPort 1.4 incorporated DSC version
+1.2 to drastically increase effective display bandwidth without changing
+physical connector hardware. This article examines what DSC 1.2 is, how
+it works, and why its inclusion was essential for enabling
+high-resolution, high-refresh-rate displays and HDR content across
+modern consumer electronics.</p>
+<h2 id="understanding-display-stream-compression-dsc">Understanding
+Display Stream Compression (DSC)</h2>
+<p>Display Stream Compression was developed by the Video Electronics
+Standards Association (VESA) in collaboration with industry hardware
+manufacturers. Unlike traditional lossy compression formats designed for
+storage or streaming—such as H.264 or HEVC, which introduce noticeable
+latency and visual artifacts—DSC was engineered specifically for
+real-time display pipelines.</p>
+<p>DSC functions as a visually lossless, low-latency compression
+algorithm. Operating on a line-by-line raster basis rather than encoding
+entire video frames, it adds virtually zero processing delay (often less
+than a single scan line of latency). This near-zero latency makes it
+suitable for gaming, interactive computing, and professional media
+workflows where input lag must be avoided.</p>
+<h2 id="key-capabilities-of-dsc-12-in-displayport-14">Key Capabilities
+of DSC 1.2 in DisplayPort 1.4</h2>
+<p>The integration of DSC 1.2 expanded the utility of DisplayPort 1.4
+far beyond its raw physical transmission rate:</p>
+<ul>
+<li><strong>3:1 Compression Ratio:</strong> DSC delivers a typical
+compression ratio of up to 3:1, effectively tripling the data throughput
+possible over standard DisplayPort lanes.</li>
+<li><strong>Higher Resolutions and Refresh Rates:</strong> DisplayPort
+1.4 offers a maximum raw physical bandwidth of 32.4 Gbps (with a net
+data rate of 25.92 Gbps using 8b/10b encoding). With DSC enabled, the
+standard supports 8K UHD (7680 × 4320) at 60 Hz and 4K UHD (3840 × 2160)
+at up to 120 Hz with uncompromised color fidelity.</li>
+<li><strong>Support for High Dynamic Range (HDR):</strong> DSC
+accommodates deep color depths, including 10-bit and 12-bit color
+spaces, alongside high dynamic range metadata without downsampling color
+resolution.</li>
+<li><strong>Preserving Chroma Subsampling:</strong> Without compression,
+high-resolution displays frequently require 4:2:2 or 4:2:0 chroma
+subsampling to fit within bandwidth constraints, degrading text clarity.
+DSC allows full 4:4:4 RGB color to be preserved over existing
+cables.</li>
+</ul>
+<h2 id="impact-on-multi-stream-transport-and-usb-c">Impact on
+Multi-Stream Transport and USB-C</h2>
+<p>Beyond single high-end monitors, integrating DSC into DisplayPort 1.4
+provided critical flexibility for display connectivity ecosystems.
+Through Multi-Stream Transport (MST), a single DisplayPort output can
+daisy-chain multiple 4K displays from a single port without exhausting
+total link bandwidth.</p>
+<p>Furthermore, DSC proved vital for DisplayPort Alternate Mode over USB
+Type-C connections. Because USB-C often allocates only two of its four
+high-speed lanes to video when simultaneous USB 3.0 or 10 Gbps data
+transfer is required, DSC enables full 4K and 5K video outputs over the
+remaining two lanes without degrading refresh rates or image
+quality.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

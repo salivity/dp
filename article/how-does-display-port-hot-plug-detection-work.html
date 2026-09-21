@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Does DisplayPort Hot-Plug Detection Work? - dp</title>
+    <meta name="description" content="Hot-plug detection (HPD) in DisplayPort is a hardware and protocol mechanism that notifies a source device when a display is connected, disconnected, or requesting attention. When a monitor attaches, a dedicated physical line shifts from low to high volt">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/how-does-display-port-hot-plug-detection-work">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Does DisplayPort Hot-Plug Detection Work? - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/how-does-display-port-hot-plug-detection-work" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Hot-plug detection (HPD) in DisplayPort is a hardware and protocol mechanism that notifies a source device when a display is connected, disconnected, or requesting attention. When a monitor attaches, a dedicated physical line shifts from low to high volt" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-does-displayport-hot-plug-detection-work">How Does
+DisplayPort Hot-Plug Detection Work?</h1>
+<p>Hot-plug detection (HPD) in DisplayPort is a hardware and protocol
+mechanism that notifies a source device when a display is connected,
+disconnected, or requesting attention. When a monitor attaches, a
+dedicated physical line shifts from low to high voltage, triggering the
+source to initiate bidirectional communication over the Auxiliary (AUX)
+channel to read display capabilities, negotiate link bandwidth, and
+establish video transmission without requiring a system reboot.</p>
+<h2 id="the-physical-hpd-signal-line">The Physical HPD Signal Line</h2>
+<p>The foundation of DisplayPort HPD is Pin 18 on a full-size
+DisplayPort connector (or Pin 19 on standard Mini DisplayPort). Under
+normal disconnected conditions, this line is pulled low to ground via a
+pull-down resistor on the source device.</p>
+<p>When a sink device (the monitor) is connected and powered on, it
+pulls the HPD line high to approximately 3.3V. To prevent false triggers
+caused by mechanical contact bounce during insertion, the source
+hardware monitors this line and requires the signal to remain steadily
+high for a debounce period—typically at least 100 milliseconds—before
+acknowledging that a stable connection exists.</p>
+<h2 id="device-identification-via-the-aux-channel">Device Identification
+via the AUX Channel</h2>
+<p>Once the source registers a stable high HPD signal, it activates its
+Auxiliary (AUX) Channel. The AUX channel is a dedicated, half-duplex,
+bidirectional differential pair that operates independently of the
+high-speed main video lanes.</p>
+<p>Through the AUX channel, the source performs two vital queries:</p>
+<ol type="1">
+<li><strong>Reading the EDID (Extended Display Identification
+Data):</strong> The source retrieves the monitor's supported screen
+resolutions, color formats, refresh rates, and audio
+configurations.</li>
+<li><strong>Reading the DPCD (DisplayPort Configuration Data):</strong>
+The DPCD resides directly in the sink's receiver chip. It reports the
+sink’s architectural limits, including supported link rates (such as
+RBR, HBR, HBR2, HBR3, or UHBR), lane counts (1, 2, or 4 lanes), and
+specific DisplayPort feature capabilities.</li>
+</ol>
+<h2 id="link-training-and-stream-transmission">Link Training and Stream
+Transmission</h2>
+<p>After collecting the sink's operational parameters, the source
+configures the high-speed main link through a handshake known as Link
+Training.</p>
+<p>During link training, the source sends test patterns across the
+designated main data lanes. The sink evaluates the signal integrity,
+clock recovery, and channel equalization, reporting status back to the
+source via the DPCD registers over the AUX channel. The source
+dynamically adjusts its drive current, pre-emphasis, and voltage swing
+until all lanes achieve stable synchronization. Once link training
+succeeds, the source begins transmitting active audio and video data
+streams.</p>
+<h2 id="handling-interrupts-and-disconnections">Handling Interrupts and
+Disconnections</h2>
+<p>The HPD line remains asserted as long as the monitor stays plugged in
+and operational, but it also serves as an interrupt line (HPD_IRQ). If
+the sink experiences a status change—such as losing link lock, changing
+HDCP status, or detecting downstream branch devices in a Multi-Stream
+Transport (MST) daisy chain—it briefly pulses the HPD line low
+(typically between 0.5 ms and 1.0 ms). The source interprets this short
+drop not as an unplug event, but as an interrupt request, prompting it
+to immediately read the DPCD status registers and resolve the issue.</p>
+<p>When the cable is physically unplugged or the display loses power,
+the HPD line drops low continuously for longer than 2 ms. The source
+recognizes this prolonged low state as a full disconnection, halts main
+link transmission, powers down the transmitter circuitry, and updates
+the operating system's display configuration.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>
