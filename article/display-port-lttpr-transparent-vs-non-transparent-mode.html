@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisplayPort LTTPR: Transparent vs Non-Transparent Mode - dp</title>
+    <meta name="description" content="This article explains the difference between transparent mode and non-transparent mode in DisplayPort Link Training Tunable PHY Repeaters (LTTPRs). Introduced in the DisplayPort 1.4a and 2.0/2.1 standards, LTTPRs regenerate high-speed video signals over l">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/display-port-lttpr-transparent-vs-non-transparent-mode">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DisplayPort LTTPR: Transparent vs Non-Transparent Mode - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/display-port-lttpr-transparent-vs-non-transparent-mode" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explains the difference between transparent mode and non-transparent mode in DisplayPort Link Training Tunable PHY Repeaters (LTTPRs). Introduced in the DisplayPort 1.4a and 2.0/2.1 standards, LTTPRs regenerate high-speed video signals over l" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1
+id="displayport-lttpr-transparent-vs-non-transparent-mode">DisplayPort
+LTTPR: Transparent vs Non-Transparent Mode</h1>
+<p>This article explains the difference between transparent mode and
+non-transparent mode in DisplayPort Link Training Tunable PHY Repeaters
+(LTTPRs). Introduced in the DisplayPort 1.4a and 2.0/2.1 standards,
+LTTPRs regenerate high-speed video signals over longer physical paths.
+The fundamental difference between the two operational modes lies in
+whether the repeater actively communicates with the video source during
+the link training process (non-transparent mode) or acts as an invisible
+signal conditioner that passes training communications straight through
+to the display (transparent mode).</p>
+<h3 id="understanding-lttpr">Understanding LTTPR</h3>
+<p>An LTTPR is an active component, such as a retimer or redriver,
+placed between a DisplayPort Source (like a GPU) and a DisplayPort Sink
+(like a monitor). At elevated data rates such as HBR3 and UHBR
+(Ultra-High Bit Rate), trace attenuation and jitter degrade signal
+integrity. LTTPRs mitigate these losses, operating in either Transparent
+Mode or Non-Transparent Mode.</p>
+<h3 id="transparent-mode">Transparent Mode</h3>
+<p>In Transparent Mode, the LTTPR is invisible to both the Source and
+the Sink:</p>
+<ul>
+<li><strong>Link Training Process:</strong> The Source and the Sink
+execute standard link training directly with one another over the AUX
+(Auxiliary) channel. The LTTPR does not intercept, modify, or respond to
+AUX transactions.</li>
+<li><strong>Repeater Function:</strong> The LTTPR operates primarily as
+an analog amplifier or snooping retimer. It monitors the link training
+transactions passively to infer data rates, or relies on automatic gain
+control and fixed equalization settings to clean up and retransmit the
+high-speed data lanes.</li>
+<li><strong>Visibility:</strong> The DPCD (DisplayPort Configuration
+Data) registers of the repeater are not exposed to the Source. The
+system topology appears as a single point-to-point connection between
+the Source and Sink.</li>
+<li><strong>Limitations:</strong> Because the Source cannot adjust the
+repeater's internal equalizer or drive levels directly, transparent mode
+may yield suboptimal link margins on complex channels with severe signal
+degradation.</li>
+</ul>
+<h3 id="non-transparent-mode">Non-Transparent Mode</h3>
+<p>In Non-Transparent Mode, the LTTPR explicitly reveals itself to the
+Source and takes an active role in link negotiation:</p>
+<ul>
+<li><strong>Link Training Process:</strong> Link training is divided
+into discrete physical segments. Instead of a single end-to-end training
+sequence, training occurs hop-by-hop. For example, in a connection with
+one repeater, the Source trains the link between itself and the LTTPR,
+while the LTTPR concurrently or sequentially trains the link to the
+Sink.</li>
+<li><strong>DPCD Visibility:</strong> The LTTPR exposes a standardized
+set of DPCD addresses (from <code>0xF0000</code> to <code>0xF00FF</code>
+for up to eight repeaters). The Source detects the presence and count of
+repeaters along the transmission path.</li>
+<li><strong>PHY Optimization:</strong> The Source reads the receiver
+capabilities of the LTTPR and actively adjusts voltage swing,
+pre-emphasis, and equalization parameters for that specific segment.
+This ensures optimal signal integrity even at maximum UHBR
+bandwidths.</li>
+<li><strong>Latency and Overhead:</strong> Non-transparent mode
+introduces slightly more AUX channel communication during link
+establishment, but it provides deterministic and reliable link
+stability.</li>
+</ul>
+<h3 id="key-differences-at-a-glance">Key Differences at a Glance</h3>
+<ul>
+<li><strong>Awareness:</strong> Non-transparent mode allows the Source
+to detect and configure each repeater; transparent mode hides the
+repeater entirely.</li>
+<li><strong>Training Architecture:</strong> Non-transparent mode uses
+segment-by-segment (hop-by-hop) link training; transparent mode relies
+on end-to-end link training between the Source and Sink.</li>
+<li><strong>PHY Control:</strong> Non-transparent mode enables
+software-driven, precise tuning of the repeater's physical layer
+parameters via DPCD; transparent mode depends on automatic or fixed
+hardware settings within the repeater.</li>
+<li><strong>High-Speed Reliability:</strong> Non-transparent mode is the
+preferred and often necessary implementation for DisplayPort 2.1 UHBR
+speeds, where strict channel parameters require exact equalization
+tuning across every segment of the link.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

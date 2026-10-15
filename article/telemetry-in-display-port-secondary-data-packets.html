@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telemetry in DisplayPort Secondary Data Packets - dp</title>
+    <meta name="description" content="DisplayPort Secondary Data Packets (SDPs) can technically carry time-sensitive sensor data and telemetry by utilizing blanking intervals within the video stream. By leveraging Vendor-Specific Secondary Data Packets, hardware architects can interleave cust">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/telemetry-in-display-port-secondary-data-packets">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Telemetry in DisplayPort Secondary Data Packets - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/telemetry-in-display-port-secondary-data-packets" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="DisplayPort Secondary Data Packets (SDPs) can technically carry time-sensitive sensor data and telemetry by utilizing blanking intervals within the video stream. By leveraging Vendor-Specific Secondary Data Packets, hardware architects can interleave cust" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="telemetry-in-displayport-secondary-data-packets">Telemetry in
+DisplayPort Secondary Data Packets</h1>
+<p>DisplayPort Secondary Data Packets (SDPs) can technically carry
+time-sensitive sensor data and telemetry by utilizing blanking intervals
+within the video stream. By leveraging Vendor-Specific Secondary Data
+Packets, hardware architects can interleave custom payloads alongside
+video and audio data. This approach offers deterministic,
+microsecond-level latency synchronized directly with the visual
+pipeline, making it viable for specialized applications like head
+tracking in virtual reality, robotics, and medical displays, provided
+that both the source and sink are configured to encode and parse custom
+packet types.</p>
+<h3 id="how-displayport-handles-secondary-data-packets">How DisplayPort
+Handles Secondary Data Packets</h3>
+<p>DisplayPort organizes its Main Link transmission into
+time-multiplexed framing that carries primary video stream components
+and secondary data. Secondary Data Packets are inserted during the
+horizontal blanking (HBlank) and vertical blanking (VBlank) intervals,
+where no active visual pixel data is being drawn.</p>
+<p>Standard DisplayPort specifications allocate these packets primarily
+for:</p>
+<ul>
+<li>Multi-channel digital audio</li>
+<li>High Dynamic Range (HDR) metadata (Dynamic Range and Mastering
+InfoFrames)</li>
+<li>Audio InfoFrames and Consumer Electronics Control (CEC) data</li>
+<li>Display synchronization and Adaptive-Sync descriptors</li>
+</ul>
+<p>Because the protocol format provides standard headers for
+Vendor-Specific InfoFrames (VSIF) and generic secondary packet types,
+designers have an established mechanism to insert arbitrary binary
+payloads into these blanking intervals.</p>
+<h3 id="feasibility-for-time-sensitive-telemetry">Feasibility for
+Time-Sensitive Telemetry</h3>
+<p>Using SDPs for telemetry is feasible and provides specific advantages
+for applications requiring tight correlation with visual frames.</p>
+<h4 id="deterministic-latency-and-clock-synchronization">Deterministic
+Latency and Clock Synchronization</h4>
+<p>Unlike asynchronous sideband channels (such as USB, I2C, or UART),
+SDP transmission is tied directly to the Main Link symbol clock and
+video frame timing. When sensor data is packaged into an HBlank packet,
+it reaches the display sink in fixed microsecond intervals corresponding
+to the line rate. This enables sensor fusion architectures where IMU
+(Inertial Measurement Unit) tracking data, environmental sensors, or
+camera telemetry must align with exact video scan lines or frames
+without the jitter introduced by standard operating system network or
+serial stacks.</p>
+<h4 id="high-bandwidth-potential">High Bandwidth Potential</h4>
+<p>While standard InfoFrames are small (typically dozens of bytes per
+packet), blanking overhead on high-resolution, high-refresh-rate links
+offers significant throughput:</p>
+<ul>
+<li><strong>HBlank frequency:</strong> In a standard 4K 60Hz or 120Hz
+display, thousands of horizontal lines occur each second, presenting
+thousands of packet transmission opportunities per second.</li>
+<li><strong>VBlank capacity:</strong> Longer vertical intervals allow
+bursting of larger sensor telemetry buffers or historical logging arrays
+before the next active frame begins.</li>
+</ul>
+<h3 id="architectural-constraints-and-limitations">Architectural
+Constraints and Limitations</h3>
+<p>Deploying telemetry within SDPs involves distinct physical and
+protocol limitations:</p>
+<ul>
+<li><strong>Bandwidth Overhead Limits:</strong> Secondary data cannot
+encroach upon the active pixel payload. If the display interface
+operates near the maximum line rate of the link (e.g., UHBR rates in
+DisplayPort 2.1), blanking periods may be deliberately reduced (such as
+via Coordinated Video Timings-Reduced Blanking / CVT-RB) to fit higher
+frame rates, leaving fewer symbols available for custom packets.</li>
+<li><strong>Unidirectional Transport:</strong> The Main Link is
+fundamentally unidirectional from source (GPU/transmitter) to sink
+(display/receiver). Sending sensor data <em>from</em> the display back
+to the host via SDPs is impossible. Reverse telemetry must travel over
+the DisplayPort AUX channel, which is significantly slower (1 Mbps
+native or 720 Mbps in DP 2.1 USB-C alternate mode) and subject to
+transaction arbitration.</li>
+<li><strong>Hardware Incompatibility with Standard Displays:</strong>
+Commercial off-the-shelf monitors discard unhandled or non-standard SDPs
+silently in their display scalar ASICs. Consequently, interleaved
+telemetry requires custom sink silicon, such as an FPGA, a dedicated
+video processing ASIC, or an embedded system equipped with a compatible
+DisplayPort receiver Core.</li>
+<li><strong>Source-Side Driver Access:</strong> Standard graphics
+drivers restrict raw SDP construction to privileged operations,
+prioritizing standard display protocols. Injecting real-time telemetry
+typically requires custom GPU firmware, an embedded display engine, or
+an intermediate FPGA processing board to multiplex the sensor payload
+onto the physical link.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

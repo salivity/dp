@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisplayPort Lanes with USB 3.2 on USB-C - dp</title>
+    <meta name="description" content="When running DisplayPort video and USB 3.2 data concurrently over a single USB Type-C cable, DisplayPort utilizes exactly two high-speed lanes. This article explains how the USB Type-C connector allocates its physical high-speed data paths to balance vide">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/display-port-lanes-with-usb-3-2-on-usb-c">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DisplayPort Lanes with USB 3.2 on USB-C - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/display-port-lanes-with-usb-3-2-on-usb-c" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="When running DisplayPort video and USB 3.2 data concurrently over a single USB Type-C cable, DisplayPort utilizes exactly two high-speed lanes. This article explains how the USB Type-C connector allocates its physical high-speed data paths to balance vide" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="displayport-lanes-with-usb-32-on-usb-c">DisplayPort Lanes with
+USB 3.2 on USB-C</h1>
+<p>When running DisplayPort video and USB 3.2 data concurrently over a
+single USB Type-C cable, DisplayPort utilizes exactly two high-speed
+lanes. This article explains how the USB Type-C connector allocates its
+physical high-speed data paths to balance video transmission with
+SuperSpeed data transfers, what this means for display resolution, and
+how this mode compares to dedicated video-only configurations.</p>
+<h3 id="physical-lane-allocation-on-usb-type-c">Physical Lane Allocation
+on USB Type-C</h3>
+<p>A standard USB Type-C connector contains four high-speed differential
+pairs (lanes) capable of carrying high-bandwidth signals, designated as
+TX1/RX1 and TX2/RX2. In standard operation, these lanes are dynamically
+configured through DisplayPort Alternate Mode (DP Alt Mode) negotiation
+between the host and the peripheral.</p>
+<p>When a dock, monitor, or adapter requires simultaneous USB 3.2 Gen 1
+(5 Gbps) or USB 3.2 Gen 2 (10 Gbps) data connectivity alongside video
+output, the connector splits these four high-speed lanes evenly:</p>
+<ul>
+<li><strong>2 High-Speed Lanes for DisplayPort:</strong> Carries the
+video and audio stream.</li>
+<li><strong>2 High-Speed Lanes for USB 3.2:</strong> Allocates one
+transmit pair (TX) and one receive pair (RX) for full-duplex SuperSpeed
+data.</li>
+</ul>
+<h3 id="impact-on-display-bandwidth-and-resolution">Impact on Display
+Bandwidth and Resolution</h3>
+<p>Using two lanes cuts the raw video bandwidth in half compared to a
+native four-lane DisplayPort connection. However, modern DisplayPort
+standards still achieve high resolutions over two lanes depending on the
+link rate:</p>
+<ul>
+<li><strong>DisplayPort 1.2 (HBR2):</strong> Two lanes deliver a maximum
+data rate of 8.64 Gbps, which supports uncompressed 1080p at 144Hz or 4K
+at 30Hz.</li>
+<li><strong>DisplayPort 1.4 (HBR3):</strong> Two lanes deliver up to
+12.96 Gbps. Using Display Stream Compression (DSC), this configuration
+easily drives 4K displays at 60Hz with HDR.</li>
+<li><strong>DisplayPort 2.1 (UHBR10/13.5):</strong> Two lanes can
+provide upwards of 20 to 26 Gbps, enabling uncompressed 4K at 60Hz and
+higher refresh rates even while sharing the cable with USB 3.2.</li>
+</ul>
+<h3 id="comparison-with-4-lane-displayport-mode">Comparison with 4-Lane
+DisplayPort Mode</h3>
+<p>If an external display requires the full bandwidth of four
+DisplayPort lanes, the USB-C interface reallocates all four high-speed
+pairs entirely to video. In this scenario, simultaneous USB 3.2 data is
+disabled, and any attached peripherals (such as keyboard and mouse ports
+on a monitor) fall back to USB 2.0 speeds. This fallback works because
+USB 2.0 operates over dedicated, separate D+ and D- pins within the USB
+Type-C connector, completely independent of the four high-speed
+lanes.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

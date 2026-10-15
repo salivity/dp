@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SerDes PLL Implementation for DisplayPort Clocks - dp</title>
+    <meta name="description" content="Serializer/Deserializer (SerDes) architectures in DisplayPort systems rely on specialized Phase-Locked Loops (PLLs) to generate, synchronize, and recover high-speed serial clocks. Because DisplayPort embeds the clock directly into the transmitted data str">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/ser-des-pll-implementation-for-display-port-clocks">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="SerDes PLL Implementation for DisplayPort Clocks - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/ser-des-pll-implementation-for-display-port-clocks" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Serializer/Deserializer (SerDes) architectures in DisplayPort systems rely on specialized Phase-Locked Loops (PLLs) to generate, synchronize, and recover high-speed serial clocks. Because DisplayPort embeds the clock directly into the transmitted data str" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="serdes-pll-implementation-for-displayport-clocks">SerDes PLL
+Implementation for DisplayPort Clocks</h1>
+<p>Serializer/Deserializer (SerDes) architectures in DisplayPort systems
+rely on specialized Phase-Locked Loops (PLLs) to generate, synchronize,
+and recover high-speed serial clocks. Because DisplayPort embeds the
+clock directly into the transmitted data stream rather than using a
+dedicated clock line, SerDes designs deploy transmit (TX) PLLs to
+synthesize multi-gigahertz clocks from a low-frequency reference, and
+receive (RX) Clock and Data Recovery (CDR) PLLs to reconstruct the clock
+at the sink. This implementation must simultaneously accommodate
+variable link rates, handle down-spread spectrum clocking for
+electromagnetic interference (EMI) reduction, and maintain strict jitter
+budgets required by modern standards from RBR up to UHBR20.</p>
+<h3 id="transmitter-tx-pll-architecture">Transmitter (TX) PLL
+Architecture</h3>
+<p>The TX SerDes uses a PLL to multiply a low-frequency reference clock
+(typically 27 MHz, 100 MHz, or 135 MHz) up to the target bit rate's
+fundamental frequency.</p>
+<ol type="1">
+<li><strong>VCO Topologies:</strong> DisplayPort implementations
+typically choose between Ring Oscillators and LC Tank Voltage-Controlled
+Oscillators (LC-VCOs). Ring oscillators offer a compact silicon
+footprint and wide tuning ranges, making them suitable for lower
+DisplayPort speeds (RBR, HBR). High Bit Rate 2 (HBR2), HBR3, and Ultra
+High Bit Rate (UHBR) modes generally mandate LC-VCOs due to their
+superior phase noise performance and lower intrinsic jitter, which are
+necessary to meet strict eye-diagram masks at speeds up to 20 Gbps per
+lane.</li>
+<li><strong>Frequency Synthesis and Dividers:</strong> A programmable
+feedback divider network scales the VCO output. Modern designs employ
+Fractional-N PLL architectures with delta-sigma (<span
+class="math inline">\(\Delta\Sigma\)</span>) modulators to achieve fine
+frequency resolution, allowing the SerDes to toggle seamlessly between
+standard link rates (1.62, 2.7, 5.4, 8.1, 10, 13.5, and 20 Gbps) using a
+single reference oscillator. Post-VCO dividers generate multi-phase
+clocks (e.g., quadrature 0°, 90°, 180°, 270°) used to drive half-rate or
+quarter-rate serializer topologies.</li>
+</ol>
+<h3 id="spread-spectrum-clocking-ssc-support">Spread-Spectrum Clocking
+(SSC) Support</h3>
+<p>DisplayPort mandates the use of down-spread spectrum clocking
+(typically 0% to -0.5% modulation at a 30 kHz to 33 kHz rate) to reduce
+peak EMI emissions.</p>
+<p>TX PLLs implement this modulation directly in the clock generation
+stage. Rather than modulating the input reference clock externally,
+modern SerDes TX PLLs inject digital modulation profiles directly into
+the feedback divider using a <span
+class="math inline">\(\Delta\Sigma\)</span> fractional controller. The
+loop bandwidth of the TX PLL must be designed wide enough to track this
+30–33 kHz modulation profile accurately without distorting the
+modulation shape or introducing excessive phase jitter.</p>
+<h3 id="receiver-rx-clock-and-data-recovery-cdr">Receiver (RX) Clock and
+Data Recovery (CDR)</h3>
+<p>At the sink device, the RX SerDes implements a PLL-based CDR system
+to extract the timing information directly from the transitions of the
+incoming 8b/10b (DP 1.4) or 128b/132b (DP 2.0/2.1) encoded data.</p>
+<ol type="1">
+<li><strong>Dual-Loop CDR Architecture:</strong> DisplayPort RX
+architectures frequently use a dual-loop topology consisting of a
+frequency acquisition loop and a phase acquisition loop. The frequency
+loop coarse-tunes the internal oscillator to match the nominal standard
+link rate, while the phase loop uses a Phase Detector (such as an
+Alexander or Hogge phase detector) to align the sampling clock phase to
+the center of the received data eye.</li>
+<li><strong>Phase Interpolator (PI) Based CDR:</strong> To save area and
+power in multi-lane configurations (up to 4 lanes per DisplayPort
+interface), many modern SerDes implementations share a single
+centralized PLL that feeds high-speed clock phases to all lanes. Each
+lane features an independent Phase Interpolator (PI) driven by a digital
+loop filter. The PI continuously shifts the phase of the central clock
+to track lane-specific skew, high-frequency jitter, and the common SSC
+profile.</li>
+</ol>
+<h3 id="jitter-filtering-and-loop-bandwidth-requirements">Jitter
+Filtering and Loop Bandwidth Requirements</h3>
+<p>DisplayPort compliance standards define strict jitter transfer and
+jitter tolerance masks:</p>
+<ul>
+<li><strong>TX PLL Jitter Transfer:</strong> The TX PLL loop filter acts
+as a low-pass filter to reference clock phase noise while attenuating
+high-frequency noise generated by internal components. The loop
+bandwidth is tuned high enough to track the required SSC profile but low
+enough to reject high-frequency reference clock jitter.</li>
+<li><strong>RX CDR Jitter Tolerance:</strong> The RX CDR PLL acts as a
+high-pass filter to input jitter. It must possess a sufficiently wide
+tracking bandwidth (typically in the megahertz range) to track and
+absorb low-frequency jitter, baseline wander, and the 30–33 kHz SSC
+profile without misinterpreting data bits. High-frequency jitter that
+falls outside the CDR tracking bandwidth is absorbed by the timing
+margin of the receiver's equalization circuitry (CTLE and DFE).</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

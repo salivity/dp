@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisplayPort Adaptive-Sync Minimum Refresh Rate - dp</title>
+    <meta name="description" content="DisplayPort Adaptive-Sync establishes a dynamic refresh rate window where the monitor synchronizes with the GPU&#39;s frame output. The minimum refresh rate threshold supported by most Adaptive-Sync displays before Low Framerate Compensation (LFC) activates i">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/display-port-adaptive-sync-minimum-refresh-rate">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DisplayPort Adaptive-Sync Minimum Refresh Rate - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/display-port-adaptive-sync-minimum-refresh-rate" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="DisplayPort Adaptive-Sync establishes a dynamic refresh rate window where the monitor synchronizes with the GPU&#39;s frame output. The minimum refresh rate threshold supported by most Adaptive-Sync displays before Low Framerate Compensation (LFC) activates i" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="displayport-adaptive-sync-minimum-refresh-rate">DisplayPort
+Adaptive-Sync Minimum Refresh Rate</h1>
+<p>DisplayPort Adaptive-Sync establishes a dynamic refresh rate window
+where the monitor synchronizes with the GPU's frame output. The minimum
+refresh rate threshold supported by most Adaptive-Sync displays before
+Low Framerate Compensation (LFC) activates is typically <strong>48
+Hz</strong>, with some panels bottoming out at <strong>40 Hz</strong> or
+occasionally <strong>30 Hz</strong>. When the frame rate drops below
+this hardware-defined lower limit, native 1:1 frame synchronization
+ends, and LFC engages to maintain tear-free, smooth gameplay.</p>
+<h3 id="the-standard-adaptive-sync-operating-window">The Standard
+Adaptive-Sync Operating Window</h3>
+<p>Every variable refresh rate (VRR) monitor has a physical operating
+range. Common panels feature ranges such as 48 Hz to 144 Hz, 48 Hz to
+165 Hz, or 40 Hz to 240 Hz. The lower boundary represents the slowest
+rate at which the panel's internal scaler and liquid crystals can
+refresh without causing visible artifacts, such as brightness
+flickering.</p>
+<p>Because standard display hardware struggles to refresh smoothly at
+extremely low frequencies, 48 Hz serves as the prevailing baseline
+across mainstream monitors. On higher-tier displays featuring advanced
+scalar hardware, this threshold can lower to 40 Hz or 30 Hz, but 48 Hz
+remains the industry standard lower boundary for DisplayPort-certified
+displays.</p>
+<h3 id="how-lfc-activates-below-the-threshold">How LFC Activates Below
+the Threshold</h3>
+<p>When your GPU delivers frame rates that match or exceed the minimum
+threshold, Adaptive-Sync refreshes the panel once per frame. Once the
+frame rate drops below that baseline (e.g., dipping to 35 FPS on a
+48–144 Hz monitor), native synchronization becomes impossible.</p>
+<p>At this point, Low Framerate Compensation automatically
+activates:</p>
+<ol type="1">
+<li><strong>Frame Duplication:</strong> The graphics driver instructs
+the monitor to display each generated frame multiple times.</li>
+<li><strong>Frequency Multiplication:</strong> If a game runs at 30 FPS
+on a 48 Hz minimum display, LFC doubles the frames to display at 60 Hz
+(30 FPS × 2). If the game drops to 20 FPS, it may triple the output to
+60 Hz (20 FPS × 3).</li>
+<li><strong>VRR Maintenance:</strong> By keeping the effective refresh
+rate within the supported operating window (e.g., 60 Hz falls inside
+48–144 Hz), the display prevents the severe stuttering and screen
+tearing associated with traditional V-Sync.</li>
+</ol>
+<h3 id="requirements-for-lfc-support">Requirements for LFC Support</h3>
+<p>LFC is not universal across all Adaptive-Sync monitors. For LFC to
+function properly, the display's maximum refresh rate must typically be
+at least double (2x), and ideally 2.4 times, the minimum refresh
+rate.</p>
+<ul>
+<li><strong>LFC Capable:</strong> A 48 Hz to 144 Hz display has a 3:1
+ratio, easily satisfying the requirement for smooth frame
+multiplication.</li>
+<li><strong>Non-LFC Capable:</strong> A narrow-range display running
+from 48 Hz to 75 Hz lacks the bandwidth to double lower frame rates
+without exceeding its 75 Hz ceiling, meaning LFC cannot engage and the
+display must fall back to standard V-Sync behavior or introduce tearing
+below 48 Hz.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

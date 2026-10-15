@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Much Latency Does DisplayPort DSC Add? - dp</title>
+    <meta name="description" content="Display Stream Compression (DSC) introduces virtually imperceptible latency into a DisplayPort video pipeline, adding only a fraction of a millisecond to the total signal path. Developed by VESA as a visually lossless, low-complexity standard, DSC utilize">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/how-much-latency-does-display-port-dsc-add">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Much Latency Does DisplayPort DSC Add? - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/how-much-latency-does-display-port-dsc-add" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Display Stream Compression (DSC) introduces virtually imperceptible latency into a DisplayPort video pipeline, adding only a fraction of a millisecond to the total signal path. Developed by VESA as a visually lossless, low-complexity standard, DSC utilize" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-much-latency-does-displayport-dsc-add">How Much Latency Does
+DisplayPort DSC Add?</h1>
+<p>Display Stream Compression (DSC) introduces virtually imperceptible
+latency into a DisplayPort video pipeline, adding only a fraction of a
+millisecond to the total signal path. Developed by VESA as a visually
+lossless, low-complexity standard, DSC utilizes real-time, line-based
+processing rather than full-frame buffering. As a result, the combined
+hardware compression and decompression cycle introduces a delay measured
+strictly in microseconds, making it practically non-existent for
+everyday computing, competitive gaming, and professional
+applications.</p>
+<h3 id="the-latency-numbers">The Latency Numbers</h3>
+<p>In a hardware-implemented DisplayPort pipeline, the total end-to-end
+latency added by the DSC compression (encoder on the GPU) and
+decompression (decoder in the display scaler) cycle is typically
+<strong>under 10 to 50 microseconds (0.01 to 0.05
+milliseconds)</strong>.</p>
+<p>To put this into perspective:</p>
+<ul>
+<li>At 60 Hz, one frame takes <strong>16.67 ms</strong>.</li>
+<li>At 144 Hz, one frame takes <strong>6.94 ms</strong>.</li>
+<li>At 240 Hz, one frame takes <strong>4.17 ms</strong>.</li>
+</ul>
+<p>A delay of 0.05 ms represents less than 1% of a single frame at 144
+Hz, which is well below the threshold of human perception and
+significantly lower than typical display panel response times or pixel
+transition times.</p>
+<h3 id="why-dsc-latency-is-so-low">Why DSC Latency Is So Low</h3>
+<p>Traditional video compression algorithms (such as H.264, H.265, or
+AV1) achieve high compression ratios by buffering multiple entire frames
+to analyze temporal changes over time. This frame buffering introduces
+tens of milliseconds of latency.</p>
+<p>In contrast, VESA DSC is designed specifically for display interfaces
+and operates strictly as a intra-frame, <strong>line-based
+codec</strong>:</p>
+<ul>
+<li><strong>Scan-Line Buffering:</strong> Hardware DSC encoders and
+decoders buffer only a few horizontal scan lines of pixels at a time
+(often fewer than three to four lines) to determine predictive color
+differences and entropy.</li>
+<li><strong>Stream-Through Architecture:</strong> Compression occurs
+on-the-fly as the GPU’s display engine rasterizes the image, and
+decompression occurs simultaneously inside the monitor's timing
+controller (TCON) as the pixel data arrives.</li>
+</ul>
+<p>Because the display does not need to wait for an entire frame to
+arrive before decoding begins, the cycle achieves true real-time
+throughput.</p>
+<h3 id="impact-on-gaming-and-real-time-systems">Impact on Gaming and
+Real-Time Systems</h3>
+<p>Because hardware DSC operates at sub-millisecond speeds, it does not
+introduce any detectable input lag. Competitive esports players and
+professional colorists can run high-resolution, high-refresh-rate
+configurations—such as 4K at 144 Hz or 240 Hz over DisplayPort 1.4 or
+2.1—with DSC enabled without compromising latency or visual integrity
+compared to an uncompressed native stream.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

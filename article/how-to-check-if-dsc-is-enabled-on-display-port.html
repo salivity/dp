@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Check if DSC Is Enabled on DisplayPort - dp</title>
+    <meta name="description" content="Display Stream Compression (DSC) is a visually lossless compression standard that allows high resolutions and refresh rates—such as 4K at 144Hz or 8K at 60Hz—to operate within standard DisplayPort bandwidth limits. Determining whether your graphics card i">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/how-to-check-if-dsc-is-enabled-on-display-port">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Check if DSC Is Enabled on DisplayPort - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/how-to-check-if-dsc-is-enabled-on-display-port" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Display Stream Compression (DSC) is a visually lossless compression standard that allows high resolutions and refresh rates—such as 4K at 144Hz or 8K at 60Hz—to operate within standard DisplayPort bandwidth limits. Determining whether your graphics card i" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-to-check-if-dsc-is-enabled-on-displayport">How to Check if
+DSC Is Enabled on DisplayPort</h1>
+<p>Display Stream Compression (DSC) is a visually lossless compression
+standard that allows high resolutions and refresh rates—such as 4K at
+144Hz or 8K at 60Hz—to operate within standard DisplayPort bandwidth
+limits. Determining whether your graphics card is actively utilizing DSC
+requires inspecting specific software diagnostics, checking hardware
+behaviors, or verifying display bandwidth calculations. This guide
+details the most direct methods to verify whether DSC is actively
+running on your system.</p>
+<h3 id="1-check-the-monitors-on-screen-display-osd">1. Check the
+Monitor’s On-Screen Display (OSD)</h3>
+<p>The most direct hardware-level confirmation often comes from the
+monitor itself. Many high-refresh-rate gaming monitors indicate the
+current input status directly in their firmware menus.</p>
+<ol type="1">
+<li>Open your monitor's built-in OSD menu using the physical buttons or
+joystick on the display.</li>
+<li>Navigate to the <strong>Information</strong>,
+<strong>Status</strong>, or <strong>System</strong> section.</li>
+<li>Look for a field labeled <strong>DSC</strong>,
+<strong>Compression</strong>, or <strong>DisplayPort Mode</strong>.</li>
+<li>Displays from manufacturers such as ASUS, LG, and Samsung frequently
+state "DSC: ON" or display a dedicated DSC icon next to the active
+resolution and refresh rate.</li>
+</ol>
+<h3 id="2-check-amd-radeon-software">2. Check AMD Radeon Software</h3>
+<p>AMD provides direct reporting of DSC status within its driver
+interface.</p>
+<ol type="1">
+<li>Right-click your desktop and open <strong>AMD Software: Adrenalin
+Edition</strong>.</li>
+<li>Click the <strong>Settings</strong> (gear) icon in the top right and
+select the <strong>Display</strong> tab.</li>
+<li>If multiple displays are connected, select the target monitor.</li>
+<li>Expand the <strong>Display Specs</strong> or
+<strong>Hardware</strong> dropdown.</li>
+<li>Locate the <strong>DSC Status</strong> line, which will explicitly
+state <strong>Enabled</strong> or <strong>Disabled</strong>.</li>
+</ol>
+<h3 id="3-check-nvidia-gpus-via-dsrdldsr-availability">3. Check NVIDIA
+GPUs via DSR/DLDSR Availability</h3>
+<p>NVIDIA does not currently include an explicit "DSC: Active" readout
+in the standard NVIDIA Control Panel. However, you can confirm DSC
+status through driver feature limitations:</p>
+<ul>
+<li><strong>The DSR/DLDSR Indicator:</strong> On modern NVIDIA
+architectures (Turing, Ampere, and Ada Lovelace), enabling DSC
+automatically disables Dynamic Super Resolution (DSR) and Deep Learning
+Dynamic Super Resolution (DLDSR).</li>
+<li>Open <strong>NVIDIA Control Panel</strong> &gt; <strong>Manage 3D
+Settings</strong>.</li>
+<li>Look at the <strong>DSR - Factors</strong> option. If DSC is
+actively in use, this option will be greyed out or completely missing
+from the list. If DSR/DLDSR is selectable, DSC is not active on that
+display.</li>
+</ul>
+<h3 id="4-calculate-displayport-bandwidth-requirements">4. Calculate
+DisplayPort Bandwidth Requirements</h3>
+<p>Because DisplayPort bandwidth capacities are mathematically fixed,
+achieving certain signal formats is physically impossible without DSC.
+You can confirm DSC is active if your display exceeds the maximum
+uncompressed data rate of your DisplayPort version:</p>
+<ul>
+<li><strong>DisplayPort 1.4 Maximum Uncompressed Limit:</strong>
+Approximately 25.92 Gbps of data bandwidth. This caps native
+uncompressed RGB 8-bit output at 4K (3840x2160) at 120Hz, or 4K 10-bit
+(HDR) at 98Hz.</li>
+<li><strong>The Verification Rule:</strong> If your monitor is connected
+via DisplayPort 1.4 and you are running <strong>4K at 144Hz (or
+higher)</strong> with <strong>RGB / 4:4:4 color format</strong> and
+<strong>10-bit color depth</strong>, DSC is guaranteed to be active.
+Without DSC, the driver would be forced to drop the refresh rate or
+reduce chroma subsampling to 4:2:2 or 4:2:0.</li>
+</ul>
+<p>To check your current output format:</p>
+<ul>
+<li>On Windows, navigate to <strong>Settings</strong> &gt;
+<strong>System</strong> &gt; <strong>Display</strong> &gt;
+<strong>Advanced display</strong>.</li>
+<li>Verify that your resolution, refresh rate, and <strong>Bit
+depth</strong> (e.g., 10-bit) meet or exceed the DisplayPort 1.4
+uncompressed bandwidth threshold.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

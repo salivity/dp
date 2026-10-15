@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Role of FEC in DisplayPort 1.4 Transmissions - dp</title>
+    <meta name="description" content="Forward Error Correction (FEC) is a critical data-integrity protocol introduced in the DisplayPort 1.4 specification to ensure reliable, high-bandwidth audiovisual transmission. Operating at the physical and link layers, FEC detects and corrects data tran">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/role-of-fec-in-display-port-1-4-transmissions">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Role of FEC in DisplayPort 1.4 Transmissions - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/role-of-fec-in-display-port-1-4-transmissions" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Forward Error Correction (FEC) is a critical data-integrity protocol introduced in the DisplayPort 1.4 specification to ensure reliable, high-bandwidth audiovisual transmission. Operating at the physical and link layers, FEC detects and corrects data tran" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="role-of-fec-in-displayport-14-transmissions">Role of FEC in
+DisplayPort 1.4 Transmissions</h1>
+<p>Forward Error Correction (FEC) is a critical data-integrity protocol
+introduced in the DisplayPort 1.4 specification to ensure reliable,
+high-bandwidth audiovisual transmission. Operating at the physical and
+link layers, FEC detects and corrects data transmission errors in real
+time without requiring packet retransmission. This overview explores how
+FEC functions, why it is essential for modern high-resolution displays,
+and its indispensable partnership with Display Stream Compression (DSC)
+to deliver flawless 4K, 8K, and high-refresh-rate video.</p>
+<h3 id="the-purpose-of-forward-error-correction">The Purpose of Forward
+Error Correction</h3>
+<p>As display resolutions and refresh rates scaled up with DisplayPort
+1.4, the standard introduced High Bit Rate 3 (HBR3), pushing bandwidth
+capacity to 32.4 Gbps across four lanes. At these high frequencies,
+copper cables are increasingly susceptible to signal attenuation,
+electromagnetic interference (EMI), and jitter.</p>
+<p>Traditionally, communication protocols request that corrupted packets
+be resent. In real-time video streams, however, retransmission is
+impossible due to strict latency requirements. FEC resolves this by
+appending error-correcting code (parity data) to the transmitted data
+packets. The receiving display uses these parity bits to reconstruct
+corrupted data on the fly, ensuring a bit-error-free stream reaches the
+display panel.</p>
+<h3 id="why-fec-is-vital-for-display-stream-compression-dsc">Why FEC is
+Vital for Display Stream Compression (DSC)</h3>
+<p>While FEC improves standard uncompressed transmission, its primary
+role in DisplayPort 1.4 is enabling Display Stream Compression (DSC
+1.2).</p>
+<p>DSC is a visually lossless compression algorithm necessary for
+driving ultra-high resolutions—such as 8K at 60Hz or 4K at 144Hz with
+HDR—over existing physical interfaces. However, compressed video data is
+uniquely fragile. In an uncompressed stream, a single flipped bit might
+cause a single, imperceptible pixel anomaly. In a compressed stream, a
+single bit error can corrupt the decompression state, causing visible
+visual artifacts, slice corruptions, or complete frame loss.</p>
+<p>Because of this vulnerability, the VESA specification mandates that
+FEC be active whenever DSC is utilized. FEC provides the mathematically
+clean transport layer required for DSC to decompress video without
+catastrophic visual failure.</p>
+<h3 id="how-fec-operates-in-the-hardware">How FEC Operates in the
+Hardware</h3>
+<p>DisplayPort 1.4 implements a specific variant of FEC known as
+Reed-Solomon coding—specifically, an RS(254, 250) code or similar block
+code tailored for high-speed serialized data.</p>
+<ol type="1">
+<li><strong>Encoding at the Source:</strong> The graphics processing
+unit (GPU) or source device processes video data through an FEC encoder,
+generating parity symbols alongside the payload data.</li>
+<li><strong>Transmission:</strong> The combined payload and parity data
+are transmitted across the physical HBR3 link lanes.</li>
+<li><strong>Decoding and Correction at the Sink:</strong> The monitor's
+receiver processes the incoming stream through an FEC decoder. If noise
+or attenuation corrupts any bits during transit, the decoder identifies
+the exact locations of the corrupted symbols using the parity data and
+corrects them instantly.</li>
+<li><strong>Latency-Free Operation:</strong> This mathematical
+reconstruction happens in hardware with negligible latency, keeping the
+video feed synchronized with audio and real-time inputs.</li>
+</ol>
+<h3 id="key-benefits-of-fec-in-displayport-14">Key Benefits of FEC in
+DisplayPort 1.4</h3>
+<ul>
+<li><strong>Enables Ultra-High Resolutions:</strong> By safeguarding
+compressed data, FEC enables stable delivery of 8K at 60Hz and 4K at
+144Hz over a single DisplayPort cable.</li>
+<li><strong>Extended Cable Reliability:</strong> FEC mitigates signal
+degradation caused by longer cables or low-quality interconnects,
+reducing blackouts, flickering, and signal drops.</li>
+<li><strong>Zero Retransmission Overhead:</strong> Eliminates the need
+for feedback channels or data resends, maintaining the low-latency
+performance essential for gaming and professional visual
+applications.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

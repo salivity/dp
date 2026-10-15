@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Stream Compression for 10-Bit DisplayPort - dp</title>
+    <meta name="description" content="This article provides an overview of how VESA Display Stream Compression (DSC) operates to compress raw 10-bit video frames in real time over DisplayPort connections. It examines the step-by-step encoding pipeline, including slice partitioning, color-spac">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/display-stream-compression-for-10-bit-display-port">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Display Stream Compression for 10-Bit DisplayPort - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/display-stream-compression-for-10-bit-display-port" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article provides an overview of how VESA Display Stream Compression (DSC) operates to compress raw 10-bit video frames in real time over DisplayPort connections. It examines the step-by-step encoding pipeline, including slice partitioning, color-spac" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="display-stream-compression-for-10-bit-displayport">Display
+Stream Compression for 10-Bit DisplayPort</h1>
+<p>This article provides an overview of how VESA Display Stream
+Compression (DSC) operates to compress raw 10-bit video frames in real
+time over DisplayPort connections. It examines the step-by-step encoding
+pipeline, including slice partitioning, color-space transformation,
+intra-line prediction algorithms, adaptive quantization, and
+deterministic rate-control mechanisms that enable visually lossless
+quality with sub-line latency.</p>
+<h3 id="slice-partitioning-and-color-conversion">Slice Partitioning and
+Color Conversion</h3>
+<p>Display Stream Compression (specifically DSC 1.2a and later versions
+used in DisplayPort 1.4 and 2.1) divides each incoming raw 10-bit video
+frame into independent horizontal regions known as slices. Slicing
+enables multi-core parallel processing in hardware display controllers
+and displays, keeping processing latency well under one scanline.</p>
+<p>Before compression, native 10-bit RGB data (30 bits per pixel) is
+converted into the reversible YCoCg-R color space. This transformation
+decorrelates color information, concentrating the visual energy into the
+luma (Y) component while maintaining absolute mathematical reversibility
+without bit-depth loss or rounding artifacts. If the source content is
+already native YCbCr 4:2:2 or 4:2:0, DSC applies specialized subsampling
+handling instead.</p>
+<h3 id="predictive-coding-modes">Predictive Coding Modes</h3>
+<p>To remove spatial redundancy within each slice, DSC processes pixels
+in sequential pixel groups using one of three primary prediction
+methods:</p>
+<ol type="1">
+<li><strong>Modified Median Adaptive Prediction (MMAP):</strong> Uses
+previous neighbor pixels within the current and preceding scanlines to
+predict the current pixel value, effectively modeling smooth gradients
+typical of 10-bit HDR content.</li>
+<li><strong>Block Prediction (BP):</strong> Searches a small,
+single-line reference window within the current slice to find repetitive
+patterns, such as text rendering or UI elements, referencing identical
+pixel blocks previously encoded.</li>
+<li><strong>Midpoint Prediction:</strong> Acts as a boundary-fallback
+mode when neighbor pixels are unavailable or produce high prediction
+errors across high-frequency edges.</li>
+</ol>
+<p>The encoder computes residual errors between the predicted values and
+the actual raw 10-bit pixel data, which are then passed downstream for
+quantization.</p>
+<h3 id="adaptive-quantization-and-flatness-detection">Adaptive
+Quantization and Flatness Detection</h3>
+<p>Because 10-bit video is highly sensitive to color banding, DSC
+implements dedicated flatness detection. The algorithm analyzes
+neighboring pixels to identify flat or subtly graded surfaces. When a
+flat area is detected, the Quantization Parameter (QP) is dynamically
+lowered to preserve fine color fidelity, eliminating contouring
+artifacts. In complex, highly textured regions where the human visual
+system is less sensitive to fine errors, QP is raised to discard less
+perceptible data.</p>
+<h3 id="entropy-coding-and-sub-stream-multiplexing">Entropy Coding and
+Sub-Stream Multiplexing</h3>
+<p>The quantized residuals are converted into bitstreams using
+variable-length entropy coding. DSC uses a specialized prefix-coding
+technique combined with history-based tracking. To achieve the high
+throughput required for multi-gigabit DisplayPort transmissions, the
+compressed data is partitioned into multiple concurrent entropy
+sub-streams via a Sub-Stream Multiplexer (SSM). This architecture allows
+parallel encoding and decoding without requiring high-frequency internal
+clock rates.</p>
+<h3 id="buffer-control-and-constant-bit-rate-transport">Buffer Control
+and Constant Bit Rate Transport</h3>
+<p>DisplayPort links require a constant transmission data rate. DSC
+utilizes a virtual rate buffer model that continuously tracks buffer
+fullness against predetermined thresholds. The rate controller
+dynamically adjusts the QP for subsequent pixel groups to ensure the
+buffer never underflows or overflows.</p>
+<p>Through this closed-loop control, a 30-bit raw pixel (10 bits per
+channel) is deterministically compressed to a lower fixed
+budget—typically between 8 and 12 bits per pixel (a 2.5:1 to 3.75:1
+compression ratio)—delivering visually lossless transmission across
+bandwidth-constrained DisplayPort physical lanes.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

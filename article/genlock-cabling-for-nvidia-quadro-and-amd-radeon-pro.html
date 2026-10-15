@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genlock Cabling for NVIDIA Quadro and AMD Radeon Pro - dp</title>
+    <meta name="description" content="This guide outlines the precise hardware and cabling required to establish Genlock synchronization using professional workstation GPUs from NVIDIA and AMD. While DisplayPort cables transmit video to displays, achieving true Genlock—synchronizing the GPU&#39;s">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/genlock-cabling-for-nvidia-quadro-and-amd-radeon-pro">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Genlock Cabling for NVIDIA Quadro and AMD Radeon Pro - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/genlock-cabling-for-nvidia-quadro-and-amd-radeon-pro" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This guide outlines the precise hardware and cabling required to establish Genlock synchronization using professional workstation GPUs from NVIDIA and AMD. While DisplayPort cables transmit video to displays, achieving true Genlock—synchronizing the GPU&#39;s" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="genlock-cabling-for-nvidia-quadro-and-amd-radeon-pro">Genlock
+Cabling for NVIDIA Quadro and AMD Radeon Pro</h1>
+<p>This guide outlines the precise hardware and cabling required to
+establish Genlock synchronization using professional workstation GPUs
+from NVIDIA and AMD. While DisplayPort cables transmit video to
+displays, achieving true Genlock—synchronizing the GPU's internal frame
+refresh to an external master timing reference—requires dedicated
+synchronization daughterboards, internal ribbon cables, and external BNC
+and RJ45 connections.</p>
+<h3 id="nvidia-quadro-and-rtx-workstation-cabling">NVIDIA Quadro and RTX
+Workstation Cabling</h3>
+<p>Standard DisplayPort connections cannot ingest external house sync
+signals directly. To Genlock an NVIDIA workstation, you must install an
+<strong>NVIDIA Quadro Sync II</strong> card (or the legacy Quadro Sync I
+card for older architectures).</p>
+<p>The following cabling is required:</p>
+<ul>
+<li><strong>External Sync Reference (BNC Coaxial Cable):</strong>
+Connect a standard 75-ohm coaxial cable with a male BNC connector from
+the master sync generator (transmitting Bi-level Blackburst or Tri-level
+sync) to the <strong>BNC In</strong> connector on the bracket of the
+Quadro Sync II card.</li>
+<li><strong>Internal Ribbon Cables:</strong> Inside the chassis, connect
+flat ribbon cables between the Quadro Sync II board and each compatible
+NVIDIA Quadro or RTX GPU. The Sync II card supports up to four GPUs in a
+single chassis via separate internal sync ribbon connectors.</li>
+<li><strong>Inter-System Daisy-Chain (CAT5e/CAT6 RJ45):</strong> If
+synchronizing multiple display servers together, connect standard CAT5e
+or CAT6 Ethernet patch cables between the <strong>RJ45 ports</strong> on
+the Quadro Sync II cards. This establishes a hardware frame-lock
+daisy-chain across multiple host machines.</li>
+<li><strong>Video Outputs:</strong> Standard VESA-compliant DisplayPort
+cables run from each GPU directly to the displays, video processors, or
+projectors to output the locked signal.</li>
+</ul>
+<h3 id="amd-radeon-pro-cabling">AMD Radeon Pro Cabling</h3>
+<p>Similar to NVIDIA, AMD Radeon Pro systems require a dedicated
+hardware add-in module: the <strong>AMD Radeon Pro S400</strong> (or
+legacy FirePro S400) synchronization card.</p>
+<p>The required cabling setup includes:</p>
+<ul>
+<li><strong>External Master Sync (BNC Coaxial Cable):</strong> Run a
+75-ohm coaxial cable with a BNC connector from the central house sync
+source into the <strong>BNC Genlock In</strong> port located on the S400
+rear bracket. An optional BNC loop-through cable can be used if
+daisy-chaining the analog signal to other equipment.</li>
+<li><strong>Internal Interconnect Cable:</strong> Connect the dedicated
+ribbon cable provided with the S400 module from the synchronization card
+to the synchronization header on the top edge of the AMD Radeon Pro
+graphics card. Up to two compatible Radeon Pro GPUs can connect to one
+S400 card internally.</li>
+<li><strong>Multi-Chassis Frame Lock (CAT5e/CAT6 RJ45):</strong> Connect
+CAT5e or CAT6 patch cables to the <strong>RJ45 Frame Lock</strong> ports
+to daisy-chain the timing signals across multiple independent
+workstations.</li>
+<li><strong>Display Feeds:</strong> High-bandwidth DisplayPort cables
+run from the Radeon Pro cards to the target display devices.</li>
+</ul>
+<h3 id="summary-of-cabling-topology">Summary of Cabling Topology</h3>
+<p>Achieving proper Genlock synchronization on both platforms requires a
+two-tier cabling structure: an <strong>external distribution
+tier</strong> using 75-ohm BNC coaxial cables for the timing master
+signal and RJ45 patch cables for multi-PC linking, and an
+<strong>internal distribution tier</strong> using proprietary ribbon
+cables to slave the physical GPU clock to the dedicated synchronization
+daughterboard. DisplayPort cables are only responsible for the video
+signal path from the synchronized GPUs out to the display hardware.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

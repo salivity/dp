@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Military KVMs Secure DisplayPort Channels - dp</title>
+    <meta name="description" content="High-security military KVM (Keyboard, Video, Mouse) switches are designed to allow operators to control multiple systems on different security enclaves—such as unclassified and top-secret networks—using a single set of peripherals without cross-domain con">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/how-military-kv-ms-secure-display-port-channels">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Military KVMs Secure DisplayPort Channels - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/how-military-kv-ms-secure-display-port-channels" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="High-security military KVM (Keyboard, Video, Mouse) switches are designed to allow operators to control multiple systems on different security enclaves—such as unclassified and top-secret networks—using a single set of peripherals without cross-domain con" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-military-kvms-secure-displayport-channels">How Military KVMs
+Secure DisplayPort Channels</h1>
+<p>High-security military KVM (Keyboard, Video, Mouse) switches are
+designed to allow operators to control multiple systems on different
+security enclaves—such as unclassified and top-secret networks—using a
+single set of peripherals without cross-domain contamination. Because
+modern display interfaces like DisplayPort are inherently bidirectional
+and carry both video and auxiliary data, they present a significant risk
+for covert data exfiltration. Military-grade KVMs neutralize these
+threats by employing strict hardware-enforced unidirectionality,
+dedicated EDID emulation, AUX channel sanitization, and physical
+electrical isolation to ensure that data can never traverse back into
+connected host systems.</p>
+<h3 id="the-threat-vector-in-standard-displayport-interfaces">The Threat
+Vector in Standard DisplayPort Interfaces</h3>
+<p>Standard DisplayPort connections do not merely push video pixels
+outward; they also feature an Auxiliary (AUX) channel. The AUX channel
+is a bidirectional pathway used for:</p>
+<ul>
+<li>Reading Extended Display Identification Data (EDID).</li>
+<li>Managing Display Data Channel / Command Interface (DDC/CI)
+signals.</li>
+<li>Establishing High-bandwidth Digital Content Protection (HDCP)
+handshakes.</li>
+<li>Transmitting sideband data, including USB protocols and touch-screen
+inputs.</li>
+</ul>
+<p>In an unmanaged environment, this bidirectional communication creates
+an exploit path. A compromised machine on a secure network could write
+malicious code or sensitive data into the monitor's internal flash
+memory via the AUX channel. When the KVM switches to an unclassified
+machine, that machine could read the stored data from the monitor,
+bypassing air-gap protections.</p>
+<h3 id="hardware-data-diodes-and-unidirectional-video-paths">Hardware
+Data Diodes and Unidirectional Video Paths</h3>
+<p>To counteract this vulnerability, military KVM switches certified
+under the NIAP Protection Profile (such as PP PSD 4.0) employ hardware
+data diodes on the video lines.</p>
+<p>Video data consists of high-speed digital lanes carrying raw pixel
+streams from the graphics processing unit (GPU) to the display. Military
+KVMs enforce a physically unidirectional pathway using optical isolation
+or hardware logic gates. These components physically permit signals to
+travel only in the forward direction (host-to-display). Reverse signal
+transmission is physically impossible at the circuit level, ensuring no
+data from the monitor or an adjacent host can travel back to the source
+PC.</p>
+<h3 id="isolated-edid-emulation-and-read-only-memory">Isolated EDID
+Emulation and Read-Only Memory</h3>
+<p>Displays require EDID handshakes to communicate supported resolutions
+and refresh rates to the host computer. Standard KVMs simply pass these
+requests directly through to the connected monitor, which leaves the AUX
+channel open.</p>
+<p>Military KVMs eliminate this live communication path:</p>
+<ol type="1">
+<li><strong>Per-Port Emulators:</strong> Each connected computer
+interfaces exclusively with a dedicated, isolated EDID emulator built
+into that specific KVM input port.</li>
+<li><strong>Fixed Data Sets:</strong> When a computer boots or queries
+the display, it reads a pre-programmed or securely captured EDID profile
+stored on a read-only memory chip.</li>
+<li><strong>No Direct Path:</strong> The host PC never establishes a
+direct, continuous AUX link to the physical monitor. This prevents rogue
+software from modifying monitor firmware or utilizing the monitor's
+memory as an intermediary drop-point for exfiltrated data.</li>
+</ol>
+<h3 id="aux-channel-stripping-and-protocol-filtering">AUX Channel
+Stripping and Protocol Filtering</h3>
+<p>DisplayPort supports various ancillary data packets that are
+unnecessary for primary display rendering. Secure KVM switches implement
+hardware-level protocol filtering that blocks all non-essential AUX
+commands.</p>
+<p>Audio, DDC/CI commands, MCCS (Monitor Control Command Set), and
+arbitrary vendor-specific communication packets are entirely stripped
+from the signal path. Even when bidirectional AUX transactions are
+needed to initialize link training, the switch intercepts and terminates
+these requests locally within isolated microcontrollers rather than
+passing them between endpoints.</p>
+<h3 id="electrical-isolation-and-ground-plane-separation">Electrical
+Isolation and Ground Plane Separation</h3>
+<p>Data leakage can also occur via high-frequency electrical crosstalk
+or ground loops shared across switch ports. High-assurance KVM switches
+mitigate this through:</p>
+<ul>
+<li><strong>Air-gapped PCB traces:</strong> Strict physical distance
+rules between internal traces connected to different host channels.</li>
+<li><strong>Independent power domains:</strong> Isolated internal power
+supplies that prevent voltage fluctuations from conveying sideband data
+between channels.</li>
+<li><strong>Chassis shielding:</strong> Heavy-duty metal enclosures and
+RF shielding that prevent electromagnetic emissions from radiating
+between neighboring DisplayPort receptacles.</li>
+</ul>
+<p>Through the combination of unidirectional hardware gates, protocol
+scrubbing, and isolated EDID emulation, military-grade KVMs ensure that
+DisplayPort channels function strictly as display outputs, neutralizing
+their capacity to bridge isolated networks.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

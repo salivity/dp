@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How DisplayPort Handles 5K Without DSC - dp</title>
+    <meta name="description" content="Before the widespread adoption of Display Stream Compression (DSC) and higher bandwidth standards like DisplayPort 1.3 and 1.4, achieving a 5K resolution (5120 x 2880) at 60Hz presented a major hardware bottleneck. Early 5K displays, such as the Dell Ultr">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/how-display-port-handles-5-k-without-dsc">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How DisplayPort Handles 5K Without DSC - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/how-display-port-handles-5-k-without-dsc" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Before the widespread adoption of Display Stream Compression (DSC) and higher bandwidth standards like DisplayPort 1.3 and 1.4, achieving a 5K resolution (5120 x 2880) at 60Hz presented a major hardware bottleneck. Early 5K displays, such as the Dell Ultr" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-displayport-handles-5k-without-dsc">How DisplayPort Handles
+5K Without DSC</h1>
+<p>Before the widespread adoption of Display Stream Compression (DSC)
+and higher bandwidth standards like DisplayPort 1.3 and 1.4, achieving a
+5K resolution (5120 x 2880) at 60Hz presented a major hardware
+bottleneck. Early 5K displays, such as the Dell UltraSharp UP2715K and
+the HP Z27q, solved this bandwidth limitation by utilizing dual-cable
+DisplayPort routing. By splitting the video signal across two physical
+DisplayPort 1.2 connections, graphics cards and monitors could
+coordinate to render a seamless ultra-high-resolution image without
+visually lossy compression.</p>
+<h3 id="the-5k-bandwidth-bottleneck">The 5K Bandwidth Bottleneck</h3>
+<p>A 5120 x 2880 resolution at a standard 60Hz refresh rate with 8-bit
+color depth (SDR) requires an uncompressed video data rate of roughly
+22.18 Gbps, excluding blanking intervals. When factoring in standard
+blanking overhead, the total required bandwidth reaches nearly 24
+Gbps.</p>
+<p>DisplayPort 1.2 relies on High Bit Rate 2 (HBR2) transmission, which
+provides a raw bandwidth of 21.60 Gbps across four physical lanes. After
+accounting for 8b/10b line-coding overhead, the actual maximum usable
+data rate of a single DP 1.2 connection drops to 17.28 Gbps. Because
+Display Stream Compression was not introduced until the DisplayPort 1.4
+specification in 2016, single-cable DP 1.2 ports lacked the physical
+capacity to carry a 5K60 stream.</p>
+<h3 id="dual-cable-routing-via-displayid-and-tiling">Dual-Cable Routing
+via DisplayID and Tiling</h3>
+<p>To circumvent this throughput ceiling, display manufacturers and GPU
+vendors turned to tiled display topology standardized under the VESA
+DisplayID specification. Instead of treating the monitor as a single
+high-bandwidth target, the system handles the display as two independent
+panels placed side-by-side.</p>
+<ol type="1">
+<li><strong>Stream Splitting at the GPU:</strong> The graphics card
+splits the framebuffer vertically into two distinct 2560 x 2880 halves.
+Each 2560 x 2880 signal at 60Hz requires roughly 11 Gbps of usable data,
+which sits safely below the 17.28 Gbps ceiling of a standard DisplayPort
+1.2 HBR2 link.</li>
+<li><strong>Dual-Cable Transport:</strong> The GPU transmits these two
+video streams simultaneously over two separate DisplayPort cables
+plugged into two distinct output ports on the graphics card and two
+input ports on the monitor.</li>
+<li><strong>EDID and DisplayID Handshake:</strong> The monitor
+communicates its physical architecture to the operating system using
+DisplayID Extension Blocks embedded in the Extended Display
+Identification Data (EDID). The DisplayID informs the GPU driver that
+the two physical inputs represent the left and right halves of a single
+logical display surface, specifying exact tile layout, pixel offsets,
+and physical dimensions.</li>
+</ol>
+<h3 id="synchronization-and-image-reconstruction">Synchronization and
+Image Reconstruction</h3>
+<p>Carrying half of a desktop over one cable and half over another
+introduces the risk of synchronization failure, which can cause frame
+misalignment or tearing straight down the center of the screen.
+Dual-link routing avoids this through hardware-level
+synchronization:</p>
+<ul>
+<li><strong>GPU Genlock:</strong> The graphics driver synchronizes the
+pixel clocks and vertical refresh rates between the two display outputs,
+ensuring that frame presentation occurs simultaneously on both
+links.</li>
+<li><strong>Internal Timing Controller (TCON) Fusion:</strong> Inside
+the monitor, one or more Timing Controllers receive the two distinct
+DisplayPort streams. The TCON aligns the vertical and horizontal
+blanking intervals of both inputs before driving the panel's row and
+column drivers, outputting the reconstructed 5120 x 2880 frame
+synchronously.</li>
+</ul>
+<h3 id="obsolescence-of-dual-cable-routing">Obsolescence of Dual-Cable
+Routing</h3>
+<p>Dual-cable DisplayPort routing served as a critical stopgap between
+2014 and 2016. The method became obsolete with two key developments:</p>
+<ul>
+<li><strong>DisplayPort 1.3 and 1.4 (HBR3):</strong> The arrival of High
+Bit Rate 3 boosted the single-cable raw bandwidth to 32.4 Gbps (25.92
+Gbps net data rate), making single-cable uncompressed 5K at 60Hz 8-bit
+color natively possible.</li>
+<li><strong>Display Stream Compression (DSC):</strong> Standardized
+alongside DisplayPort 1.4, DSC provides visually lossless compression at
+ratios up to 3:1, allowing high bit-depth 5K and higher resolutions to
+run comfortably over a single cable or a single Thunderbolt
+connection.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

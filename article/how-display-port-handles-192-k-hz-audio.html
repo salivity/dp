@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How DisplayPort Handles 192 kHz Audio - dp</title>
+    <meta name="description" content="DisplayPort handles audio sample rates up to 192 kHz by treating digital audio as a packetized data service layered onto its high-speed main link. Rather than transmitting audio over a dedicated physical wire or clock line, DisplayPort encapsulates high-r">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/how-display-port-handles-192-k-hz-audio">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How DisplayPort Handles 192 kHz Audio - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/how-display-port-handles-192-k-hz-audio" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="DisplayPort handles audio sample rates up to 192 kHz by treating digital audio as a packetized data service layered onto its high-speed main link. Rather than transmitting audio over a dedicated physical wire or clock line, DisplayPort encapsulates high-r" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-displayport-handles-192-khz-audio">How DisplayPort Handles
+192 kHz Audio</h1>
+<p>DisplayPort handles audio sample rates up to 192 kHz by treating
+digital audio as a packetized data service layered onto its high-speed
+main link. Rather than transmitting audio over a dedicated physical wire
+or clock line, DisplayPort encapsulates high-resolution Pulse-Code
+Modulation (LPCM) and bitstream audio into Secondary Data Packets. These
+packets are multiplexed alongside video streams, synchronized through
+precise clock regeneration timestamps, and delivered seamlessly across
+the display pipeline without degrading video performance.</p>
+<h3 id="packetized-architecture-and-secondary-data-packets">Packetized
+Architecture and Secondary Data Packets</h3>
+<p>DisplayPort relies on a packetized transmission architecture similar
+to Ethernet or PCI Express. Instead of sending a continuous,
+synchronized analog or clock-dependent digital audio signal (like
+S/PDIF), DisplayPort converts the audio data into discrete packets:</p>
+<ul>
+<li><strong>Secondary Data Packets (SDPs):</strong> High-definition
+audio samples are packaged into SDPs, which can contain uncompressed
+LPCM channels or encoded bitstreams (such as Dolby TrueHD or DTS-HD
+Master Audio).</li>
+<li><strong>Multiplexing:</strong> The DisplayPort transmitter
+interleaves these SDPs into the Main Link's data stream during
+horizontal and vertical blanking intervals, or even between active video
+pixel data if necessary.</li>
+<li><strong>Payload Capacity:</strong> Each audio packet carries raw
+audio samples alongside header data indicating channel assignment,
+sample depth (typically 16-bit or 24-bit), and audio layout (from stereo
+up to 8 full-bandwidth channels).</li>
+</ul>
+<h3 id="clock-regeneration-and-jitter-reduction">Clock Regeneration and
+Jitter Reduction</h3>
+<p>Because the DisplayPort Main Link operates on a fixed link symbol
+rate (such as 1.62 Gbps, 2.7 Gbps, 5.4 Gbps, or higher) that is
+completely decoupled from audio sampling rates, the receiver must
+reconstruct the original 192 kHz clock accurately.</p>
+<ul>
+<li><strong>Timestamping (<span class="math inline">\(M_{aud}\)</span>
+and <span class="math inline">\(N_{aud}\)</span>):</strong> The source
+transmitter measures the audio sample clock against a known reference
+clock and generates a pair of fractional values known as <span
+class="math inline">\(M_{aud}\)</span> (Audio Multiplier) and <span
+class="math inline">\(N_{aud}\)</span> (Audio Divider).</li>
+<li><strong>Audio Clock Regeneration (ACR) Packets:</strong> These
+integer values are transmitted periodically in specialized ACR packets
+alongside the audio data.</li>
+<li><strong>Phase-Locked Loop (PLL) Synthesis:</strong> The display’s
+receiver utilizes these timestamp ratios to drive an internal PLL,
+faithfully regenerating the low-jitter 192 kHz master clock needed by
+the digital-to-analog converter (DAC).</li>
+</ul>
+<h3 id="bandwidth-allocation-and-processing-overhead">Bandwidth
+Allocation and Processing Overhead</h3>
+<p>Handling high-resolution 192 kHz audio requires sufficient data
+throughput, but relative to DisplayPort’s total video capacity, the
+overhead is minimal:</p>
+<ul>
+<li><strong>Data Rate Calculation:</strong> An 8-channel, 24-bit, 192
+kHz uncompressed LPCM stream requires approximately 36.86 Mbps of
+continuous audio bandwidth (<span class="math inline">\(8 \text{
+channels} \times 24 \text{ bits} \times 192,000 \text{
+Hz}\)</span>).</li>
+<li><strong>Link Utilization:</strong> Even DisplayPort 1.1 running at
+the lowest RBR speed provides 5.18 Gbps of total usable throughput,
+meaning full 192 kHz multi-channel audio consumes less than 1% of the
+overall link capacity.</li>
+<li><strong>Format Flexibility:</strong> This minimal footprint ensures
+that sources can transmit maximum-quality 192 kHz/24-bit audio without
+forcing displays to drop refresh rates or reduce video resolutions.</li>
+</ul>
+<h3 id="latency-and-stream-synchronization">Latency and Stream
+Synchronization</h3>
+<p>To keep high-sampling-rate audio aligned with ultra-high-definition
+video, DisplayPort incorporates presentation timestamping within its
+protocol stack:</p>
+<ul>
+<li><strong>Audio-to-Video Synchronization (AV-Sync):</strong> Audio
+samples contain timestamp data mapped against the video stream's
+timebase, preventing audio drift over long runtimes.</li>
+<li><strong>Receiver Buffering:</strong> Receivers employ small FIFO
+(First-In, First-Out) buffers to assemble incoming SDPs, handle jitter
+from the packetized link, and output a steady, uninterrupted 192 kHz
+stream directly to the internal sound processor or external audio
+pass-through interfaces like eARC or S/PDIF.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

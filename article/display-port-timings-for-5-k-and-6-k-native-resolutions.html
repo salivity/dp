@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisplayPort Timings for 5K and 6K Native Resolutions - dp</title>
+    <meta name="description" content="Driving 5K (5120x2880) and 6K (6016x3384) monitors at native resolutions requires strict adherence to custom video timings and transmission modes to prevent exceeding interface bandwidth limits. This guide details the specific timing parameters, reduced b">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/display-port-timings-for-5-k-and-6-k-native-resolutions">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DisplayPort Timings for 5K and 6K Native Resolutions - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/display-port-timings-for-5-k-and-6-k-native-resolutions" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Driving 5K (5120x2880) and 6K (6016x3384) monitors at native resolutions requires strict adherence to custom video timings and transmission modes to prevent exceeding interface bandwidth limits. This guide details the specific timing parameters, reduced b" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1
+id="displayport-timings-for-5k-and-6k-native-resolutions">DisplayPort
+Timings for 5K and 6K Native Resolutions</h1>
+<p>Driving 5K (5120x2880) and 6K (6016x3384) monitors at native
+resolutions requires strict adherence to custom video timings and
+transmission modes to prevent exceeding interface bandwidth limits. This
+guide details the specific timing parameters, reduced blanking
+standards, and transmission architectures—such as Display Stream
+Compression (DSC) and multi-stream transport tiling—necessary to achieve
+stable native refresh rates over DisplayPort.</p>
+<h3 id="bandwidth-bottlenecks-and-timing-standards">Bandwidth
+Bottlenecks and Timing Standards</h3>
+<p>Standard VESA Generalized Timing Formula (GTF) and standard
+Coordinated Video Timings (CVT) include large blanking intervals
+originally designed for CRT electron-beam deflection. At native 5K and
+6K resolutions, standard blanking pushes the required pixel clock beyond
+the 25.92 Gbps usable payload capacity of a four-lane DisplayPort 1.4
+(HBR3) link.</p>
+<p>To drive these panels without signal loss, custom display
+configurations must use <strong>VESA CVT-RBv2 (Coordinated Video
+Timings-Reduced Blanking version 2)</strong>. CVT-RBv2 reduces the
+horizontal blanking period to a static interval (typically 80 pixels)
+and minimizes vertical blanking, significantly lowering the required
+pixel clock and transmission bandwidth.</p>
+<hr />
+<h3 id="custom-timings-for-5k-5120x2880-at-60hz">Custom Timings for 5K
+(5120x2880 at 60Hz)</h3>
+<p>A 5120x2880 resolution at 60Hz uncompressed at 8-bit color (24 bpp)
+yields an effective transmission data rate of approximately 22.18 Gbps
+when paired with CVT-RBv2. This allows a native 5K 60Hz signal to fit
+inside a single DisplayPort 1.4 HBR3 link without requiring
+compression.</p>
+<h4 id="single-stream-cvt-rbv2-timing-configuration">Single-Stream
+CVT-RBv2 Timing Configuration:</h4>
+<ul>
+<li><strong>Pixel Clock:</strong> 938.25 MHz</li>
+<li><strong>Horizontal Timings:</strong>
+<ul>
+<li>Active: 5120 pixels</li>
+<li>Front Porch: 8 pixels</li>
+<li>Sync Width: 32 pixels</li>
+<li>Back Porch: 40 pixels</li>
+<li>Total Blanking: 80 pixels</li>
+<li>Horizontal Total: 5200 pixels</li>
+</ul></li>
+<li><strong>Vertical Timings:</strong>
+<ul>
+<li>Active: 2880 lines</li>
+<li>Front Porch: 1 line</li>
+<li>Sync Width: 8 lines</li>
+<li>Back Porch: 33 lines</li>
+<li>Total Blanking: 42 lines</li>
+<li>Vertical Total: 2922 lines</li>
+</ul></li>
+<li><strong>Sync Polarity:</strong> Positive (+) Horizontal, Negative
+(-) Vertical (or +/+ depending on driver requirements)</li>
+</ul>
+<h4 id="dual-cable--dual-sst-tiled-timing">Dual-Cable / Dual-SST Tiled
+Timing:</h4>
+<p>Legacy hardware lacking DP 1.4 HBR3 or DSC must split the panel into
+two synchronized 2560x2880 panels side-by-side using two DisplayPort 1.2
+(HBR2) links:</p>
+<ul>
+<li><strong>Per-Tile Resolution:</strong> 2560x2880 at 60Hz</li>
+<li><strong>Tile Pixel Clock:</strong> ~469.13 MHz</li>
+<li><strong>Horizontal Active:</strong> 2560 pixels (Horizontal Total:
+~2640 pixels with RBv2)</li>
+<li><strong>Vertical Active:</strong> 2880 lines (Vertical Total: ~2922
+lines)</li>
+</ul>
+<hr />
+<h3 id="custom-timings-for-6k-6016x3384-at-60hz">Custom Timings for 6K
+(6016x3384 at 60Hz)</h3>
+<p>Uncompressed 6016x3384 at 60Hz even with minimal blanking requires a
+pixel clock of approximately 1.27 GHz, translating to an uncompressed
+bandwidth exceeding 30 Gbps (for 8-bit) and 38 Gbps (for 10-bit). This
+fundamentally exceeds the physical bandwidth of DisplayPort 1.4
+HBR3.</p>
+<p>To achieve native 6K over DisplayPort, you must use
+<strong>DisplayPort 2.1 (UHBR10/13.5)</strong> or enable <strong>Display
+Stream Compression (DSC 1.2)</strong> over DisplayPort 1.4.</p>
+<h4 id="native-single-stream-dsc--dp-21-timing-parameters">Native
+Single-Stream DSC / DP 2.1 Timing Parameters:</h4>
+<ul>
+<li><strong>Pixel Clock:</strong> 1272.50 MHz (1.2725 GHz)</li>
+<li><strong>Horizontal Timings:</strong>
+<ul>
+<li>Active: 6016 pixels</li>
+<li>Front Porch: 8 pixels</li>
+<li>Sync Width: 32 pixels</li>
+<li>Back Porch: 40 pixels</li>
+<li>Total Blanking: 80 pixels</li>
+<li>Horizontal Total: 6096 pixels</li>
+</ul></li>
+<li><strong>Vertical Timings:</strong>
+<ul>
+<li>Active: 3384 lines</li>
+<li>Front Porch: 1 line</li>
+<li>Sync Width: 8 lines</li>
+<li>Back Porch: 87 lines</li>
+<li>Total Blanking: 96 lines</li>
+<li>Vertical Total: 3480 lines</li>
+</ul></li>
+<li><strong>Sync Polarity:</strong> +Horizontal, -Vertical</li>
+</ul>
+<h4 id="dsc-specific-configurations">DSC-Specific Configurations:</h4>
+<p>When using Custom Resolution Utility (CRU) or custom modelines in
+Linux (<code>xrandr</code>) to drive 6K panels via DP 1.4:</p>
+<ul>
+<li><strong>DSC Slice Count:</strong> Must be set to at least 2 or 4
+slices per line (e.g., 4 slices of 1504x3384).</li>
+<li><strong>Target Bitrate:</strong> Configured to an 8 bpp or 10 bpp
+compressed target rate (equivalent to a 2:1 or 3:1 compression ratio),
+bringing total link consumption under the 25.92 Gbps limit.</li>
+</ul>
+<hr />
+<h3 id="system-configuration-guidelines">System Configuration
+Guidelines</h3>
+<ol type="1">
+<li><strong>Pixel Clock Limits:</strong> Ensure that the graphics
+driver's internal pixel clock patch allows values exceeding the standard
+600 MHz ceiling (e.g., using the AMD/NVIDIA Pixel Clock Patcher on
+Windows if using older drivers).</li>
+<li><strong>Color Depth Restrictions:</strong> If attempting native 5K
+at 60Hz over uncompressed DP 1.4, the color depth must remain locked to
+8-bit (24 bpp) RGB. Selecting 10-bit (30 bpp) uncompressed pushes the
+data rate to ~27.7 Gbps, requiring either DSC activation or chroma
+subsampling down to YCbCr 4:2:2.</li>
+<li><strong>Link Training Verification:</strong> Both 5K and 6K
+configurations require 4-lane HBR3 (8.1 Gbps per lane) or UHBR speeds.
+Cable lengths must be kept under 1.5 meters using VESA-certified DP8K or
+DP40/DP80 cables to prevent lane degradation to HBR2 during the
+DisplayPort AUX handshake.</li>
+</ol></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

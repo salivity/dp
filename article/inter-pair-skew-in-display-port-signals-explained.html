@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inter-Pair Skew in DisplayPort Signals Explained - dp</title>
+    <meta name="description" content="This article provides an overview of inter-pair skew within DisplayPort interfaces, detailing what it is, how it physically occurs, and the specific mechanisms through which it degrades high-speed differential signals. Readers will learn the distinction b">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/inter-pair-skew-in-display-port-signals-explained">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Inter-Pair Skew in DisplayPort Signals Explained - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/inter-pair-skew-in-display-port-signals-explained" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article provides an overview of inter-pair skew within DisplayPort interfaces, detailing what it is, how it physically occurs, and the specific mechanisms through which it degrades high-speed differential signals. Readers will learn the distinction b" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="inter-pair-skew-in-displayport-signals-explained">Inter-Pair
+Skew in DisplayPort Signals Explained</h1>
+<p>This article provides an overview of inter-pair skew within
+DisplayPort interfaces, detailing what it is, how it physically occurs,
+and the specific mechanisms through which it degrades high-speed
+differential signals. Readers will learn the distinction between
+inter-pair and intra-pair skew, the challenges skew introduces to
+DisplayPort’s multi-lane architecture, and how exceeding timing
+tolerances leads to link training failures, bit errors, and display
+instability.</p>
+<h3 id="what-is-inter-pair-skew">What Is Inter-Pair Skew?</h3>
+<p>Inter-pair skew is the time difference in signal arrival between two
+or more independent differential pairs within a multi-lane transmission
+system. In DisplayPort interfaces, the Main Link typically utilizes one,
+two, or four high-speed differential pairs (lanes) to transmit
+serialized video and audio data simultaneously.</p>
+<p>While <em>intra-pair</em> skew refers to the timing mismatch between
+the positive and negative conductors within a single differential pair,
+<em>inter-pair</em> skew measures the propagation delay between entirely
+separate lanes (such as Lane 0 relative to Lane 1, 2, or 3).</p>
+<p>This timing differential is caused by physical variances across the
+transmission medium, including:</p>
+<ul>
+<li><strong>Trace Length Mismatches:</strong> Differences in routing
+lengths on the printed circuit board (PCB).</li>
+<li><strong>Dielectric Variations:</strong> Non-uniformities in
+substrate materials, such as the PCB "fiber weave effect," where one
+lane travels over more glass weave than resin compared to another.</li>
+<li><strong>Cable Imperfections:</strong> Variations in twisted-pair
+lengths, dielectric thickness, or tension within passive copper
+DisplayPort cables.</li>
+</ul>
+<h3 id="how-inter-pair-skew-degrades-displayport-signals">How Inter-Pair
+Skew Degrades DisplayPort Signals</h3>
+<p>DisplayPort relies on data striping, where high-resolution pixel data
+is divided, mapped into symbols, and transmitted concurrently across all
+active lanes. The receiving device must collect these parallel streams
+and reconstruct the original, cohesive data stream. Inter-pair skew
+directly compromises this architecture in several ways:</p>
+<h4 id="1-exhaustion-of-elastic-deskew-buffers">1. Exhaustion of Elastic
+Deskew Buffers</h4>
+<p>To compensate for minor propagation delays, DisplayPort receivers
+employ First-In, First-Out (FIFO) elastic buffers on each lane. When
+symbols arrive, the receiver uses alignment characters to synchronize
+the lanes. However, these buffers have a finite depth defined by VESA
+standards. If the inter-pair skew exceeds the receiver’s maximum deskew
+tolerance (typically measured in unit intervals, or UI), the buffers
+overflow or underflow. When the deskew capacity is exceeded, the
+receiver can no longer align the incoming lanes in the correct temporal
+sequence.</p>
+<h4 id="2-link-training-and-lane-alignment-failures">2. Link Training
+and Lane Alignment Failures</h4>
+<p>During link initialization, the source and sink negotiate
+transmission speed and signal conditioning through a multi-step Link
+Training process. A crucial phase of this process is Inter-Lane
+Alignment. The source transmits dedicated training patterns (such as
+TPS3 or TPS4) across all lanes. If inter-pair skew prevents the receiver
+from achieving lane lock within the strict time limits dictated by the
+DisplayPort specification, link training fails. This forces the link to
+either negotiate down to a lower data rate (e.g., dropping from UHBR or
+HBR3 down to HBR2) or reduce the active lane count, drastically limiting
+available bandwidth.</p>
+<h4 id="3-increased-bit-error-rates-and-packet-corruption">3. Increased
+Bit Error Rates and Packet Corruption</h4>
+<p>At modern DisplayPort transmission speeds—such as UHBR 10, 13.5, and
+20 under DisplayPort 2.1, which operate at up to 20 Gbps per lane—the
+time duration of a single bit (unit interval) shrinks down to tens of
+picoseconds. At these frequencies, even fractional-millimeter
+discrepancies in conductor length generate multiple UIs of skew. When
+lanes drift relative to one another, cross-lane synchronization packets
+and secondary data packets (carrying audio, metadata, and encryption
+states like HDCP) become corrupt, driving up the Bit Error Rate
+(BER).</p>
+<h4 id="4-visual-artifacts-and-signal-loss">4. Visual Artifacts and
+Signal Loss</h4>
+<p>When inter-pair skew degrades the signal past the threshold of error
+correction and receiver alignment logic, the digital pipeline breaks
+down. This degradation visually manifests as digital noise, horizontal
+line artifacts, color channel desynchronization, intermittent screen
+flickering, or complete display blanking as the receiver repeatedly
+resets the link in an attempt to re-align the lanes.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

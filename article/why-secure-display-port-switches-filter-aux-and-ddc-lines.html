@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why Secure DisplayPort Switches Filter AUX and DDC Lines - dp</title>
+    <meta name="description" content="Secure DisplayPort switches isolate or strictly filter bidirectional Auxiliary (AUX) and Display Data Channel (DDC) lines to prevent cross-domain data leakage, unauthorized firmware tampering, and covert channel creation between connected computers. While">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/why-secure-display-port-switches-filter-aux-and-ddc-lines">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Why Secure DisplayPort Switches Filter AUX and DDC Lines - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/why-secure-display-port-switches-filter-aux-and-ddc-lines" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Secure DisplayPort switches isolate or strictly filter bidirectional Auxiliary (AUX) and Display Data Channel (DDC) lines to prevent cross-domain data leakage, unauthorized firmware tampering, and covert channel creation between connected computers. While" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="why-secure-displayport-switches-filter-aux-and-ddc-lines">Why
+Secure DisplayPort Switches Filter AUX and DDC Lines</h1>
+<p>Secure DisplayPort switches isolate or strictly filter bidirectional
+Auxiliary (AUX) and Display Data Channel (DDC) lines to prevent
+cross-domain data leakage, unauthorized firmware tampering, and covert
+channel creation between connected computers. While main video lanes
+transmit pixel data strictly downstream from the graphics card to the
+display, AUX and DDC lines support two-way communication. Without strict
+hardware isolation and protocol filtering, these bidirectional channels
+can be exploited by an attacker to bridge physically or logically
+segregated networks sharing the same monitor.</p>
+<h3 id="the-role-of-aux-and-ddc-in-displayport">The Role of AUX and DDC
+in DisplayPort</h3>
+<p>In standard DisplayPort architecture, the main link consists of
+high-speed, unidirectional lanes responsible solely for sending
+uncompressed video and audio streams to the monitor. In contrast, the
+Auxiliary (AUX) channel is a bidirectional, half-duplex sideband
+connection. In native DisplayPort, the AUX channel replaces the legacy
+I2C-based DDC channel used by DVI and HDMI, though it still encapsulates
+DDC transactions for backward compatibility.</p>
+<p>Normally, these bidirectional channels handle essential handshake
+functions:</p>
+<ul>
+<li>Reading Extended Display Identification Data (EDID) from the display
+to inform the host computer of supported resolutions and refresh
+rates.</li>
+<li>Reading and writing to DisplayPort Configuration Data (DPCD)
+registers for link training and status monitoring.</li>
+<li>Negotiating High-bandwidth Digital Content Protection (HDCP)
+encryption keys.</li>
+<li>Transmitting Monitor Control Command Set (MCCS) data to adjust
+monitor settings such as brightness and contrast.</li>
+</ul>
+<h3 id="why-bidirectional-channels-pose-a-security-risk">Why
+Bidirectional Channels Pose a Security Risk</h3>
+<p>Because standard AUX and DDC channels allow bidirectional read and
+write operations, they create significant security vulnerabilities in
+environments where multiple computers of differing security
+classifications (such as Classified and Unclassified domains) share a
+single display via a KVM (Keyboard, Video, Mouse) switch.</p>
+<h4 id="1-covert-data-exfiltration-across-enclaves">1. Covert Data
+Exfiltration Across Enclaves</h4>
+<p>If a switch passed raw, unfiltered AUX or DDC signals directly
+between connected computers and a shared display, the monitor itself
+could become an unintended storage buffer. A compromised host on a
+secure network could write sensitive data into unused registers of the
+monitor’s internal memory (such as non-volatile EEPROM, DPCD registers,
+or EDID buffers). When the user toggles the switch to an unclassified
+network, software on the second host could read that stored data,
+effectively bypassing air-gaps and transferring classified information
+across domains.</p>
+<h4 id="2-monitor-firmware-tampering-and-exploitation">2. Monitor
+Firmware Tampering and Exploitation</h4>
+<p>Modern displays feature complex microcontrollers and firmware. Many
+manufacturers allow firmware updates over the video cable using
+proprietary vendor extensions tunneled through the AUX channel or DDC/CI
+(Command Interface). An attacker with access to one connected system
+could exploit these mechanisms to flash malicious firmware to the
+monitor's display controller. Once compromised, the monitor could act as
+a persistent hardware implant, capturing video frame information or
+attacking other computers connected to the same switch.</p>
+<h4 id="3-tunneling-of-non-display-protocols">3. Tunneling of
+Non-Display Protocols</h4>
+<p>The DisplayPort AUX channel operates at bandwidths up to 720 Mbps (in
+fast AUX mode) and supports generic data tunneling, including USB and
+Ethernet over AUX. Leaving the AUX channel unfiltered allows arbitrary
+data packets to bypass network boundaries, transforming a standard
+display connection into a high-speed peripheral bus.</p>
+<h3 id="how-secure-switches-implement-isolation-and-filtering">How
+Secure Switches Implement Isolation and Filtering</h3>
+<p>To meet standards such as the NIAP Protection Profile for Peripheral
+Sharing Devices (PSD), secure DisplayPort switches apply strict
+countermeasures to AUX and DDC lines:</p>
+<ul>
+<li><strong>Virtual EDID Emulation:</strong> Instead of allowing a
+computer to query the monitor directly, the secure switch reads the
+monitor’s EDID once during power-up, validates the structure, and
+mirrors it using a dedicated, read-only internal EEPROM for each port.
+The host computer only communicates with the switch's emulator, ensuring
+that write operations are rejected and physical access to the display's
+storage is blocked.</li>
+<li><strong>Hardware-Enforced Unidirectional Data Diodes:</strong> Where
+physical signals must pass to maintain high-speed video synchronization,
+hardware-enforced optical diodes or unidirectional buffer chips ensure
+electrical signals can flow only from the graphics card to the display,
+mechanically eliminating reverse transmission paths.</li>
+<li><strong>Strict Command Whitelisting:</strong> For essential link
+management transactions (such as DPCD link training), the switch's
+internal microcontroller acts as an air-gapped intermediary. It
+validates every single packet, strictly dropping non-whitelisted
+transactions, vendor-specific commands, MCCS controls, and any packet
+attempting to write to persistent memory.</li>
+<li><strong>Volatile Memory Clearing:</strong> Modern secure switches
+purge and reset all volatile buffers upon switching channels or when
+detecting physical tampering, ensuring that residual data cannot persist
+between switching cycles.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

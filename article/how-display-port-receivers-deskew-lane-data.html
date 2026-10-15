@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How DisplayPort Receivers Deskew Lane Data - dp</title>
+    <meta name="description" content="DisplayPort interfaces transmit high-speed video and audio across up to four independent physical lanes, making inter-lane skew inevitable due to differences in trace lengths, packaging, and component variations. To present a unified, coherent data stream">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/how-display-port-receivers-deskew-lane-data">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How DisplayPort Receivers Deskew Lane Data - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/how-display-port-receivers-deskew-lane-data" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="DisplayPort interfaces transmit high-speed video and audio across up to four independent physical lanes, making inter-lane skew inevitable due to differences in trace lengths, packaging, and component variations. To present a unified, coherent data stream" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-displayport-receivers-deskew-lane-data">How DisplayPort
+Receivers Deskew Lane Data</h1>
+<p>DisplayPort interfaces transmit high-speed video and audio across up
+to four independent physical lanes, making inter-lane skew inevitable
+due to differences in trace lengths, packaging, and component
+variations. To present a unified, coherent data stream to the display
+processing engine, DisplayPort receivers implement dedicated deskew
+circuitry. This process relies on specialized link training patterns,
+per-lane Clock and Data Recovery (CDR), and elastic FIFO buffers that
+detect alignment markers and synchronously release data across all
+lanes.</p>
+<h3 id="the-source-of-inter-lane-skew">The Source of Inter-Lane
+Skew</h3>
+<p>In high-speed differential signaling, trace length mismatches of even
+a fraction of a millimeter result in picoseconds of propagation delay.
+Printed circuit board (PCB) routing constraints, via transitions,
+connector pin assignments, and variations in PCB dielectric constants
+cause bits dispatched simultaneously by the transmitter (GPU) to arrive
+at the receiver (monitor) at different times. At modern DisplayPort
+transmission rates—ranging from 1.62 Gbps (RBR) to 20 Gbps (UHBR20) per
+lane—this delay can easily span multiple symbol periods, necessitating
+active compensation.</p>
+<h3 id="phase-1-clock-and-data-recovery-cdr">Phase 1: Clock and Data
+Recovery (CDR)</h3>
+<p>Deskewing cannot occur until the receiver properly captures the raw
+bits on each lane independently. Because DisplayPort embeds the clock
+within the data stream, the receiver routes each lane to its own
+dedicated CDR unit. During the initial phase of link training, the
+transmitter sends Training Pattern Sequence 1 (TPS1). The CDR lock loops
+onto the transitions in this pattern, locking the phase and frequency to
+generate a local sampling clock for each lane. Once locked, the receiver
+can reliably convert the continuous analog waveform into a discrete
+serial bit stream.</p>
+<h3 id="phase-2-symbol-lock-and-framing">Phase 2: Symbol Lock and
+Framing</h3>
+<p>After achieving CDR lock, the receiver must establish symbol
+boundaries. For DisplayPort 1.4 and older standards using 8b/10b
+encoding, the receiver scans the serial stream for unique framing
+characters such as the K28.5 "Comma" symbol. In DisplayPort 2.1
+utilizing 128b/132b channel encoding for Ultra High Bit Rate (UHBR)
+links, the receiver synchronizes to standardized 4-bit sync headers.
+Once the receiver detects these markers, it correctly groups the
+incoming bits into distinct symbols or blocks.</p>
+<h3 id="phase-3-alignment-detection-via-training-patterns">Phase 3:
+Alignment Detection via Training Patterns</h3>
+<p>To measure and eliminate skew across the active lanes, the
+transmitter switches to advanced training patterns—such as TPS2, TPS3,
+or TPS4. During this phase:</p>
+<ol type="1">
+<li>The transmitter simultaneously transmits a predetermined alignment
+character across all active lanes at the exact same symbol period.</li>
+<li>The receiver receives these alignment characters at staggered
+intervals depending on the physical delay of each lane.</li>
+<li>A deskew controller monitors the parallel symbol outputs of each
+lane to detect the exact arrival time of these markers.</li>
+</ol>
+<h3 id="phase-4-elastic-fifo-buffer-deskewing">Phase 4: Elastic FIFO
+Buffer Deskewing</h3>
+<p>The actual deskewing mechanism is centered around a set of elastic
+First-In, First-Out (FIFO) buffers, with one FIFO assigned to each
+receiver lane.</p>
+<ul>
+<li><strong>Writing to the FIFOs:</strong> As each lane decodes its
+incoming symbols, it writes them into its respective FIFO using its
+individual recovered clock. The fastest lane will write the alignment
+marker into its FIFO first, while slower lanes write it cycles
+later.</li>
+<li><strong>Holding and Aligning:</strong> The deskew logic halts or
+delays reading from the FIFOs until the alignment symbol has safely
+arrived and been registered in the FIFOs of all active lanes.</li>
+<li><strong>Synchronous Reading:</strong> Once all lanes indicate the
+presence of the alignment symbol, the receiver adjusts the read pointers
+of each FIFO. The read pointers are configured so that reading the
+alignment symbol—and all subsequent data symbols—occurs simultaneously
+across all FIFOs on a single, shared internal clock domain.</li>
+</ul>
+<h3 id="dynamic-skew-tolerance">Dynamic Skew Tolerance</h3>
+<p>DisplayPort standards mandate that receivers support a specific
+maximum lane-to-lane skew budget, typically accommodating several symbol
+times (tens of nanoseconds). The physical depth of the elastic buffers
+defines this tolerance window. As long as the physical routing skew
+stays within the limits defined by the DisplayPort specification, the
+elastic buffers absorb the delay disparities entirely, outputting fully
+aligned parallel data to the main link de-framing and pixel-generation
+stages.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

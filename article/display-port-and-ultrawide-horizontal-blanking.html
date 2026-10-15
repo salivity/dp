@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisplayPort and Ultrawide Horizontal Blanking - dp</title>
+    <meta name="description" content="Curved ultrawide monitors—particularly those utilizing 21:9 and 32:9 aspect ratios at high refresh rates—require specialized display timings to maintain signal integrity, reduce pixel latency, and optimize bandwidth across the interface. The VESA DisplayP">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/display-port-and-ultrawide-horizontal-blanking">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DisplayPort and Ultrawide Horizontal Blanking - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/display-port-and-ultrawide-horizontal-blanking" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Curved ultrawide monitors—particularly those utilizing 21:9 and 32:9 aspect ratios at high refresh rates—require specialized display timings to maintain signal integrity, reduce pixel latency, and optimize bandwidth across the interface. The VESA DisplayP" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="displayport-and-ultrawide-horizontal-blanking">DisplayPort and
+Ultrawide Horizontal Blanking</h1>
+<p>Curved ultrawide monitors—particularly those utilizing 21:9 and 32:9
+aspect ratios at high refresh rates—require specialized display timings
+to maintain signal integrity, reduce pixel latency, and optimize
+bandwidth across the interface. The VESA DisplayPort standard
+accommodates these requirements by moving away from legacy CRT-era
+timing models, utilizing flexible packetized data transport, modern
+timing algorithms like Coordinated Video Timings-Reduced Blanking
+(CVT-RB), and descriptive metadata communication protocols via
+DisplayID. This article breaks down the technical mechanisms DisplayPort
+uses to handle non-standard horizontal blanking in extreme ultrawide
+displays.</p>
+<h3 id="the-challenge-of-horizontal-blanking-in-ultrawide-panels">The
+Challenge of Horizontal Blanking in Ultrawide Panels</h3>
+<p>Horizontal blanking represents the time interval between the end of
+one scan line and the beginning of the next. Historically, this period
+allowed the electron beam in a cathode-ray tube to reposition to the
+left side of the screen. In modern liquid-crystal and OLED ultrawide
+panels, horizontal blanking is instead used by the panel's internal
+timing controller (TCON) and row/column drivers to latch data, clear
+previous states, and manage physical gate-driver delays across wide
+horizontal matrices.</p>
+<p>Curved ultrawide monitors, spanning up to 5120 pixels horizontally,
+face unique physical constraints:</p>
+<ul>
+<li><strong>Pixel Charging Times:</strong> The extensive horizontal
+dimension increases capacitive and resistive loads on driver traces,
+requiring precise control over the line time.</li>
+<li><strong>Bandwidth Overhead:</strong> Standard timing algorithms
+allocate proportional horizontal blanking intervals (HBI). On a standard
+16:9 4K panel, traditional blanking consumes a manageable fraction of
+total bandwidth; on a 32:9 5120x1440 or 7680x2160 panel, standard
+blanking would consume gigabits per second of non-visible data.</li>
+</ul>
+<p>To resolve these constraints, manufacturers implement non-standard,
+custom horizontal blanking intervals that balance the TCON’s physical
+electrical requirements against the available bandwidth of the
+interface.</p>
+<h3 id="packet-based-architecture-decouples-pixel-clocks">Packet-Based
+Architecture Decouples Pixel Clocks</h3>
+<p>Legacy interfaces like DVI and early revisions of HDMI transmit video
+as a continuous raster stream tied strictly to the pixel clock, making
+arbitrary or heavily customized horizontal blanking harder to negotiate
+without custom driver overrides.</p>
+<p>DisplayPort fundamentally differs by using a packetized transport
+system over a fixed-rate Main Link:</p>
+<ol type="1">
+<li><strong>Decoupled Link Rates:</strong> The DisplayPort physical
+layer operates at standardized link speeds (e.g., HBR2 at 5.4 Gbps, HBR3
+at 8.1 Gbps, or UHBR10/20 in DisplayPort 2.1), completely independent of
+the panel's native pixel clock.</li>
+<li><strong>Micro-Packets:</strong> Pixel data is packaged into
+Micro-Packets during the active display period.</li>
+<li><strong>Blanking as Data Channels:</strong> During horizontal and
+vertical blanking periods, the transmitter inserts Fill symbols or
+Secondary Data Packets (such as audio, metadata, or HDR
+info-frames).</li>
+</ol>
+<p>Because the link rate does not dictate the timing format, the GPU and
+monitor can configure arbitrary horizontal blanking intervals without
+breaking the underlying electrical layer of the physical DisplayPort
+connection.</p>
+<h3 id="cvt-rb-and-cvt-rbv2-integration">CVT-RB and CVT-RBv2
+Integration</h3>
+<p>DisplayPort relies on the VESA Coordinated Video Timings (CVT)
+standard, specifically Reduced Blanking versions 1 and 2 (CVT-RB and
+CVT-RBv2), to eliminate wasted horizontal blanking time:</p>
+<ul>
+<li><strong>Fixed Blanking Allocations:</strong> Unlike standard CVT,
+which calculates blanking intervals as a percentage of the total line
+time, CVT-RB reduces the horizontal blanking period to a fixed, minimal
+duration (typically 160 horizontal clock cycles).</li>
+<li><strong>CVT-RBv2 Optimizations:</strong> Developed specifically with
+high-refresh-rate displays and variable refresh rate (VRR) in mind,
+CVT-RBv2 allows horizontal blanking intervals to drop as low as 80 clock
+cycles on panels capable of handling fast row transitions.</li>
+</ul>
+<p>By applying CVT-RB standards, DisplayPort transmitters compress the
+horizontal blanking interval to the minimum threshold needed by the
+ultrawide panel's TCON, reserving the maximum possible share of the
+transmission channel for actual pixel rendering.</p>
+<h3 id="displayid-and-detailed-timing-descriptors">DisplayID and
+Detailed Timing Descriptors</h3>
+<p>To communicate non-standard horizontal blanking requirements to the
+host GPU, curved ultrawide monitors use DisplayID (the modern successor
+to legacy EDID):</p>
+<ul>
+<li><strong>Pixel-Level Granularity:</strong> While legacy EDID 1.4
+restricted timing specifications to rigid 8-bit or 12-bit registers with
+limits on line counts and pixel clocks, DisplayID 2.0 introduces
+detailed Type VII Timing Descriptors.</li>
+<li><strong>Exact Timings:</strong> The display communicates its exact
+required parameters—Horizontal Active Pixels, Horizontal Front Porch,
+Horizontal Sync Pulse Width, and Horizontal Back Porch—directly to the
+graphics driver down to individual pixel clocks.</li>
+</ul>
+<p>When an ultrawide monitor is plugged into a DisplayPort output, the
+source reads the DisplayID structure via the Auxiliary (AUX) channel.
+The GPU display engine directly adopts the custom horizontal front and
+back porches without requiring specialized vendor drivers.</p>
+<h3 id="interaction-with-display-stream-compression-dsc">Interaction
+with Display Stream Compression (DSC)</h3>
+<p>When high resolutions (such as dual 4K/32:9) are paired with refresh
+rates exceeding 144Hz, total throughput exceeds the raw physical
+capacity of DisplayPort 1.4 or 2.1 links, necessitating Display Stream
+Compression (DSC).</p>
+<p>DSC operates in real-time by breaking each horizontal line into
+independent slices:</p>
+<ul>
+<li><strong>Per-Line Compression:</strong> DSC performs visually
+lossless compression on a horizontal scanline basis, relying on tight
+alignment between active video and horizontal blanking.</li>
+<li><strong>Buffer Management:</strong> The horizontal blanking interval
+provides the critical time window required by the hardware decoder on
+the display's TCON to manage rate-buffer fullness and clear slice
+decoders before the next line starts.</li>
+</ul>
+<p>DisplayPort’s DSC implementation incorporates the non-standard
+horizontal blanking parameters declared by the display to calculate the
+exact slice widths and buffer delays, ensuring that compression
+artifacts or buffer under-runs do not occur across the wide, continuous
+horizontal span of the panel.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

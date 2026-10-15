@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why Monitors Disconnect Over DisplayPort When Turned Off - dp</title>
+    <meta name="description" content="When you turn off a monitor connected via DisplayPort, whether it remains recognized by your operating system or disappears entirely depends on how the hardware handles Hot Plug Detect (HPD) signaling. Some monitors cut power completely to their internal">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/why-monitors-disconnect-over-display-port-when-turned-off">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Why Monitors Disconnect Over DisplayPort When Turned Off - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/why-monitors-disconnect-over-display-port-when-turned-off" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="When you turn off a monitor connected via DisplayPort, whether it remains recognized by your operating system or disappears entirely depends on how the hardware handles Hot Plug Detect (HPD) signaling. Some monitors cut power completely to their internal" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="why-monitors-disconnect-over-displayport-when-turned-off">Why
+Monitors Disconnect Over DisplayPort When Turned Off</h1>
+<p>When you turn off a monitor connected via DisplayPort, whether it
+remains recognized by your operating system or disappears entirely
+depends on how the hardware handles Hot Plug Detect (HPD) signaling.
+Some monitors cut power completely to their internal logic boards,
+dropping the HPD voltage to zero and signaling the graphics card that
+the cable has been unplugged. Other monitors maintain standby power to
+their display controller, keeping the HPD line active so the operating
+system preserves your desktop layout, open windows, and multi-monitor
+configuration.</p>
+<h3 id="the-role-of-hot-plug-detect-hpd">The Role of Hot Plug Detect
+(HPD)</h3>
+<p>DisplayPort relies on a dedicated physical line—Pin 18, known as the
+Hot Plug Detect (HPD) pin—to manage communication between the graphics
+card (source) and the display (sink).</p>
+<ul>
+<li><strong>High Signal (~3.3V):</strong> The graphics card detects an
+active connection, reads the monitor's Extended Display Identification
+Data (EDID), and outputs video accordingly.</li>
+<li><strong>Low Signal (0V):</strong> The graphics card interprets this
+as an immediate physical disconnection. The operating system responds by
+disabling that display output, recalculating resolutions, and shifting
+all active windows and desktop icons to the remaining active
+screen.</li>
+</ul>
+<h3 id="internal-scaler-power-design">Internal Scaler Power Design</h3>
+<p>The fundamental reason behind the difference in behavior across
+monitor models is internal circuit design and power routing:</p>
+<ol type="1">
+<li><strong>Full Board Shutdown:</strong> In many monitors, pressing the
+physical power button shuts off the entire internal scaler board along
+with the panel and backlight. This kills the 3.3V bias voltage on the
+HPD pin, immediately dropping it to 0V. The PC treats this the same as
+pulling the DisplayPort cable out of the socket.</li>
+<li><strong>Standby Auxiliary Power:</strong> Other monitors feature
+auxiliary power circuits that remain energized even when the panel is
+turned off. These displays route trickle power to the microcontroller,
+the EDID chip, and the HPD circuitry. Because the HPD line stays high,
+the operating system never realizes the screen panel itself is dark,
+keeping the virtual desktop intact.</li>
+</ol>
+<h3 id="displayport-deep-sleep-and-firmware">DisplayPort Deep Sleep and
+Firmware</h3>
+<p>DisplayPort is a packetized data bus similar to PCI Express or USB,
+making it far more sensitive to link states than older standards like
+DVI or legacy HDMI implementations. Many modern displays incorporate an
+aggressive energy-saving feature called "DisplayPort Deep Sleep."</p>
+<p>When enabled in the monitor's On-Screen Display (OSD), Deep Sleep
+shuts down transceiver circuitry after a few seconds of inactivity or
+when the power button is pressed. This drops the HPD line to meet
+stringent regional power-consumption standards (such as Energy Star or
+EU Tier requirements), but it creates the persistent desktop
+rearrangement issue common on Windows systems.</p>
+<h3 id="how-to-keep-the-logical-connection-active">How to Keep the
+Logical Connection Active</h3>
+<p>If your monitor disconnects logically every time it powers down, a
+few methods can force the connection to persist:</p>
+<ul>
+<li><strong>Disable Deep Sleep in the OSD:</strong> Check your monitor’s
+built-in settings menu under "System," "Power," or "DisplayPort" and
+disable options labeled "DisplayPort Deep Sleep," "Auto Power Down," or
+"Auto Source Detect."</li>
+<li><strong>Use an Inline EDID Emulator:</strong> Hardware DisplayPort
+EDID passthrough adapters plug between the PC and the DisplayPort cable.
+These adapters mimic an active screen by holding HPD high and caching
+the EDID data, preventing the PC from detecting power-off states.</li>
+<li><strong>Update System Software:</strong> Windows 11 includes an
+architecture update called "Rapid HPD" designed to mitigate window
+rearrangement issues across sleep states, though it does not completely
+prevent disconnection behavior on monitors that fully kill the HPD
+signal via their physical power buttons.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

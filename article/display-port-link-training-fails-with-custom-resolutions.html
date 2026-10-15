@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisplayPort Link Training Fails with Custom Resolutions - dp</title>
+    <meta name="description" content="When configuring custom display resolutions, minor adjustments to refresh rates and timing parameters can unexpectedly prevent a monitor from displaying an image. This issue occurs when a marginal DisplayPort cable fails &quot;link training&quot;—the handshake proc">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/display-port-link-training-fails-with-custom-resolutions">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DisplayPort Link Training Fails with Custom Resolutions - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/display-port-link-training-fails-with-custom-resolutions" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="When configuring custom display resolutions, minor adjustments to refresh rates and timing parameters can unexpectedly prevent a monitor from displaying an image. This issue occurs when a marginal DisplayPort cable fails &quot;link training&quot;—the handshake proc" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1
+id="displayport-link-training-fails-with-custom-resolutions">DisplayPort
+Link Training Fails with Custom Resolutions</h1>
+<p>When configuring custom display resolutions, minor adjustments to
+refresh rates and timing parameters can unexpectedly prevent a monitor
+from displaying an image. This issue occurs when a marginal DisplayPort
+cable fails "link training"—the handshake process between the GPU and
+the display that verifies signal integrity. While standard resolutions
+operate reliably, custom timings often push total bandwidth demands
+across discrete transmission thresholds, exposing the physical
+deficiencies of lower-quality or degraded cabling.</p>
+<h3 id="the-role-of-displayport-link-training">The Role of DisplayPort
+Link Training</h3>
+<p>DisplayPort relies on a packetized data architecture rather than a
+direct analog or raw digital stream. Before transmitting video, the
+graphics processing unit (GPU) and the monitor negotiate a stable
+connection through a hardware handshake known as link training. This
+process occurs in two primary phases:</p>
+<ol type="1">
+<li><strong>Clock Recovery (CR):</strong> The GPU sends test patterns to
+ensure the display's receiver can synchronize its internal clock with
+the incoming data stream.</li>
+<li><strong>Channel Equalization (EQ) and Symbol Lock:</strong> The
+devices adjust voltage swing levels and pre-emphasis settings across
+each active lane to eliminate inter-symbol interference and achieve a
+clean signal "eye" pattern.</li>
+</ol>
+<p>If the monitor cannot lock onto the test patterns after several
+voltage stepping cycles, link training fails, and the display goes into
+a fallback mode or remains blank.</p>
+<h3 id="how-custom-resolutions-trigger-higher-link-rates">How Custom
+Resolutions Trigger Higher Link Rates</h3>
+<p>Unlike interfaces that dynamically adjust clock speeds continuously,
+DisplayPort operates at fixed link rates:</p>
+<ul>
+<li><strong>RBR:</strong> 1.62 Gbps per lane</li>
+<li><strong>HBR:</strong> 2.7 Gbps per lane</li>
+<li><strong>HBR2:</strong> 5.4 Gbps per lane</li>
+<li><strong>HBR3:</strong> 8.1 Gbps per lane</li>
+<li><strong>UHBR:</strong> 10, 13.5, or 20 Gbps per lane</li>
+</ul>
+<p>When defining a custom resolution, the critical factor is not just
+the active pixels (e.g., 2560x1440), but the total pixel clock, which
+includes blanking intervals (front porch, sync width, and back
+porch).</p>
+<p>Standard predefined resolutions usually rely on VESA Coordinated
+Video Timings-Reduced Blanking (CVT-RB) algorithms, which compress
+blanking intervals to minimize total bandwidth. If a custom resolution
+is set using standard CRT timings, standard CVT, or manual values with
+inflated blanking periods, the pixel clock spikes. If the resulting
+payload exceeds the ceiling of a lower tier (such as HBR2), the GPU is
+forced to initiate link training at the next higher transmission speed
+(such as HBR3).</p>
+<h3 id="the-impact-of-marginal-cables">The Impact of Marginal
+Cables</h3>
+<p>A marginal cable is one suffering from high attenuation, poor
+shielding, excessive length, or internal wire gauge (AWG) limitations.
+At lower link rates like HBR2, the signal degradation may not be severe
+enough to close the signal eye diagram, allowing the display to pass
+channel equalization.</p>
+<p>However, when a custom resolution forces link training to step up to
+a higher transmission frequency:</p>
+<ul>
+<li><strong>High-Frequency Attenuation:</strong> Signal loss increases
+drastically with frequency. A marginal cable may cleanly transmit at 5.4
+Gbps but severely degrade an 8.1 Gbps signal.</li>
+<li><strong>Equalization Exhaustion:</strong> During the EQ phase, the
+GPU increases its pre-emphasis and drive current. On an out-of-spec or
+damaged cable, even the maximum boost cannot overcome the high-frequency
+packet loss, preventing symbol lock.</li>
+<li><strong>Phase-Locked Loop (PLL) Instability:</strong> Non-standard
+pixel clocks paired with active Spread Spectrum Clocking (SSC) can
+introduce jitter. Marginal cables exacerbate this jitter, causing the
+display's receiver PLL to lose tracking.</li>
+</ul>
+<h3 id="resolving-the-issue">Resolving the Issue</h3>
+<p>To stabilize the connection without replacing hardware, the custom
+resolution must be configured to stay within the cable's reliable
+frequency envelope:</p>
+<ul>
+<li><strong>Switch to CVT-RB or CVT-RB2:</strong> Selecting reduced
+blanking standards reduces the pixel clock and total data overhead,
+potentially dropping the required transmission tier back to a frequency
+the marginal cable can maintain.</li>
+<li><strong>Lower the Refresh Rate Incrementally:</strong> Reducing the
+refresh rate by a fraction of a hertz (e.g., from 144 Hz to 141 Hz) can
+drop the data rate just below a link-rate negotiation threshold.</li>
+<li><strong>Upgrade the Physical Cable:</strong> If higher bandwidth is
+mandatory for the target resolution, replacing the marginal cable with a
+VESA-certified cable rated for the appropriate standard (such as DP8K /
+HBR3) resolves the underlying physical layer attenuation.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

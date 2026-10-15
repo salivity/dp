@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Do Active DisplayPort Adapters Cause Input Lag? - dp</title>
+    <meta name="description" content="Active DisplayPort adapters convert video signals using internal processing chips, raising valid concerns among competitive gamers regarding added input latency. In practice, while these adapters do introduce a theoretical delay due to signal conversion,">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/do-active-display-port-adapters-cause-input-lag">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Do Active DisplayPort Adapters Cause Input Lag? - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/do-active-display-port-adapters-cause-input-lag" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Active DisplayPort adapters convert video signals using internal processing chips, raising valid concerns among competitive gamers regarding added input latency. In practice, while these adapters do introduce a theoretical delay due to signal conversion," />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="do-active-displayport-adapters-cause-input-lag">Do Active
+DisplayPort Adapters Cause Input Lag?</h1>
+<p>Active DisplayPort adapters convert video signals using internal
+processing chips, raising valid concerns among competitive gamers
+regarding added input latency. In practice, while these adapters do
+introduce a theoretical delay due to signal conversion, the latency is
+measured in microseconds—far below a single millisecond. Consequently, a
+quality active DisplayPort adapter introduces virtually no measurable or
+perceptible input latency, meaning it will not compromise competitive
+gaming performance.</p>
+<h3 id="how-active-displayport-adapters-work">How Active DisplayPort
+Adapters Work</h3>
+<p>Unlike passive adapters that simply reroute pin signals and rely on
+the graphics card's DisplayPort Dual-Mode (DP++) to output HDMI or DVI
+formats, active adapters contain an integrated circuit (converter IC).
+This chip receives the native DisplayPort packetized data, decodes it,
+and translates it into a different protocol, such as TMDS for HDMI or
+analog signals for VGA.</p>
+<p>Because this conversion requires active data processing, it
+inherently involves a processing step that passive cables avoid.</p>
+<h3 id="measuring-the-latency-impact">Measuring the Latency Impact</h3>
+<p>In fast-paced esports titles where frame times are vital, display
+pipelines are scrutinized down to the millisecond. For reference:</p>
+<ul>
+<li>A 60Hz refresh rate delivers one frame every <strong>16.67
+milliseconds</strong>.</li>
+<li>A 144Hz refresh rate delivers one frame every <strong>6.94
+milliseconds</strong>.</li>
+<li>A 240Hz refresh rate delivers one frame every <strong>4.16
+milliseconds</strong>.</li>
+</ul>
+<p>Modern converter ICs found in reputable active DisplayPort adapters
+operate using small line-buffer architectures rather than full-frame
+buffers. Instead of storing an entire frame before outputting it, the
+chip translates the video stream almost continuously line by line.</p>
+<p>This process typically introduces a delay ranging between <strong>5
+to 50 microseconds (0.005 to 0.05 milliseconds)</strong>. Because this
+latency is fractions of a single frame duration even at 360Hz, it cannot
+be registered by human perception, nor can it be reliably measured
+outside of specialized lab equipment using high-bandwidth
+oscilloscopes.</p>
+<h3 id="real-factors-that-impact-performance">Real Factors That Impact
+Performance</h3>
+<p>While signal translation itself does not cause noticeable input lag,
+low-quality or mismatched active adapters can still negatively affect
+your gaming experience through other limitations:</p>
+<ul>
+<li><strong>Bandwidth and Refresh Rate Caps:</strong> If an adapter only
+supports HDMI 2.0 instead of HDMI 2.1, it may cap your monitor at 60Hz
+or 120Hz instead of its native 144Hz or 240Hz. A lower refresh rate
+significantly increases end-to-end system latency.</li>
+<li><strong>Loss of Variable Refresh Rate (VRR):</strong> Many active
+adapters do not pass through AMD FreeSync or NVIDIA G-Sync signals.
+Playing without VRR can force you to choose between screen tearing or
+the substantial latency penalty of traditional V-Sync.</li>
+<li><strong>Signal Instability and Frame Dropping:</strong> Poorly
+shielded or overheating active adapters can lose signal sync, resulting
+in dropped frames, stuttering, or temporary black screens during intense
+moments.</li>
+</ul>
+<h3 id="conclusion">Conclusion</h3>
+<p>An active DisplayPort adapter does not introduce meaningful input
+lag. As long as the adapter supports the full resolution, high refresh
+rates, and variable refresh rate technologies required by your display,
+it will perform identically to a direct connection in fast-paced
+competitive environments.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

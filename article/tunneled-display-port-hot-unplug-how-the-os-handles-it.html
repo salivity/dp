@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tunneled DisplayPort Hot-Unplug: How the OS Handles It - dp</title>
+    <meta name="description" content="When a tunneled DisplayPort monitor is unplugged from a USB4 or Thunderbolt port, the operating system executes a coordinated teardown across the bus controller, graphics driver, and window manager. The OS rapidly tears down the underlying high-speed tunn">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/tunneled-display-port-hot-unplug-how-the-os-handles-it">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Tunneled DisplayPort Hot-Unplug: How the OS Handles It - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/tunneled-display-port-hot-unplug-how-the-os-handles-it" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="When a tunneled DisplayPort monitor is unplugged from a USB4 or Thunderbolt port, the operating system executes a coordinated teardown across the bus controller, graphics driver, and window manager. The OS rapidly tears down the underlying high-speed tunn" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="tunneled-displayport-hot-unplug-how-the-os-handles-it">Tunneled
+DisplayPort Hot-Unplug: How the OS Handles It</h1>
+<p>When a tunneled DisplayPort monitor is unplugged from a USB4 or
+Thunderbolt port, the operating system executes a coordinated teardown
+across the bus controller, graphics driver, and window manager. The OS
+rapidly tears down the underlying high-speed tunnel, translates the
+physical disconnection into a virtual Hot Plug Detect (HPD) drop,
+migrates active application windows to surviving displays, and frees
+associated audio and frame-buffer resources without causing system
+instability or kernel panics.</p>
+<h3 id="1-tunnel-detection-and-bus-teardown">1. Tunnel Detection and Bus
+Teardown</h3>
+<p>In a tunneled configuration, native DisplayPort protocol packets are
+encapsulated inside USB4 or Thunderbolt transport frames. When the cable
+is pulled, the physical link drops instantly:</p>
+<ul>
+<li><strong>Host Router Detection:</strong> The USB4 or Thunderbolt host
+controller recognizes the physical disconnect via sideband channels
+(such as USB Type-C CC pins or Thunderbolt low-frequency periodic
+signaling).</li>
+<li><strong>Tunnel Teardown:</strong> The OS Connection Manager (CM)
+invalidates the DisplayPort tunnel path. It immediately deallocates the
+bandwidth consumed by the DP IN and DP OUT adapters within the
+fabric.</li>
+<li><strong>Emulated Signal Drops:</strong> Because physical DP Hot Plug
+Detect (HPD) pins do not run end-to-end over the cable, the router or
+the connection manager asserts a virtual HPD low signal to notify the
+graphics subsystem that the display is gone.</li>
+</ul>
+<h3 id="2-graphics-driver-interrupt-and-safety-handling">2. Graphics
+Driver Interrupt and Safety Handling</h3>
+<p>Once the virtual HPD low signal triggers an interrupt:</p>
+<ul>
+<li><strong>Canceling Active Transactions:</strong> The OS kernel
+graphics driver (such as WDDM in Windows or DRM/KMS in Linux) must
+immediately abort pending DisplayPort Configuration Data (DPCD) and AUX
+channel reads. Without graceful handling, lingering I/O transactions
+would cause bus timeouts or kernel lockups.</li>
+<li><strong>Disabling Display Pipes:</strong> The driver halts the
+associated display pipe, shuts down the stream encoder, and stops
+transmitting pixel data to the virtual DP output interface.</li>
+<li><strong>Audio Device Revocation:</strong> DisplayPort carries
+digital audio alongside video. The OS audio subsystem (e.g., Windows
+Audio or CoreAudio) instantly de-enumerates the audio endpoint,
+seamlessly rerouting active streams to fallback audio devices like
+internal speakers.</li>
+</ul>
+<h3 id="3-display-topology-update-and-window-migration">3. Display
+Topology Update and Window Migration</h3>
+<p>With the hardware pipeline quiesced, the OS moves up the stack to
+maintain desktop continuity:</p>
+<ul>
+<li><strong>Topology Invalidation:</strong> The OS marks the display
+output as disconnected and invalidates any cached EDID (Extended Display
+Identification Data) metadata for that port.</li>
+<li><strong>Compositor Reconfiguration:</strong> The compositing engine
+(Windows DWM, macOS WindowServer, or a Wayland/X11 compositor) triggers
+a modeset change.</li>
+<li><strong>Window Repositioning:</strong> Any application windows
+previously rendered on the unplugged monitor are mapped back to the
+primary display or redistributed among remaining displays based on
+spatial coordinates or saved workspace profiles.</li>
+</ul>
+<h3 id="4-memory-reallocation-and-application-safety">4. Memory
+Reallocation and Application Safety</h3>
+<p>To prevent application crashes:</p>
+<ul>
+<li><strong>Swapchain Redirection:</strong> Applications utilizing
+rendering APIs (DirectX, Metal, or Vulkan) do not communicate directly
+with the physical screen. Their swapchains are managed by the
+compositor, which handles the resolution change and surface invalidation
+asynchronously.</li>
+<li><strong>Buffer Cleanup:</strong> The driver destroys the now-unused
+swapchains and display buffers, returning the allocated VRAM to the
+system's memory pool. Active applications simply receive an event
+indicating a swapchain resize or output change, allowing them to redraw
+their frames seamlessly.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

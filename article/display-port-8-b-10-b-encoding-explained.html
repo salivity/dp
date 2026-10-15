@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisplayPort 8b/10b Encoding Explained - dp</title>
+    <meta name="description" content="This article provides an overview of the 8b/10b line encoding scheme utilized in DisplayPort standards up through DisplayPort 1.4. It examines the fundamental mechanics of mapping 8-bit data bytes to 10-bit transmission characters, explains why this physi">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/display-port-8-b-10-b-encoding-explained">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DisplayPort 8b/10b Encoding Explained - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/display-port-8-b-10-b-encoding-explained" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article provides an overview of the 8b/10b line encoding scheme utilized in DisplayPort standards up through DisplayPort 1.4. It examines the fundamental mechanics of mapping 8-bit data bytes to 10-bit transmission characters, explains why this physi" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="displayport-8b10b-encoding-explained">DisplayPort 8b/10b
+Encoding Explained</h1>
+<p>This article provides an overview of the 8b/10b line encoding scheme
+utilized in DisplayPort standards up through DisplayPort 1.4. It
+examines the fundamental mechanics of mapping 8-bit data bytes to 10-bit
+transmission characters, explains why this physical-layer protocol is
+necessary for clock recovery and direct current (DC) balance, details
+the role of control symbols in link management, and highlights the
+resulting 20% bandwidth overhead that shaped DisplayPort's effective
+data throughput until the introduction of DisplayPort 2.0.</p>
+<h3 id="what-is-8b10b-encoding">What Is 8b/10b Encoding?</h3>
+<p>Originally developed by IBM researchers Al Widmer and Peter Franaszek
+in 1983, 8b/10b encoding is a telecommunications line code that maps an
+8-bit data byte (providing 256 possible data values) to a 10-bit symbol
+(providing 1,024 possible combinations). DisplayPort adopted this
+standard starting with DisplayPort 1.0 and continued utilizing it
+through versions 1.1, 1.2, 1.3, and 1.4 across all its legacy link
+rates: RBR (1.62 Gbps), HBR (2.7 Gbps), HBR2 (5.4 Gbps), and HBR3 (8.1
+Gbps per lane).</p>
+<h3 id="the-primary-purposes-in-displayport">The Primary Purposes in
+DisplayPort</h3>
+<p>The transmission of high-speed serial data over DisplayPort's
+differential pairs requires solving specific physical-layer transmission
+challenges. The 8b/10b scheme achieves three primary goals:</p>
+<ul>
+<li><strong>Clock Recovery:</strong> High-speed DisplayPort lanes do not
+carry a dedicated physical clock line. Instead, the receiver extracts
+the clock signal directly from transitions in the serial data stream
+using a Clock and Data Recovery (CDR) circuit. The 8b/10b scheme ensures
+that long runs of consecutive identical bits (such as all zeros or all
+ones) never occur. By limiting maximum run length to no more than five
+identical bits, the receiver receives frequent signal transitions to
+maintain phase lock.</li>
+<li><strong>DC Balance:</strong> DisplayPort uses AC-coupled
+differential signaling with capacitors inline on each lane. If a signal
+contains an unequal number of ones and zeros over time, a direct current
+(DC) voltage offset accumulates, causing signal degradation and baseline
+wander. 8b/10b maintains a continuous count called "Running Disparity"
+(RD). Every transmitted 10-bit symbol either has an equal number of ones
+and zeros (disparity zero) or has a disparity of <span
+class="math inline">\(+2\)</span> or <span
+class="math inline">\(-2\)</span>. The transmitter alternates between
+positive and negative disparity representations to ensure the average DC
+bias across the transmission line remains zero.</li>
+<li><strong>Error Detection and Framing:</strong> Because only 256 of
+the 1,024 available 10-bit patterns are needed for standard data symbols
+(referred to as D-codes), the remaining patterns allow for robust error
+handling. If a receiver encounters an unassigned 10-bit code or an
+invalid disparity jump, it immediately flags a transmission error.
+Furthermore, 12 specific non-data patterns (referred to as K-codes or
+special characters) are reserved for control functions, including frame
+delineation, blanking indicators, and the comma symbol (K28.5) used for
+physical lane alignment and training sequences.</li>
+</ul>
+<h3 id="bandwidth-impact-and-efficiency">Bandwidth Impact and
+Efficiency</h3>
+<p>The trade-off for the signal integrity provided by 8b/10b encoding is
+a fixed 20% bandwidth overhead. Because two extra bits are added to
+every eight bits of payload, the effective data throughput is always 80%
+of the raw physical signaling rate:</p>
+<p><span class="math display">\[\text{Effective Throughput} = \text{Raw
+Bit Rate} \times \left(\frac{8}{10}\right)\]</span></p>
+<p>For example, DisplayPort 1.4 running at its maximum HBR3 link rate
+operates at a raw rate of 8.1 Gbps per lane across 4 lanes, yielding a
+32.4 Gbps raw link rate. After applying the 8b/10b encoding penalty, the
+maximum uncompressed payload throughput is reduced to 25.92 Gbps.</p>
+<p>This 20% overhead became a limiting bottleneck as display resolutions
+reached 4K at high refresh rates and 8K. Consequently, VESA transitioned
+away from 8b/10b in DisplayPort 2.0 and 2.1, adopting a more efficient
+128b/132b line encoding scheme that reduces physical-layer overhead to
+roughly 3%.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

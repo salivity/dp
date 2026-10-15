@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Can DisplayPort Drive a CRT with a Cheap DAC? - dp</title>
+    <meta name="description" content="A DisplayPort source can drive an analog CRT monitor through an inexpensive active converter, but with significant performance limitations. Because DisplayPort is a purely digital standard, a direct passive connection is impossible, requiring an active di">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/can-display-port-drive-a-crt-with-a-cheap-dac">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Can DisplayPort Drive a CRT with a Cheap DAC? - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/can-display-port-drive-a-crt-with-a-cheap-dac" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="A DisplayPort source can drive an analog CRT monitor through an inexpensive active converter, but with significant performance limitations. Because DisplayPort is a purely digital standard, a direct passive connection is impossible, requiring an active di" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="can-displayport-drive-a-crt-with-a-cheap-dac">Can DisplayPort
+Drive a CRT with a Cheap DAC?</h1>
+<p>A DisplayPort source can drive an analog CRT monitor through an
+inexpensive active converter, but with significant performance
+limitations. Because DisplayPort is a purely digital standard, a direct
+passive connection is impossible, requiring an active digital-to-analog
+converter (DAC) to generate the analog RGB and sync signals. While
+budget converters easily handle entry-level resolutions and standard
+refresh rates, their restricted pixel clock bandwidth prevents them from
+fully utilizing the high resolutions and ultra-fast refresh rates that
+make high-end CRT monitors desirable.</p>
+<h3 id="digital-vs-analog-why-an-active-converter-is-required">Digital
+vs. Analog: Why an Active Converter is Required</h3>
+<p>Unlike legacy DVI-I connections, DisplayPort does not carry any
+native analog video signals. To connect a modern GPU’s DisplayPort
+output to the VGA input of a cathode-ray tube (CRT) monitor, an active
+conversion process must take place.</p>
+<p>Modern "RAMDAC" converters are usually integrated single-chip
+transcoders built directly into compact DisplayPort-to-VGA dongles.
+These chips decode the digital DisplayPort packets, translate the color
+data into analog voltage variations for the red, green, and blue
+electron guns, and generate the necessary horizontal and vertical sync
+pulses.</p>
+<h3 id="where-inexpensive-converters-work">Where Inexpensive Converters
+Work</h3>
+<p>Inexpensive converters—typically mass-market DisplayPort-to-VGA
+adapters costing under $15—will successfully produce an image on a CRT
+monitor. They generally function seamlessly under the following
+conditions:</p>
+<ul>
+<li><strong>Standard Resolutions:</strong> Resolutions like 1024×768,
+1280×1024, or 1920×1080.</li>
+<li><strong>Standard Refresh Rates:</strong> Refresh rates capped at
+60Hz to 75Hz.</li>
+<li><strong>Plug-and-Play EDID Communication:</strong> Passing standard
+VESA display data from the CRT back to the graphics driver.</li>
+</ul>
+<p>If the goal is basic desktop productivity or casual retro gaming at
+modest refresh rates, a cheap adapter is entirely sufficient.</p>
+<h3 id="the-bottleneck-pixel-clock-limits">The Bottleneck: Pixel Clock
+Limits</h3>
+<p>The core performance limitation of budget DACs is the maximum pixel
+clock frequency. A CRT’s resolution and refresh rate together dictate
+the required pixel clock bandwidth:</p>
+<p><span class="math display">\[\text{Pixel Clock} \approx
+\text{Horizontal Total Pixels} \times \text{Vertical Total Pixels}
+\times \text{Refresh Rate}\]</span></p>
+<p>Most inexpensive converters use entry-level ICs limited to a maximum
+pixel clock between 165 MHz and 200 MHz. This creates a hard
+ceiling:</p>
+<ul>
+<li><strong>1080p at 60Hz</strong> requires roughly 148 MHz
+(supported).</li>
+<li><strong>1024×768 at 85Hz</strong> requires roughly 94 MHz
+(supported).</li>
+<li><strong>1600×1200 at 85Hz</strong> requires roughly 229 MHz
+(unsupported or unstable).</li>
+<li><strong>2048×1536 at 85Hz</strong> requires over 380 MHz (fails
+entirely).</li>
+</ul>
+<p>When an inexpensive converter is pushed past its pixel clock limit,
+it typically produces an out-of-range black screen, severe frame
+dropping, or hardware desynchronization.</p>
+<h3 id="analog-signal-quality-issues">Analog Signal Quality Issues</h3>
+<p>Budget converters cut costs on passive components, power delivery,
+and analog filtering. On an analog display, these compromises manifest
+as visible artifacts:</p>
+<ul>
+<li><strong>Ghosting and Ringing:</strong> Poor impedance matching and
+weak filtering cause shadows or halos to appear to the right of
+high-contrast text and edges.</li>
+<li><strong>Color Smearing:</strong> Inadequate digital-to-analog
+transitions can cause color bleed.</li>
+<li><strong>Voltage Drop:</strong> Insufficient power from the
+DisplayPort bus can lead to dim, muddy images or crushed black
+levels.</li>
+</ul>
+<h3 id="summary">Summary</h3>
+<p>An inexpensive DisplayPort-to-VGA converter will function with an
+analog CRT, but it restricts the display to entry-level speeds and
+resolutions. Enthusiasts seeking to run CRTs at high refresh rates
+(100Hz–160Hz+) or high resolutions (1600×1200 and above) must bypass
+cheap generic adapters in favor of higher-end transcoders featuring
+pixel clocks rated at 330 MHz to 400 MHz or higher.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

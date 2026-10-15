@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisplayPort Packet Priority: Video, Audio, and Data - dp</title>
+    <meta name="description" content="The DisplayPort standard manages bandwidth contention on its Main Link through a deterministic, packet-based time-division architecture rather than a dynamic software-driven queue. High-priority isochronous streams—primarily active video—are given absolut">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/display-port-packet-priority-video-audio-and-data">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DisplayPort Packet Priority: Video, Audio, and Data - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/display-port-packet-priority-video-audio-and-data" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The DisplayPort standard manages bandwidth contention on its Main Link through a deterministic, packet-based time-division architecture rather than a dynamic software-driven queue. High-priority isochronous streams—primarily active video—are given absolut" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="displayport-packet-priority-video-audio-and-data">DisplayPort
+Packet Priority: Video, Audio, and Data</h1>
+<p>The DisplayPort standard manages bandwidth contention on its Main
+Link through a deterministic, packet-based time-division architecture
+rather than a dynamic software-driven queue. High-priority isochronous
+streams—primarily active video—are given absolute temporal precedence
+based on pixel timing, while audio, metadata, and general data packets
+are multiplexed into specific framing intervals or reserved time slots.
+This article details the structural hierarchy and arbitration mechanisms
+the VESA DisplayPort specification uses to prevent packet collision and
+guarantee that video and audio arrive without latency or dropouts.</p>
+<h3 id="the-micro-packet-architecture">The Micro-Packet
+Architecture</h3>
+<p>DisplayPort replaces conventional raster-based digital transmission
+with a packetized protocol derived from PCI Express. The Main Link
+operates at a fixed, unthrottled link rate (such as RBR, HBR, HBR3, or
+UHBR) regardless of the pixel clock rate of the incoming video
+stream.</p>
+<p>Because the link rate generally exceeds the native stream data rate,
+transmission is governed by a micro-packet framing mechanism using
+special control symbols. This structure allows video, audio, and
+secondary data to interleave predictably across physical lanes.</p>
+<h3 id="active-video-priority">Active Video Priority</h3>
+<p>In Single-Stream Transport (SST) mode, active video holds strict
+temporal priority during the active display period:</p>
+<ul>
+<li><strong>Raster Synchronization:</strong> When pixels are actively
+being drawn across a scanline, pixel data occupies the physical link
+layer. Video data is mapped into data streams framed by dedicated
+start-of-frame and end-of-frame control symbols.</li>
+<li><strong>Stream Reservation:</strong> Video data packets cannot be
+interrupted or fragmented arbitrarily by auxiliary data during the
+active video period. The transmitter utilizes a Transfer Unit (TU)
+structure—typically 32 to 64 link symbols per lane—to consistently feed
+pixel data alongside minimal link-maintenance symbols.</li>
+</ul>
+<h3 id="blanking-periods-and-secondary-data-packets-sdp">Blanking
+Periods and Secondary Data Packets (SDP)</h3>
+<p>Because active video occupies the link during the active raster
+lines, all non-video traffic contends for bandwidth primarily during the
+Horizontal Blanking Interval (HBI) and Vertical Blanking Interval
+(VBI).</p>
+<p>Data sent during blanking intervals is encapsulated into Secondary
+Data Packets (SDPs). DisplayPort categorizes SDPs into specific
+priorities based on latency sensitivity:</p>
+<ol type="1">
+<li><strong>Audio Timestamp Packets (ATP):</strong> Crucial for
+maintaining Audio-to-Video synchronization (lip sync). Because drift
+impairs audio reproduction, timestamp packets receive immediate
+transmission scheduling once a blanking period opens.</li>
+<li><strong>Audio Stream Packets (ASP):</strong> Audio samples require
+continuous delivery with minimal jitter. Buffer sizes on the receiver
+side are limited, so ASPs are dispatched at predictable intervals across
+the HBI and VBI before lower-priority payloads.</li>
+<li><strong>High-Priority Metadata:</strong> Dynamic High Dynamic Range
+(HDR) metadata, Extended Display Identification Data (EDID) updates, and
+Content Protection (HDCP) handshakes are prioritized next to avoid
+frame-to-frame rendering delays.</li>
+<li><strong>General Control and Information Packets:</strong> Static
+InfoFrames (such as AVI InfoFrames, Vendor-Specific InfoFrames, and
+colorimetry data) utilize remaining blanking slots.</li>
+</ol>
+<p>If a blanking interval lacks sufficient bandwidth to transmit both
+high-priority audio samples and oversized metadata, the transmitter
+holds the non-critical metadata in a local buffer until subsequent HBI
+or VBI phases occur.</p>
+<h3 id="multi-stream-transport-mst-slot-allocation">Multi-Stream
+Transport (MST) Slot Allocation</h3>
+<p>In Multi-Stream Transport (MST) mode, multiple independent
+audio/video streams share a single physical Main Link. DisplayPort
+eliminates runtime packet contention in MST environments by implementing
+an explicit Time-Division Multiplexing (TDM) scheme:</p>
+<ul>
+<li><strong>64 Time Slots:</strong> Every link transmission unit is
+organized into 64 discrete time slots per frame.</li>
+<li><strong>Virtual Channels:</strong> Each video/audio stream is
+assigned a specific number of time slots by the source device,
+determined during topology discovery and link training.</li>
+<li><strong>Guaranteed Bandwidth:</strong> Because slots are strictly
+allocated upstream, contention across competing video and audio streams
+is resolved before transmission occurs. Stream 1 cannot encroach upon
+the time slots granted to Stream 2.</li>
+</ul>
+<p>Within each individual virtual channel's allocated slots, the same
+hierarchy applies: active video reserves transmission capacity, followed
+by audio SDPs, followed by general metadata during the channel's
+respective blanking portions.</p>
+<h3 id="link-layer-stuffing">Link Layer Stuffing</h3>
+<p>At the bottom of the priority hierarchy are dummy or "stuffing"
+symbols (such as the FS and FE framing symbols). When neither active
+video nor secondary data packets are queued for transmission—or when the
+allocated TU capacity exceeds the data payload—the transmitter inserts
+stuffing symbols. These maintain link synchronization and clock recovery
+without taking bandwidth from functional data.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

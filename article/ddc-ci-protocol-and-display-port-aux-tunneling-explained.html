@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DDC/CI Protocol and DisplayPort AUX Tunneling Explained - dp</title>
+    <meta name="description" content="The Display Data Channel/Command Interface (DDC/CI) is a standard protocol that allows a computer to send control commands directly to a connected monitor, enabling software-based adjustments of settings such as brightness, contrast, and color balance. Wh">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/ddc-ci-protocol-and-display-port-aux-tunneling-explained">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DDC/CI Protocol and DisplayPort AUX Tunneling Explained - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/ddc-ci-protocol-and-display-port-aux-tunneling-explained" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The Display Data Channel/Command Interface (DDC/CI) is a standard protocol that allows a computer to send control commands directly to a connected monitor, enabling software-based adjustments of settings such as brightness, contrast, and color balance. Wh" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="ddcci-protocol-and-displayport-aux-tunneling-explained">DDC/CI
+Protocol and DisplayPort AUX Tunneling Explained</h1>
+<p>The Display Data Channel/Command Interface (DDC/CI) is a standard
+protocol that allows a computer to send control commands directly to a
+connected monitor, enabling software-based adjustments of settings such
+as brightness, contrast, and color balance. While traditionally
+transmitted over dedicated physical I2C wiring found in legacy
+connections like VGA and DVI, modern interfaces like DisplayPort lack
+these dedicated lines. Instead, DisplayPort transports DDC/CI traffic by
+encapsulating standard I2C transactions into packets sent over its
+bidirectional Auxiliary (AUX) channel—a process known as I2C-over-AUX
+tunneling.</p>
+<h2 id="what-is-the-ddcci-protocol">What Is the DDC/CI Protocol?</h2>
+<p>DDC/CI is a bidirectional communications standard defined by the
+Video Electronics Standards Association (VESA). It serves as an
+expansion of the basic DDC standard, which was originally designed
+solely to transmit Extended Display Identification Data (EDID) from the
+monitor to the host graphics card.</p>
+<p>With DDC/CI, the communication becomes two-way using the Monitor
+Control Command Set (MCCS). The host can query the monitor's
+capabilities and current settings, as well as transmit write commands to
+adjust parameters:</p>
+<ul>
+<li>Display adjustments (brightness, contrast, color temperature,
+tint)</li>
+<li>Geometry adjustments (horizontal/vertical position, phase,
+clock)</li>
+<li>Hardware control (input source switching, audio volume, power state
+management)</li>
+</ul>
+<p>Electrically, DDC/CI was designed to run over the simple two-wire I2C
+serial bus (consisting of Serial Clock [SCL] and Serial Data [SDA]
+lines) operating at the standard 7-bit device address
+<code>0x37</code>.</p>
+<h2 id="the-displayport-auxiliary-aux-channel">The DisplayPort Auxiliary
+(AUX) Channel</h2>
+<p>DisplayPort does not use dedicated physical pins for I2C
+communication. Instead, it relies on a packet-based architecture
+consisting of high-speed Main Link lanes for video and audio, and a
+dedicated, bidirectional, half-duplex sideband connection known as the
+Auxiliary (AUX) Channel.</p>
+<p>The standard DP AUX channel operates over an AC-coupled differential
+pair running at 1 Mbps with Manchester II encoding (extended to 720 Mbps
+with 8b/10b encoding in newer versions as "Fast AUX"). The AUX channel
+handles link configuration, link training, device status reporting via
+DPCD (DisplayPort Configuration Data), and legacy display management
+traffic.</p>
+<h2 id="how-ddcci-is-tunneled-through-the-aux-channel">How DDC/CI Is
+Tunneled Through the AUX Channel</h2>
+<p>To retain compatibility with standard monitor control software
+without adding dedicated I2C pins, VESA specified an
+<strong>I2C-over-AUX</strong> translation mechanism within the
+DisplayPort standard. This allows the host's graphics driver to wrap
+standard DDC/CI I2C commands into DisplayPort AUX request packets.</p>
+<p>The tunneling process occurs through the following steps:</p>
+<h3 id="1-packet-encapsulation-i2c-over-aux-syntax">1. Packet
+Encapsulation (I2C-over-AUX Syntax)</h3>
+<p>The host GPU constructs a standard DP AUX request packet. Within the
+4-bit command field of the AUX header, the host specifies an I2C
+transaction rather than a native DPCD transaction. The primary command
+types include:</p>
+<ul>
+<li><code>I2C-Write</code>: Transmits data to an I2C slave.</li>
+<li><code>I2C-Read</code>: Requests data from an I2C slave.</li>
+<li><code>I2C-Write-Status-Update</code>: Monitors write status without
+sending new data.</li>
+</ul>
+<p>The AUX packet also includes the 20-bit address field (which houses
+the standard 7-bit DDC/CI I2C address <code>0x37</code>), a length
+counter, and the data payload containing the MCCS command bytes.</p>
+<h3 id="2-transmission-across-the-cable">2. Transmission Across the
+Cable</h3>
+<p>The encapsulated packet is serialized and sent across the physical
+AUX channel differential pair to the display's receiver hardware.</p>
+<h3 id="3-monitor-demultiplexing-and-execution">3. Monitor
+Demultiplexing and Execution</h3>
+<p>The display’s DisplayPort receiver (sink) decodes the incoming AUX
+packet. Upon recognizing the command as an I2C-over-AUX transaction, it
+routes the payload to the display scalar or internal
+microcontroller:</p>
+<ul>
+<li><strong>Integrated Implementations:</strong> The display controller
+directly interprets the payload and executes the MCCS command
+internally.</li>
+<li><strong>Bridged Implementations:</strong> In displays with discrete
+bridge chips, the chip regenerates physical I2C clock (SCL) and data
+(SDA) signals and routes them to an internal hardware I2C bus linked to
+the monitor's scalar.</li>
+</ul>
+<h3 id="4-sink-response-handling">4. Sink Response Handling</h3>
+<p>The display responds back to the host across the AUX channel using
+standard AUX reply codes:</p>
+<ul>
+<li><code>AUX ACK</code>: The monitor successfully accepted the
+transaction.</li>
+<li><code>AUX NACK</code>: The addressed device failed to acknowledge
+(e.g., DDC/CI is disabled in the monitor’s on-screen menu).</li>
+<li><code>AUX DEFER</code>: The monitor is temporarily busy processing
+an internal operation and instructs the host to retry the request.</li>
+</ul>
+<p>If the command was an MCCS read request, the reply packet also
+carries the requested data payload (such as the current brightness
+value) back to the host.</p>
+<p>Through this tunneling technique, operating systems and monitor
+utilities can continue interacting with DDC/CI software layers
+identically to how they would over native I2C, while running entirely on
+the packetized physical layer of DisplayPort.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

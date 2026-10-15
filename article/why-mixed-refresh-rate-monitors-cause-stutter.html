@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why Mixed Refresh Rate Monitors Cause Stutter - dp</title>
+    <meta name="description" content="Running a multi-monitor setup with mixed refresh rates—such as a 144 Hz primary gaming screen paired with a secondary 60 Hz display—historically caused severe stuttering, micro-freezes, and frame drops. This phenomenon was primarily caused by architectura">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/why-mixed-refresh-rate-monitors-cause-stutter">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Why Mixed Refresh Rate Monitors Cause Stutter - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/why-mixed-refresh-rate-monitors-cause-stutter" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Running a multi-monitor setup with mixed refresh rates—such as a 144 Hz primary gaming screen paired with a secondary 60 Hz display—historically caused severe stuttering, micro-freezes, and frame drops. This phenomenon was primarily caused by architectura" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="why-mixed-refresh-rate-monitors-cause-stutter">Why Mixed Refresh
+Rate Monitors Cause Stutter</h1>
+<p>Running a multi-monitor setup with mixed refresh rates—such as a 144
+Hz primary gaming screen paired with a secondary 60 Hz
+display—historically caused severe stuttering, micro-freezes, and frame
+drops. This phenomenon was primarily caused by architectural limitations
+in the Windows Desktop Window Manager (DWM), uneven frame pacing
+mismatches, and GPU hardware acceleration handling across asymmetric
+display pipelines.</p>
+<h3 id="the-desktop-window-manager-dwm-bottleneck">The Desktop Window
+Manager (DWM) Bottleneck</h3>
+<p>Before recent architectural overhauls, the Windows Desktop Window
+Manager treated the entire desktop workspace across all connected
+monitors as a single unified canvas. Historically, DWM synchronized its
+desktop composition cycles using a single global vertical sync (V-Sync)
+clock. Because DWM was not originally designed to handle completely
+independent presentation intervals per monitor, it struggled to
+composite surfaces refreshing at different frequencies simultaneously.
+When motion occurred on both displays, the compositor frequently locked
+the refresh cycle to the lowest common denominator—the 60 Hz
+display—effectively throttling the high-refresh monitor or causing
+severe frame pacing anomalies.</p>
+<h3 id="hardware-acceleration-conflicts">Hardware Acceleration
+Conflicts</h3>
+<p>The stuttering was most noticeable when running hardware-accelerated
+applications on the secondary 60 Hz screen, such as a web browser
+playing video, a streaming application, or hardware-rendered chat
+interfaces. Modern applications utilize GPU-accelerated graphics APIs
+(DirectX or OpenGL) to render interfaces and video streams.</p>
+<p>When a video played at 60 frames per second on the 60 Hz screen, the
+application requested synchronization with that specific monitor’s
+V-Sync interval. DWM, attempting to composite both the
+hardware-accelerated secondary window and the 144 Hz primary window,
+would lose timing synchronization. The graphics driver would often
+prioritize the active V-Sync signal of the video player, forcing the GPU
+to queue frames according to the 60 Hz cadence and causing the
+high-refresh primary monitor to drop or duplicate frames.</p>
+<h3 id="frame-pacing-and-non-divisible-timings">Frame Pacing and
+Non-Divisible Timings</h3>
+<p>Display timings between standard 60 Hz monitors and high-refresh
+panels (such as 144 Hz or 165 Hz) are mathematically non-divisible. A 60
+Hz monitor updates every 16.67 milliseconds, while a 144 Hz monitor
+updates roughly every 6.94 milliseconds.</p>
+<p>Because their refresh intervals do not align cleanly, the GPU frame
+buffer swap chains cannot seamlessly alternate without temporal
+alignment errors. When legacy compositors attempted to synchronize these
+disjointed intervals over DisplayPort pipelines, frames intended for the
+faster monitor were frequently held back or discarded to match the
+presentation queue of the slower display. The result was visible judder,
+irregular frame delivery, and perceived stuttering during gameplay or
+desktop navigation.</p>
+<h3 id="legacy-gpu-driver-and-wddm-limitations">Legacy GPU Driver and
+WDDM Limitations</h3>
+<p>At the driver level, older versions of the Windows Display Driver
+Model (prior to WDDM 2.7) lacked the native infrastructure to
+asynchronously decouple swap chains across multiple monitors with
+hardware scheduling. The GPU's display engine had to coordinate buffer
+flips across varying scan-out frequencies using software-driven CPU
+interrupts. This created timing jitter within the GPU memory pipeline,
+particularly when transitioning between fullscreen borderless windows
+and desktop applications.</p>
+<p>These issues were largely mitigated only after Microsoft introduced
+native independent refresh rate composition in modern updates, paired
+with WDDM 2.7 and Hardware-Accelerated GPU Scheduling (HAGS), allowing
+the GPU hardware scheduler to manage presentation timings independently
+for each display port.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

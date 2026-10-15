@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisplayPort AUX vs I2C-over-AUX Transactions - dp</title>
+    <meta name="description" content="This article provides a direct comparison between native DisplayPort physical Auxiliary (AUX) channel transactions and I2C-over-AUX transactions. It explores how the bidirectional DisplayPort AUX channel manages both modern DisplayPort Configuration Data">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/display-port-aux-vs-i-2-c-over-aux-transactions">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DisplayPort AUX vs I2C-over-AUX Transactions - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/display-port-aux-vs-i-2-c-over-aux-transactions" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article provides a direct comparison between native DisplayPort physical Auxiliary (AUX) channel transactions and I2C-over-AUX transactions. It explores how the bidirectional DisplayPort AUX channel manages both modern DisplayPort Configuration Data" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="displayport-aux-vs-i2c-over-aux-transactions">DisplayPort AUX vs
+I2C-over-AUX Transactions</h1>
+<p>This article provides a direct comparison between native DisplayPort
+physical Auxiliary (AUX) channel transactions and I2C-over-AUX
+transactions. It explores how the bidirectional DisplayPort AUX channel
+manages both modern DisplayPort Configuration Data (DPCD) operations and
+backward-compatible I2C operations (such as EDID and MCCS), detailing
+the structural, operational, and functional differences between the two
+protocols.</p>
+<h2 id="the-displayport-aux-channel-overview">The DisplayPort AUX
+Channel Overview</h2>
+<p>The DisplayPort Auxiliary (AUX) channel is a dedicated,
+bidirectional, half-duplex AC-coupled differential link operating
+alongside the main video lanes. Originally designed with a raw bit rate
+of 1 Mbps using Manchester-II encoding (and expanded up to 720 Mbps with
+128b/132b encoding in DisplayPort 2.0+), it acts as the primary control
+bus between the video source (transmitter) and the display sink
+(receiver).</p>
+<p>Every interaction over this bus occurs through request-and-reply
+packet transactions initiated exclusively by the source device. These
+transactions are broadly categorized into two types: <strong>Native AUX
+Transactions</strong> and <strong>I2C-over-AUX
+Transactions</strong>.</p>
+<hr />
+<h2 id="native-displayport-aux-transactions">Native DisplayPort AUX
+Transactions</h2>
+<p>Native AUX transactions represent the standard, direct communication
+protocol engineered specifically for DisplayPort architectures.</p>
+<h3 id="key-characteristics">Key Characteristics:</h3>
+<ul>
+<li><strong>Primary Purpose:</strong> Used for low-level link
+configuration, link training, capability discovery, and ongoing link
+status monitoring.</li>
+<li><strong>Target Address Space:</strong> Accesses the DisplayPort
+Configuration Data (DPCD) registers located on the sink device. DPCD
+uses a 20-bit address space (ranging from <code>0x00000</code> to
+<code>0xFFFFF</code>).</li>
+<li><strong>Command Types:</strong>
+<ul>
+<li><code>AUX Native Write</code> (Command code <code>1000</code> in
+binary / <code>0x8</code>)</li>
+<li><code>AUX Native Read</code> (Command code <code>1001</code> in
+binary / <code>0x9</code>)</li>
+</ul></li>
+<li><strong>Payload Capacity:</strong> Each transaction can transfer
+between 1 and 16 bytes of data per burst.</li>
+<li><strong>Response Mechanism:</strong> The sink returns an immediate
+AUX reply containing status bits: <code>ACK</code> (success),
+<code>NACK</code> (negative acknowledgment), or <code>DEFER</code> (the
+receiver is busy and requests a retry).</li>
+</ul>
+<p>Because native AUX operates directly with the sink's internal
+registers without bus translation, it features lower latency and minimal
+protocol overhead.</p>
+<hr />
+<h2 id="i2c-over-aux-transactions">I2C-over-AUX Transactions</h2>
+<p>I2C-over-AUX is an emulation and tunneling protocol that allows
+standard I2C commands to be packaged and transmitted inside native AUX
+frames. DisplayPort does not include physical, dedicated I2C clock (SCL)
+and data (SDA) lines; instead, it encapsulates I2C traffic to maintain
+backward compatibility with legacy display identification standards.</p>
+<h3 id="key-characteristics-1">Key Characteristics:</h3>
+<ul>
+<li><strong>Primary Purpose:</strong> Primarily used to read Extended
+Display Identification Data (EDID) via the Display Data Channel (DDC),
+send Monitor Control Command Set (MCCS) data, or perform HDCP
+authentication on legacy downstream components.</li>
+<li><strong>Target Address Space:</strong> Targets 7-bit standard I2C
+slave addresses (e.g., <code>0x50</code> for EDID data). The 7-bit I2C
+address is mapped into the standard 20-bit AUX address field, with the
+unused upper bits set to zero.</li>
+<li><strong>Command Types:</strong>
+<ul>
+<li><code>I2C-over-AUX Write</code> (Command code <code>0000</code> /
+<code>0x0</code>)</li>
+<li><code>I2C-over-AUX Read</code> (Command code <code>0001</code> /
+<code>0x1</code>)</li>
+<li><code>I2C-over-AUX Write-Status-Update</code> (Command code
+<code>0010</code> / <code>0x2</code>)</li>
+</ul></li>
+<li><strong>Transaction Control (The MOT Bit):</strong> I2C requires
+<code>START</code>, <code>REPEATED START</code>, and <code>STOP</code>
+conditions. To emulate this on a packetized channel, I2C-over-AUX uses a
+<strong>Middle-of-Transaction (MOT)</strong> bit in the command header:
+<ul>
+<li>Setting <code>MOT = 1</code> holds the virtual I2C bus open,
+allowing multi-burst reads or combined write-then-read operations
+without issuing an I2C STOP condition.</li>
+<li>Setting <code>MOT = 0</code> signals the end of the transaction,
+instructing the sink to issue an I2C STOP condition.</li>
+</ul></li>
+<li><strong>Response Mechanism:</strong> In addition to standard AUX
+reply codes (<code>ACK</code>, <code>NACK</code>, <code>DEFER</code>),
+the sink can return an <code>I2C-NACK</code> to signify that the virtual
+or bridged I2C slave device did not acknowledge the address or data
+byte.</li>
+</ul>
+<hr />
+<h2 id="direct-comparison-of-differences">Direct Comparison of
+Differences</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Feature</th>
+<th style="text-align: left;">Native AUX Transactions</th>
+<th style="text-align: left;">I2C-over-AUX Transactions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Primary Role</strong></td>
+<td style="text-align: left;">Read/write DPCD registers; link training
+and device control</td>
+<td style="text-align: left;">Read EDID, send MCCS commands, interact
+with I2C peripherals</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Target Architecture</strong></td>
+<td style="text-align: left;">Modern DisplayPort sinks and branch
+devices</td>
+<td style="text-align: left;">Legacy I2C slave devices (real or
+emulated)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Address Width</strong></td>
+<td style="text-align: left;">20-bit address space</td>
+<td style="text-align: left;">7-bit I2C slave address (mapped into lower
+AUX address bits)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Protocol Flow</strong></td>
+<td style="text-align: left;">Direct stateless register access</td>
+<td style="text-align: left;">Emulates stateful I2C bus conditions
+(<code>START</code>, <code>STOP</code>, <code>ACK</code>) using the
+<code>MOT</code> flag</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Reply Codes</strong></td>
+<td style="text-align: left;">Native <code>ACK</code>,
+<code>NACK</code>, <code>DEFER</code></td>
+<td style="text-align: left;">Native replies plus virtual
+<code>I2C-NACK</code> and <code>I2C-DEFER</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Overhead</strong></td>
+<td style="text-align: left;">Minimal; point-to-point packetization</td>
+<td style="text-align: left;">Higher; requires encapsulation,
+bus-holding states, and translation</td>
+</tr>
+</tbody>
+</table>
+<h2 id="summary">Summary</h2>
+<p>Native AUX channel transactions provide direct, native access to
+DisplayPort's 20-bit DPCD register map for link setup and hardware
+control. In contrast, I2C-over-AUX is an encapsulation mechanism that
+simulates an I2C master-slave bus inside the AUX channel using the MOT
+bit, allowing DisplayPort sources to read EDID data and manage
+peripheral display features seamlessly without dedicated I2C pins.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

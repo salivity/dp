@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Full Range vs Limited Range RGB on DisplayPort - dp</title>
+    <meta name="description" content="RGB dynamic range defines how digital video signals represent brightness values between pure black and pure white. While Full Range (0-255) utilizes the entire spectrum of an 8-bit color signal to produce deeper contrast and accurate colors for PC environ">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/full-range-vs-limited-range-rgb-on-display-port">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Full Range vs Limited Range RGB on DisplayPort - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/full-range-vs-limited-range-rgb-on-display-port" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="RGB dynamic range defines how digital video signals represent brightness values between pure black and pure white. While Full Range (0-255) utilizes the entire spectrum of an 8-bit color signal to produce deeper contrast and accurate colors for PC environ" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="full-range-vs-limited-range-rgb-on-displayport">Full Range vs
+Limited Range RGB on DisplayPort</h1>
+<p>RGB dynamic range defines how digital video signals represent
+brightness values between pure black and pure white. While Full Range
+(0-255) utilizes the entire spectrum of an 8-bit color signal to produce
+deeper contrast and accurate colors for PC environments, Limited Range
+(16-235) compresses this scale to accommodate traditional television
+standards. Understanding how these two formats differ over a DisplayPort
+connection ensures your monitor displays games, media, and desktop
+applications with accurate color fidelity rather than washed-out grays
+or crushed shadow details.</p>
+<h2 id="understanding-the-value-ranges">Understanding the Value
+Ranges</h2>
+<p>In an 8-bit color system, each pixel's color is created by combining
+Red, Green, and Blue channels, each capable of displaying a range of
+brightness values:</p>
+<ul>
+<li><strong>Full Range (0–255):</strong> Uses all 256 available
+luminance steps per channel. A value of 0 corresponds to absolute black,
+and 255 corresponds to absolute peak white. This is the native standard
+for computer graphics, monitors, and the web.</li>
+<li><strong>Limited Range (16–235):</strong> Compresses the signal into
+220 steps. A value of 16 is designated as reference black, while 235 is
+designated as reference white. The values below 16 ("footroom") and
+above 235 ("headroom") were originally reserved by broadcast video
+standards (such as Rec. 709) to prevent signal degradation and
+accommodate broadcast hardware limitations.</li>
+</ul>
+<h2 id="displayport-and-dynamic-range">DisplayPort and Dynamic
+Range</h2>
+<p>DisplayPort was designed by VESA primarily as a computer display
+interface, unlike HDMI, which was created by consumer electronics
+manufacturers with televisions in mind. Because of this architectural
+heritage:</p>
+<ul>
+<li><strong>Default Behavior:</strong> DisplayPort connections default
+to Full Range RGB automatically. The graphics driver and the monitor
+communicate via Extended Display Identification Data (EDID), which
+almost universally triggers the full 0–255 range on DisplayPort-equipped
+monitors.</li>
+<li><strong>HDMI vs. DisplayPort Discrepancies:</strong> Users often
+encounter unintended Limited Range settings over HDMI because the
+graphics card may mistakenly identify the monitor as an HDTV. Over
+DisplayPort, this handshake error is exceedingly rare, making
+DisplayPort the more reliable connection for correct dynamic range
+output.</li>
+</ul>
+<h2 id="the-visual-impact-of-dynamic-range-mismatches">The Visual Impact
+of Dynamic Range Mismatches</h2>
+<p>Color and contrast issues occur when the output setting of the source
+(GPU) does not match the input expectation of the sink (monitor).</p>
+<h3
+id="scenario-1-gpu-outputs-full-0255-monitor-expects-limited-16235">Scenario
+1: GPU Outputs Full (0–255), Monitor Expects Limited (16–235)</h3>
+<p>When the monitor expects black at 16, receiving any value between 0
+and 15 results in "black crush." Subtle shadow details turn into
+completely flat, undifferentiated black. Conversely, bright details
+between 236 and 255 are blown out into solid white, resulting in an
+overly harsh, hyper-contrasted image with lost highlights and
+shadows.</p>
+<h3
+id="scenario-2-gpu-outputs-limited-16235-monitor-expects-full-0255">Scenario
+2: GPU Outputs Limited (16–235), Monitor Expects Full (0–255)</h3>
+<p>Because the graphics card emits its darkest black at level 16, a
+monitor expecting black at level 0 will render the signal as a dark
+gray. Peak white, transmitted at 235, is displayed as a dull, light
+gray. This creates a faded, washed-out image characterized by poor
+contrast and elevated black levels.</p>
+<h2 id="which-setting-should-you-choose">Which Setting Should You
+Choose?</h2>
+<p>For virtually all PC use cases utilizing DisplayPort, <strong>Full
+Range (0-255)</strong> is the correct choice.</p>
+<p>You can verify or adjust this configuration within your GPU's control
+software:</p>
+<ul>
+<li><strong>NVIDIA Control Panel:</strong> Navigate to <em>Change
+Resolution</em> &gt; select <em>Use NVIDIA color settings</em> &gt; set
+<em>Output dynamic range</em> to <strong>Full</strong>.</li>
+<li><strong>AMD Software (Adrenalin Edition):</strong> Navigate to
+<em>Gaming</em> &gt; <em>Display</em> &gt; locate <em>Pixel Format</em>
+&gt; ensure it is set to <strong>RGB 4:4:4 Pixel Format PC Standard
+(Full RGB)</strong>.</li>
+<li><strong>Intel Graphics Command Center:</strong> Navigate to
+<em>Display</em> &gt; ensure the input quantization range or dynamic
+range is set to <strong>Full</strong>.</li>
+</ul>
+<p>As long as both your GPU output and your monitor's internal color
+settings are aligned to Full Range, you will experience optimal black
+levels, peak whites, and accurate color gradation over DisplayPort.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

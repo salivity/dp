@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisplayPort Clock Recovery Link Training Explained - dp</title>
+    <meta name="description" content="During DisplayPort initialization, Clock Recovery (CR) is the crucial first phase of link training that establishes a synchronized bit clock between the transmitter (Source) and the receiver (Sink). This process ensures the Sink&#39;s Clock and Data Recovery">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/display-port-clock-recovery-link-training-explained">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DisplayPort Clock Recovery Link Training Explained - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/display-port-clock-recovery-link-training-explained" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="During DisplayPort initialization, Clock Recovery (CR) is the crucial first phase of link training that establishes a synchronized bit clock between the transmitter (Source) and the receiver (Sink). This process ensures the Sink&#39;s Clock and Data Recovery" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="displayport-clock-recovery-link-training-explained">DisplayPort
+Clock Recovery Link Training Explained</h1>
+<p>During DisplayPort initialization, Clock Recovery (CR) is the crucial
+first phase of link training that establishes a synchronized bit clock
+between the transmitter (Source) and the receiver (Sink). This process
+ensures the Sink's Clock and Data Recovery (CDR) circuitry can reliably
+lock onto the incoming high-speed serial data stream before signal
+equalization begins. By iteratively transmitting dedicated training
+patterns and exchanging status feedback over the bi-directional
+Auxiliary (AUX) Channel, the two devices dynamically adjust voltage
+swing and pre-emphasis levels across all active lanes until an optimal,
+jitter-tolerant electrical connection is established.</p>
+<h3 id="the-purpose-of-clock-recovery">The Purpose of Clock
+Recovery</h3>
+<p>Modern DisplayPort interfaces operate without a dedicated physical
+clock line. Instead, the clock signal is embedded directly within the
+8b/10b- or 128b/132b-encoded data stream. For the Sink to decode pixels
+and control packets accurately, its internal Phase-Locked Loop (PLL)
+must reconstruct the transmit clock. Clock Recovery link training
+resolves physical signal degradation—caused by trace routing,
+connectors, and cable quality—by calibrating the signal's electrical
+parameters until the CDR can continuously track the phase and frequency
+of the incoming data.</p>
+<h3 id="step-1-capability-discovery-and-setup">Step 1: Capability
+Discovery and Setup</h3>
+<p>Before transmitting high-speed training signals, the Source reads the
+Sink's capabilities by accessing the DisplayPort Configuration Data
+(DPCD) registers via the 1 Mbps Manchester-encoded AUX Channel.</p>
+<ol type="1">
+<li><strong>Querying Receiver Limits:</strong> The Source checks the
+Sink's maximum supported link rate (e.g., RBR, HBR, HBR2, HBR3, or UHBR)
+and lane count (1, 2, or 4 lanes).</li>
+<li><strong>Establishing Initial Parameters:</strong> The Source selects
+the desired link rate and lane count, then programs the initial
+electrical drive parameters. Clock recovery typically begins at the
+lowest drive strength: Voltage Swing Level 0 and Pre-emphasis Level
+0.</li>
+</ol>
+<h3 id="step-2-transmission-of-training-pattern-sequence-1-tps1">Step 2:
+Transmission of Training Pattern Sequence 1 (TPS1)</h3>
+<p>Once configured, the Source switches its high-speed main link lanes
+from idle to transmitting Training Pattern Sequence 1 (TPS1).</p>
+<p>TPS1 consists of a repetitive, low-complexity bit sequence with dense
+transitions (such as alternating high and low states, <code>D10.2</code>
+in 8b/10b encoding). This dense transition density provides rich edge
+information, allowing the Sink's CDR circuit to detect bit boundaries
+rapidly and align its internal clock with minimal pattern-dependent
+jitter.</p>
+<h3 id="step-3-the-aux-feedback-loop">Step 3: The AUX Feedback Loop</h3>
+<p>While TPS1 streams over the main link, a closed-loop negotiation
+occurs over the AUX Channel:</p>
+<ul>
+<li><strong>Sink Evaluation:</strong> The Sink checks whether its local
+PLL has achieved phase and frequency lock on each lane.</li>
+<li><strong>Status Reporting:</strong> The Sink updates specific DPCD
+registers—notably <code>LANE0_1_STATUS</code> and
+<code>LANE2_3_STATUS</code>—where a dedicated <code>CR_DONE</code> bit
+exists for each lane.</li>
+<li><strong>Source Polling:</strong> The Source reads the DPCD status
+registers at specified time intervals (typically 100 microseconds for
+standard link rates, shorter for UHBR rates).</li>
+</ul>
+<h3 id="step-4-iterative-signal-adjustment">Step 4: Iterative Signal
+Adjustment</h3>
+<p>If any lane fails to set its <code>CR_DONE</code> bit, the Sink
+calculates required drive adjustments and requests higher drive
+parameters via the DPCD <code>ADJUST_REQUEST</code> registers.</p>
+<ol type="1">
+<li><strong>Increasing Voltage Swing:</strong> The Sink normally
+requests an increment in voltage swing to boost signal amplitude and
+overcome channel attenuation.</li>
+<li><strong>Source Adaptation:</strong> The Source updates its physical
+transmitter output settings to match the requested voltage swing or
+pre-emphasis levels and continues sending TPS1.</li>
+<li><strong>Loop Constraints:</strong> The Source will repeat this
+adjustment process up to five consecutive times at the same voltage
+level, or until it reaches the maximum allowable voltage swing (Level
+3).</li>
+</ol>
+<h3 id="step-5-transition-or-fallback">Step 5: Transition or
+Fallback</h3>
+<p>Clock Recovery concludes in one of two ways:</p>
+<ul>
+<li><strong>Success:</strong> When the Source reads that all active
+lanes have asserted the <code>CR_DONE</code> bit simultaneously, the
+Clock Recovery phase succeeds. The transmitter immediately transitions
+to the second phase of link training: Channel Equalization (using TPS2,
+TPS3, or TPS4) to optimize inter-symbol interference (ISI)
+correction.</li>
+<li><strong>Failure and Downshifting:</strong> If the Source reaches the
+maximum voltage swing without all lanes achieving lock, or if the
+adjustment loop times out, Clock Recovery fails. The Source then drops
+down to a lower link rate (e.g., stepping down from HBR2 to HBR) or
+reduces the lane count, restarting the Clock Recovery phase from the
+beginning to find a stable operational mode.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Can DisplayPort Carry Bidirectional Video? - dp</title>
+    <meta name="description" content="A standard DisplayPort cable cannot carry bidirectional video simultaneously over the same physical connection. DisplayPort’s hardware architecture uses unidirectional high-speed lanes to transmit high-bandwidth audio and video signals strictly from a sou">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/can-display-port-carry-bidirectional-video">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Can DisplayPort Carry Bidirectional Video? - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/can-display-port-carry-bidirectional-video" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="A standard DisplayPort cable cannot carry bidirectional video simultaneously over the same physical connection. DisplayPort’s hardware architecture uses unidirectional high-speed lanes to transmit high-bandwidth audio and video signals strictly from a sou" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="can-displayport-carry-bidirectional-video">Can DisplayPort Carry
+Bidirectional Video?</h1>
+<p>A standard DisplayPort cable cannot carry bidirectional video
+simultaneously over the same physical connection. DisplayPort’s hardware
+architecture uses unidirectional high-speed lanes to transmit
+high-bandwidth audio and video signals strictly from a source device to
+a display device. While DisplayPort does incorporate a bidirectional
+communication channel, its bandwidth is restricted to control data and
+handshake protocols rather than active video feeds.</p>
+<h3 id="the-main-link-a-one-way-highway">The Main Link: A One-Way
+Highway</h3>
+<p>The primary reason DisplayPort cannot transmit video in both
+directions simultaneously lies in the design of its Main Link. The Main
+Link consists of one, two, or four AC-coupled differential pairs
+(lanes). In native DisplayPort connectors:</p>
+<ul>
+<li>All high-speed lanes are physically directed to route data
+exclusively from the transmitter (source, such as a graphics card) to
+the receiver (sink, such as a monitor).</li>
+<li>The physical layer and signaling standards (from DP 1.0 through DP
+2.1) do not support full-duplex transmission or lane reversal on the
+native DisplayPort connector.</li>
+<li>Because the bandwidth across these lanes is entirely allocated to
+the outbound display signal, no bandwidth remains for incoming
+video.</li>
+</ul>
+<h3 id="the-role-of-the-aux-channel">The Role of the AUX Channel</h3>
+<p>DisplayPort does feature a bidirectional channel called the Auxiliary
+(AUX) channel. However, it cannot be used to transmit simultaneous
+reverse video:</p>
+<ul>
+<li><strong>Bandwidth Limitations:</strong> The standard AUX channel
+operates at roughly 1 Mbps (or up to 720 Mbps in newer revisions using
+USB-C tunneling). This is far below the multi-gigabit bandwidth required
+for raw or lightly compressed video streams.</li>
+<li><strong>Intended Purpose:</strong> The AUX channel is a half-duplex
+link designed strictly for sideband management, including Extended
+Display Identification Data (EDID), DisplayPort Configuration Data
+(DPCD), and High-bandwidth Digital Content Protection (HDCP)
+handshakes.</li>
+</ul>
+<h3 id="multi-stream-transport-mst-is-not-bidirectional">Multi-Stream
+Transport (MST) Is Not Bidirectional</h3>
+<p>DisplayPort 1.2 introduced Multi-Stream Transport (MST), which
+enables daisy-chaining multiple monitors through a single cable
+connection. While this allows multiple video streams over one physical
+cable, it is entirely unidirectional. The video signal originates at the
+host PC, passes to the primary display, and is forwarded downstream to
+subsequent displays. At no point can a connected display send a video
+signal back up the chain to the host.</p>
+<h3 id="alternatives-supporting-bidirectional-protocols">Alternatives
+Supporting Bidirectional Protocols</h3>
+<p>Users requiring simultaneous bidirectional data exchange typically
+use technologies that encapsulate DisplayPort within a broader transport
+protocol:</p>
+<ul>
+<li><strong>Thunderbolt (3, 4, and 5):</strong> Uses active controllers
+to route bidirectional, high-speed PCIe and DisplayPort data over a
+single USB-C cable. While individual DisplayPort tunnels inside
+Thunderbolt remain inherently directional, the overall physical cable
+can simultaneously carry video outbound while receiving high-bandwidth
+data inbound.</li>
+<li><strong>USB4:</strong> Implements protocol tunneling similar to
+Thunderbolt, allowing dynamic allocation of high-speed lanes for
+combined transmit and receive workloads.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

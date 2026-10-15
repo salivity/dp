@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisplayPort 2.1 Over Long USB4 Passive Cables - dp</title>
+    <meta name="description" content="DisplayPort 2.1 introduces tighter electrical convergence with the USB4 standard, enabling ultra-high bit rate (UHBR) video signals to run reliably across longer USB4 passive cables. When transmitting over these extended passive copper connections, the st">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/display-port-2-1-over-long-usb-4-passive-cables">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DisplayPort 2.1 Over Long USB4 Passive Cables - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/display-port-2-1-over-long-usb-4-passive-cables" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="DisplayPort 2.1 introduces tighter electrical convergence with the USB4 standard, enabling ultra-high bit rate (UHBR) video signals to run reliably across longer USB4 passive cables. When transmitting over these extended passive copper connections, the st" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="displayport-21-over-long-usb4-passive-cables">DisplayPort 2.1
+Over Long USB4 Passive Cables</h1>
+<p>DisplayPort 2.1 introduces tighter electrical convergence with the
+USB4 standard, enabling ultra-high bit rate (UHBR) video signals to run
+reliably across longer USB4 passive cables. When transmitting over these
+extended passive copper connections, the standard actively compensates
+for high insertion loss and signal degradation by leveraging USB-C
+E-marker cable discovery, advanced adaptive link training, dynamic
+equalization adjustments, bit rate step-downs, and mandatory Forward
+Error Correction (FEC).</p>
+<h3 id="cable-identification-via-e-marker-detection">Cable
+Identification via E-Marker Detection</h3>
+<p>Before high-speed transmission begins, the DisplayPort source
+interrogates the USB4 passive cable’s electronically marked chip
+(E-marker) via the USB Power Delivery (PD) channel. This process
+identifies the cable's physical properties, rated bandwidth, and channel
+attenuation characteristics. By determining the physical limits of the
+passive wire beforehand, the DisplayPort 2.1 transmitter establishes a
+baseline for maximum safe transmission speeds (such as DP40 or DP80
+specifications) and configures its initial signal drive levels
+accordingly.</p>
+<h3 id="adaptive-link-training-and-equalization-tuning">Adaptive Link
+Training and Equalization Tuning</h3>
+<p>Longer passive cables naturally suffer from severe high-frequency
+attenuation, impedance mismatches, and inter-symbol interference (ISI).
+DisplayPort 2.1 resolves this through an updated Link Training process
+that closely mirrors the USB4 physical layer (PHY):</p>
+<ul>
+<li><strong>Transmitter Pre-Emphasis and De-Emphasis:</strong> The
+transmitter dynamically adjusts its Feed-Forward Equalization (FFE)
+taps. By boosting high frequencies relative to low frequencies at the
+source, it pre-distorts the transmitted waveform to counteract expected
+cable losses.</li>
+<li><strong>Receiver Equalization (CTLE and DFE):</strong> The display
+receiver applies Continuous-Time Linear Equalization (CTLE) and
+multi-tap Decision Feedback Equalization (DFE) to open the closed signal
+"eye" resulting from high channel loss over the passive distance.</li>
+<li><strong>Link Training Tunable PHY Repeaters (LTTPRs):</strong> If
+repeaters or retimers exist within the signal path, DP 2.1 uses LTTPR
+protocols to fine-tune each segment of the link independently, ensuring
+that transmitter parameters meet the receiver's target bit error rate
+(BER).</li>
+</ul>
+<h3 id="dynamic-bit-rate-negotiation-uhbr-tiering">Dynamic Bit Rate
+Negotiation (UHBR Tiering)</h3>
+<p>DisplayPort 2.1 natively supports three Ultra-High Bit Rate profiles:
+UHBR10 (10 Gbps per lane), UHBR13.5 (13.5 Gbps per lane), and UHBR20 (20
+Gbps per lane). Over extended passive USB4 cables (typically exceeding
+0.8 to 1 meter), physical signal degradation often prevents UHBR20 from
+maintaining an open eye.</p>
+<p>During the handshake phase, if the transceiver detects that the
+high-frequency channel loss exceeds the signal-to-noise threshold
+required for 20 Gbps, the link dynamically shifts down to UHBR13.5 or
+UHBR10. This fallback mechanism ensures that the maximum possible
+bandwidth is delivered without causing link instability or packet
+loss.</p>
+<h3 id="channel-coding-and-forward-error-correction">Channel Coding and
+Forward Error Correction</h3>
+<p>To manage the higher noise floors typical of longer passive runs, DP
+2.1 employs 128b/132b channel encoding, replacing the legacy 8b/10b
+scheme. This encoding provides 96.7% link efficiency while supporting
+mandatory Forward Error Correction (FEC). FEC enables the receiver to
+identify and correct bit errors on the fly without requesting
+retransmissions, guaranteeing uninterrupted video output even when the
+passive physical medium pushes transmission margins to their limits.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

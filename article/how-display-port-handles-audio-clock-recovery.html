@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How DisplayPort Handles Audio Clock Recovery - dp</title>
+    <meta name="description" content="DisplayPort transmits uncompressed video and multi-channel digital audio over a shared set of high-speed differential serial lanes without dedicated hardware clock wires for any media stream. This article explains how the DisplayPort protocol achieves aud">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/how-display-port-handles-audio-clock-recovery">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How DisplayPort Handles Audio Clock Recovery - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/how-display-port-handles-audio-clock-recovery" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="DisplayPort transmits uncompressed video and multi-channel digital audio over a shared set of high-speed differential serial lanes without dedicated hardware clock wires for any media stream. This article explains how the DisplayPort protocol achieves aud" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-displayport-handles-audio-clock-recovery">How DisplayPort
+Handles Audio Clock Recovery</h1>
+<p>DisplayPort transmits uncompressed video and multi-channel digital
+audio over a shared set of high-speed differential serial lanes without
+dedicated hardware clock wires for any media stream. This article
+explains how the DisplayPort protocol achieves audio clock recovery at
+the sink device by embedding mathematical timestamp
+parameters—specifically <span class="math inline">\(M\)</span> and <span
+class="math inline">\(N\)</span> values—directly into the main link data
+stream, allowing the receiver’s internal Phase-Locked Loop (PLL) to
+synthesize the original audio sampling clock with high precision.</p>
+<h3 id="the-asynchronous-clock-problem">The Asynchronous Clock
+Problem</h3>
+<p>Traditional digital audio interfaces, such as I2S, utilize dedicated
+hardware lines to carry continuous word select and bit clock signals.
+DisplayPort eliminates dedicated clock wires entirely; both the main
+link bit clock and the audio clock must be reconstructed from the
+packetized serial stream.</p>
+<p>Furthermore, the audio sampling rate (typically 32 kHz to 192 kHz) is
+fundamentally asynchronous to the fixed serial link rates of DisplayPort
+(such as 1.62 Gbps, 2.7 Gbps, 5.4 Gbps, or 8.1 Gbps). Because audio
+samples are packetized and transmitted in bursts during horizontal and
+vertical blanking intervals, the sink cannot determine the exact audio
+playback frequency merely by observing the arrival rate of the audio
+data packets.</p>
+<h3 id="the-fractional-n-clock-synthesis-model">The Fractional-N Clock
+Synthesis Model</h3>
+<p>DisplayPort resolves this discrepancy using a fractional-N frequency
+division scheme. The protocol establishes a direct mathematical
+relationship between the known DisplayPort link symbol clock (<span
+class="math inline">\(LS\_CLK\)</span>) and the desired audio stream
+clock (<span class="math inline">\(f_{audio}\)</span>).</p>
+<p>This relationship is governed by the formula:</p>
+<p><span class="math display">\[f_{audio} = LS\_CLK \times
+\frac{M_{aud}}{N_{aud}}\]</span></p>
+<p>In this equation:</p>
+<ul>
+<li><strong><span class="math inline">\(LS\_CLK\)</span></strong> is the
+link symbol clock frequency, which the sink hardware recovers directly
+from the incoming bitstream using its Clock and Data Recovery (CDR)
+unit.</li>
+<li><strong><span class="math inline">\(M_{aud}\)</span> (Audio Time
+Stamp value)</strong> is a dynamically calculated 24-bit integer
+representing the numerator.</li>
+<li><strong><span class="math inline">\(N_{aud}\)</span> (Audio Link
+Clock Divider)</strong> is a predetermined 24-bit integer representing
+the denominator, typically chosen based on the link rate to balance
+tracking speed and jitter.</li>
+</ul>
+<h3 id="audio-clock-regeneration-packets">Audio Clock Regeneration
+Packets</h3>
+<p>To relay these fractional values to the receiver, the DisplayPort
+source regularly injects <strong>Audio Stream Time Stamp
+(AUD_TIMESTAMP)</strong> packets into the link as Secondary Data Packets
+(SDP).</p>
+<ol type="1">
+<li><strong>Source Sampling:</strong> The source maintains a counter
+running on <span class="math inline">\(LS\_CLK\)</span> and measures how
+many link clock cycles elapse over an exact number of audio clock
+periods, continuously updating the <span
+class="math inline">\(M_{aud}\)</span> value to reflect any subtle drift
+or intentional frequency variations in the audio source.</li>
+<li><strong>Packet Insertion:</strong> These timestamp packets are
+multiplexed into the main link alongside the <strong>Audio Stream
+(AUD_STREAM)</strong> packets, which contain the actual Pulse Code
+Modulation (PCM) or encoded audio data samples.</li>
+<li><strong>Transmission Regularity:</strong> Timestamps are transmitted
+frequently enough to allow the receiver's tracking loop to react to
+clock drift and suppress low-frequency phase noise.</li>
+</ol>
+<h3 id="sink-side-audio-reconstruction-architecture">Sink-Side Audio
+Reconstruction Architecture</h3>
+<p>When the packetized data reaches the DisplayPort sink, the hardware
+uses a specialized pipeline to reconstruct a continuous, jitter-free
+audio clock:</p>
+<ol type="1">
+<li><strong>CDR Link Recovery:</strong> The sink's physical layer CDR
+locks onto the incoming serial data stream, extracting the raw data bits
+and recovering the underlying link clock (<span
+class="math inline">\(LS\_CLK\)</span>).</li>
+<li><strong>Packet Extraction:</strong> The link-layer decoder
+demultiplexes the secondary data packets, routing the audio sample
+payload to an elastic FIFO buffer and extracting the <span
+class="math inline">\(M_{aud}\)</span> and <span
+class="math inline">\(N_{aud}\)</span> values from the timestamp
+packets.</li>
+<li><strong>Frequency Synthesis:</strong> The extracted <span
+class="math inline">\(M_{aud}\)</span> and <span
+class="math inline">\(N_{aud}\)</span> values, along with the recovered
+<span class="math inline">\(LS\_CLK\)</span>, are fed into an audio
+fractional-N Phase-Locked Loop (PLL) or a Digital Frequency Synthesizer.
+The PLL multiplies the link clock by the ratio <span
+class="math inline">\(M_{aud} / N_{aud}\)</span> to regenerate the
+original audio master clock (often <span class="math inline">\(128
+\times f_s\)</span> or <span class="math inline">\(256 \times
+f_s\)</span>).</li>
+<li><strong>Buffer Management and Jitter Filtering:</strong> The elastic
+FIFO absorbs the bursty packet delivery from the DisplayPort link. The
+newly regenerated, continuous audio clock clocks the audio samples out
+of the FIFO into the digital-to-analog converter (DAC) or downstream
+audio processor at the exact native sampling rate, preventing buffer
+overflow or underflow.</li>
+</ol></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USB4 Bandwidth Allocation: PCIe vs DisplayPort - dp</title>
+    <meta name="description" content="USB4 dynamically manages shared high-speed links by encapsulating diverse protocols into a single transport layer. This article explores how a USB4 host allocates shared bandwidth between tunneled DisplayPort (DP) and PCI Express (PCIe) traffic, detailing">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/usb-4-bandwidth-allocation-pc-ie-vs-display-port">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="USB4 Bandwidth Allocation: PCIe vs DisplayPort - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/usb-4-bandwidth-allocation-pc-ie-vs-display-port" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="USB4 dynamically manages shared high-speed links by encapsulating diverse protocols into a single transport layer. This article explores how a USB4 host allocates shared bandwidth between tunneled DisplayPort (DP) and PCI Express (PCIe) traffic, detailing" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="usb4-bandwidth-allocation-pcie-vs-displayport">USB4 Bandwidth
+Allocation: PCIe vs DisplayPort</h1>
+<p>USB4 dynamically manages shared high-speed links by encapsulating
+diverse protocols into a single transport layer. This article explores
+how a USB4 host allocates shared bandwidth between tunneled DisplayPort
+(DP) and PCI Express (PCIe) traffic, detailing the role of the USB4
+Connection Manager, dynamic bandwidth arbitration, and protocol
+prioritization.</p>
+<h3 id="the-role-of-protocol-tunneling">The Role of Protocol
+Tunneling</h3>
+<p>USB4 does not transmit native DisplayPort or PCIe signals directly
+across the physical wires. Instead, it uses protocol tunneling. The USB4
+host controller contains integrated adapters that convert native
+DisplayPort main link streams and PCIe packets into USB4 Transport Layer
+packets. Because both protocols share the same physical link (typically
+up to 20 Gbps, 40 Gbps, or 80 Gbps depending on the generation), the
+host must arbitrate data transmission to prevent starvation and ensure
+signal integrity.</p>
+<h3 id="bandwidth-arbitration-by-the-connection-manager">Bandwidth
+Arbitration by the Connection Manager</h3>
+<p>The USB4 Connection Manager—a software or firmware layer running on
+the host system—is responsible for discovering devices, establishing
+paths, and allocating bandwidth across the USB4 fabric.</p>
+<p>Bandwidth allocation in USB4 is dynamic rather than statically
+divided. Instead of permanently assigning half of the physical lanes to
+PCIe and half to DisplayPort, the Connection Manager configures the
+internal switches to multiplex packets on a shared pipe based on active
+demands and traffic priority.</p>
+<h3 id="displayport-traffic-reserved-and-isochronous">DisplayPort
+Traffic: Reserved and Isochronous</h3>
+<p>DisplayPort carries isochronous traffic, meaning video and audio data
+require guaranteed delivery times and continuous throughput to prevent
+frame dropping, visual artifacts, or black screens.</p>
+<ol type="1">
+<li><strong>Bandwidth Reservation:</strong> When a monitor is connected,
+the DisplayPort adapter negotiates the required video bandwidth
+(determined by resolution, refresh rate, and color depth) via the
+tunneled AUX channel.</li>
+<li><strong>Priority Guarantee:</strong> The Connection Manager sets
+aside the precise amount of bandwidth required for the active display
+mode. Once established, this bandwidth is effectively guaranteed to the
+DisplayPort path, preventing other protocols from interrupting the
+display pipeline.</li>
+<li><strong>DisplayPort Bandwidth Allocation (DP BWA):</strong> USB4
+supports DP BWA, allowing the host to dynamically renegotiate and
+reclaim unused DisplayPort bandwidth if display requirements change—such
+as when a monitor enters sleep mode or switches to a lower refresh
+rate.</li>
+</ol>
+<h3 id="pcie-traffic-asynchronous-and-opportunistic">PCIe Traffic:
+Asynchronous and Opportunistic</h3>
+<p>Unlike DisplayPort, standard PCIe data traffic is asynchronous and
+inherently bursty. Storage transfers, external GPUs, and network cards
+operate on a packet-switched model that tolerates variable latency and
+fluctuating throughput.</p>
+<ol type="1">
+<li><strong>Best-Effort Utilization:</strong> PCIe traffic utilizes the
+"best-effort" capacity left over after isochronous DisplayPort streams
+have claimed their guaranteed share.</li>
+<li><strong>Elastic Scaling:</strong> If no displays are active, PCIe
+can consume nearly the entire usable link capacity (minus protocol
+overhead and any active USB3 tunneling). If a high-resolution display is
+attached, the bandwidth available to PCIe dynamically contracts,
+throttling PCIe throughput down to the remaining headroom without
+interrupting the connection.</li>
+</ol>
+<h3 id="transport-layer-scheduling-and-qos">Transport Layer Scheduling
+and QoS</h3>
+<p>At the hardware level, the USB4 Host Router relies on internal
+Quality of Service (QoS) mechanisms and credit-based flow control to
+enforce bandwidth rules:</p>
+<ul>
+<li><strong>Egress Queuing:</strong> Outgoing physical adapters maintain
+distinct queues for different traffic classes.</li>
+<li><strong>Packet Scheduling:</strong> Tunneled DisplayPort packets are
+assigned a higher scheduling priority than PCIe packets. When a
+DisplayPort packet arrives at the router, the scheduler dispatches it
+ahead of waiting PCIe bulk transfer packets to satisfy strict timing
+deadlines.</li>
+<li><strong>Flow Control Credits:</strong> PCIe adapters use
+buffer-to-buffer credit mechanisms. If DisplayPort traffic saturates the
+link, the host reduces available credits to the PCIe adapter, naturally
+throttling host-side PCIe packet generation until link bandwidth
+clears.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

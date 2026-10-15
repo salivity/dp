@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Routing DisplayPort Through an FPGA for Video Processing - dp</title>
+    <meta name="description" content="Yes, a DisplayPort signal can be routed through an FPGA development board for custom, real-time video processing. By configuring the FPGA as both a DisplayPort Sink (Receiver) and a DisplayPort Source (Transmitter), incoming video frames are deserialized">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/routing-display-port-through-an-fpga-for-video-processing">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Routing DisplayPort Through an FPGA for Video Processing - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/routing-display-port-through-an-fpga-for-video-processing" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Yes, a DisplayPort signal can be routed through an FPGA development board for custom, real-time video processing. By configuring the FPGA as both a DisplayPort Sink (Receiver) and a DisplayPort Source (Transmitter), incoming video frames are deserialized" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1
+id="routing-displayport-through-an-fpga-for-video-processing">Routing
+DisplayPort Through an FPGA for Video Processing</h1>
+<p>Yes, a DisplayPort signal can be routed through an FPGA development
+board for custom, real-time video processing. By configuring the FPGA as
+both a DisplayPort Sink (Receiver) and a DisplayPort Source
+(Transmitter), incoming video frames are deserialized into raw pixel
+streams, routed through user-defined hardware processing pipelines, and
+re-encoded for downstream display output. This article details the
+hardware prerequisites, processing architecture, and technical
+challenges involved in implementing such a pipeline.</p>
+<h3 id="hardware-prerequisites">Hardware Prerequisites</h3>
+<p>To route DisplayPort signals through an FPGA, the development board
+must meet specific hardware capabilities:</p>
+<ul>
+<li><strong>High-Speed Serial Transceivers:</strong> DisplayPort
+utilizes high-speed differential lanes (HBR, HBR2, HBR3, or UHBR). The
+FPGA must contain multi-gigabit transceivers (MGTs such as AMD/Xilinx
+GTX, GTH, or Intel Transceiver tiles) capable of matching the data rates
+of the targeted standard (e.g., 5.4 Gbps per lane for HBR2; 8.1 Gbps for
+HBR3).</li>
+<li><strong>Physical Connectors and FMC Expansion:</strong> The board
+requires either native DisplayPort In and Out connectors or
+high-pin-count expansion headers like FPGA Mezzanine Card (FMC)
+connectors populated with DisplayPort daughtercards.</li>
+<li><strong>AUX and HPD Handling:</strong> DisplayPort relies on
+auxiliary channels (AUX) for link training and EDID handshake, as well
+as Hot Plug Detect (HPD) pins. These require bidirectional,
+level-shifted GPIO lines connected to the FPGA fabric.</li>
+</ul>
+<h3 id="the-signal-processing-pipeline">The Signal Processing
+Pipeline</h3>
+<p>The typical implementation follows a "pass-through with inline
+processing" topology:</p>
+<ol type="1">
+<li><strong>Physical Layer and Link Training (DP RX):</strong> The
+incoming high-speed differential signals enter the FPGA transceivers. A
+DisplayPort Receiver IP core negotiates link parameters (lane count,
+data rate, and equalization) via the AUX channel, locks onto the stream,
+and decodes the 8b/10b or 128b/132b encoded packets.</li>
+<li><strong>Video De-framing (Stream Extraction):</strong> The DP RX
+core unpacks the main link stream, stripping away framing tokens,
+blanking intervals, and timing metadata to output raw pixel data. This
+data is typically formatted into a standard bus interface, such as
+AXI4-Stream Video, alongside horizontal and vertical synchronization
+signals.</li>
+<li><strong>Custom Processing Core:</strong> Once transformed into raw
+parallel pixel data (e.g., RGB or YUV format), the video enters custom
+FPGA logic. Common tasks at this stage include:
+<ul>
+<li>Color space conversion and tone mapping</li>
+<li>Edge detection, spatial filtering, and convolutional operations</li>
+<li>Custom on-screen displays (OSD) and graphics overlay</li>
+<li>Frame-buffering for temporal filtering, scaling, or framerate
+conversion (using external DDR memory)</li>
+<li>Neural network inference for object detection</li>
+</ul></li>
+<li><strong>Video Framing and Link Training (DP TX):</strong> The
+processed AXI4-Stream video enters a DisplayPort Transmitter IP core.
+The transmitter repacks the pixels into the DisplayPort format, handles
+downstream link training with the monitor via its AUX channel, and sends
+the serial stream out via the high-speed transmitter lanes.</li>
+</ol>
+<h3 id="critical-implementation-challenges">Critical Implementation
+Challenges</h3>
+<ul>
+<li><strong>HDCP Restrictions:</strong> If the input signal is encrypted
+with High-bandwidth Digital Content Protection (HDCP), an FPGA cannot
+natively decrypt or manipulate the video data without dedicated,
+licensed HDCP hardware components or certified IP blocks with secure key
+provisioning.</li>
+<li><strong>Clock Domain Crossing and Jitter:</strong> The input pixel
+clock is recovered from the incoming stream and will fluctuate relative
+to the local FPGA system clock. Proper asynchronous FIFOs or elastic
+buffers must be implemented to prevent buffer underflow or
+overflow.</li>
+<li><strong>Bandwidth Demands:</strong> Uncompressed 4K video at 60 Hz
+with 8-bit RGB requires approximately 12 Gbps of throughput. If
+operations require frame storage, the external memory interface (such as
+DDR4 or LPDDR4) must provide sufficient bandwidth to support
+simultaneous read and write passes without dropping frames.</li>
+<li><strong>IP Core Availability:</strong> Implementing the DisplayPort
+protocol state machines from scratch is extremely complex. Designers
+typically utilize vendor-provided IP cores (such as AMD/Xilinx
+DisplayPort 1.4/2.1 Subsystem IPs) to handle AUX communication, link
+management, and MSA (Main Stream Attribute) generation.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

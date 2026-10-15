@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisplayPort UHBR20 Skin Effect and Copper Resistance - dp</title>
+    <meta name="description" content="This article examines how the skin effect impacts high-frequency electrical performance in DisplayPort Ultra-High Bit Rate 20 (UHBR20) copper cables. It explains the fundamental physics driving current to the conductor&#39;s outer boundary at 10 GHz frequenci">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/display-port-uhbr-20-skin-effect-and-copper-resistance">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DisplayPort UHBR20 Skin Effect and Copper Resistance - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/display-port-uhbr-20-skin-effect-and-copper-resistance" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article examines how the skin effect impacts high-frequency electrical performance in DisplayPort Ultra-High Bit Rate 20 (UHBR20) copper cables. It explains the fundamental physics driving current to the conductor&#39;s outer boundary at 10 GHz frequenci" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1
+id="displayport-uhbr20-skin-effect-and-copper-resistance">DisplayPort
+UHBR20 Skin Effect and Copper Resistance</h1>
+<p>This article examines how the skin effect impacts high-frequency
+electrical performance in DisplayPort Ultra-High Bit Rate 20 (UHBR20)
+copper cables. It explains the fundamental physics driving current to
+the conductor's outer boundary at 10 GHz frequencies, demonstrates how
+this physical constraint dramatically elevates effective AC resistance,
+details the exacerbating role of conductor surface roughness, and
+highlights the resulting engineering challenges for maintaining signal
+integrity over standard transmission lengths.</p>
+<h2 id="understanding-uhbr20-frequencies">Understanding UHBR20
+Frequencies</h2>
+<p>DisplayPort 2.1 introduces the UHBR20 transmission tier, which
+delivers 20 Gigabits per second (Gbps) per lane across four lanes,
+achieving a raw bandwidth of 80 Gbps. Because UHBR20 uses
+Non-Return-to-Zero (NRZ) signaling, a data rate of 20 Gbps corresponds
+to a fundamental frequency of 10 GHz (the Nyquist frequency). At these
+multi-gigahertz operational frequencies, the electrical characteristics
+of copper conductors diverge drastically from their standard direct
+current (DC) behavior due to electromagnetic phenomena.</p>
+<h2 id="the-mechanism-of-the-skin-effect">The Mechanism of the Skin
+Effect</h2>
+<p>In a direct current or low-frequency alternating current (AC)
+circuit, electrons distribute uniformly across the entire
+cross-sectional area of a copper wire. As signal frequency escalates
+into the gigahertz realm, the alternating current generates an
+alternating internal magnetic field within the conductor. This magnetic
+field induces circulating eddy currents that oppose current flow in the
+center of the wire while reinforcing it near the perimeter.</p>
+<p>As a result, current is pushed outward, concentrating in a thin outer
+layer known as the "skin depth" (<span
+class="math inline">\(\delta\)</span>). The formula for skin depth
+is:</p>
+<p><span class="math display">\[\delta = \sqrt{\frac{\rho}{\pi \cdot f
+\cdot \mu}}\]</span></p>
+<p>Where:</p>
+<ul>
+<li><span class="math inline">\(\rho\)</span> is the electrical
+resistivity of copper (<span class="math inline">\(1.68 \times 10^{-8} \
+\Omega\cdot\text{m}\)</span>)</li>
+<li><span class="math inline">\(f\)</span> is the signal frequency (10
+GHz for the UHBR20 fundamental)</li>
+<li><span class="math inline">\(\mu\)</span> is the magnetic
+permeability of the material</li>
+</ul>
+<p>At the 10 GHz fundamental frequency of UHBR20, the calculated skin
+depth in standard copper drops to approximately <strong>0.66
+micrometers</strong> (660 nanometers).</p>
+<h2 id="how-the-skin-effect-alters-resistance">How the Skin Effect
+Alters Resistance</h2>
+<p>Resistance (<span class="math inline">\(R\)</span>) is inversely
+proportional to the cross-sectional area (<span
+class="math inline">\(A\)</span>) through which current flows:</p>
+<p><span class="math display">\[R = \frac{\rho \cdot L}{A}\]</span></p>
+<p>When the effective cross-sectional area contracts from the full core
+of a typical conductor (such as 30 AWG or 32 AWG wire commonly used in
+display cables) to a hollow cylindrical ring only 0.66 microns deep:</p>
+<ol type="1">
+<li><strong>Dramatically Reduced Conductive Area:</strong> More than 98%
+of the wire's inner core becomes virtually inactive for signal
+transport. The effective conductive area is severely truncated.</li>
+<li><strong>Square-Root Resistance Scaling:</strong> Conductor AC
+resistance increases proportionally to the square root of the frequency
+(<span class="math inline">\(\sqrt{f}\)</span>). Compared to DC
+resistance, the effective resistance at 10 GHz increases by an order of
+magnitude.</li>
+<li><strong>High-Frequency Harmonic Attenuation:</strong> High-speed
+digital signals consist not only of the 10 GHz fundamental but also
+higher harmonic frequencies required to form sharp square-wave edges.
+These higher harmonics experience even shallower skin depths and
+correspondingly higher resistance, causing dispersion and rounding the
+digital pulses.</li>
+</ol>
+<h2 id="the-compounding-effect-of-surface-roughness">The Compounding
+Effect of Surface Roughness</h2>
+<p>Because the skin depth at 10 GHz is sub-micron, the microscopic
+profile of the copper conductor plays a significant role in total
+resistance. Standard copper manufacturing leaves surface peaks and
+valleys (roughness) that often measure between 0.5 to 2.0
+micrometers.</p>
+<p>When the skin depth is equal to or smaller than the surface roughness
+profile:</p>
+<ul>
+<li>Current must travel along the actual physical contours of the peaks
+and valleys rather than a straight path.</li>
+<li>The effective path length of the current increases.</li>
+<li>The actual cross-sectional layer is further distorted, inducing
+localized eddy current losses.</li>
+</ul>
+<p>This interaction causes the effective AC resistance to rise well
+above standard theoretical skin-depth calculations, compounding signal
+attenuation.</p>
+<h2 id="consequences-for-displayport-uhbr20-systems">Consequences for
+DisplayPort UHBR20 Systems</h2>
+<p>The sharp rise in AC resistance caused by the skin effect directly
+drives channel insertion loss (signal attenuation) in UHBR20
+systems:</p>
+<ul>
+<li><strong>Restricted Cable Lengths:</strong> Passive copper cables
+operating at UHBR20 are typically limited to roughly 0.8 to 1.0 meters.
+Beyond this distance, resistive signal loss degrades the signal below
+the receiver's minimum detection threshold.</li>
+<li><strong>Need for Active Equalization:</strong> DisplayPort UHBR20
+receivers rely on advanced Continuous Time Linear Equalization (CTLE)
+and Decision Feedback Equalization (DFE) within the PHY layer to
+reconstruct signals degraded by frequency-dependent resistive
+losses.</li>
+<li><strong>Shift to Alternative Interconnects:</strong> Longer UHBR20
+connections increasingly require Active Copper Cables (ACC) containing
+redrivers or retimers to re-amplify the signal mid-span, or Active
+Optical Cables (AOC) to bypass metallic high-frequency resistance
+entirely.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

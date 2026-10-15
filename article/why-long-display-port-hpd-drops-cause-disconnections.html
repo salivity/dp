@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why Long DisplayPort HPD Drops Cause Disconnections - dp</title>
+    <meta name="description" content="When using a DisplayPort connection, the Hot Plug Detect (HPD) line acts as the primary communication bridge for physical presence detection and hardware interrupts between a monitor and a computer. A brief voltage drop on the HPD line signals an interrup">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/why-long-display-port-hpd-drops-cause-disconnections">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Why Long DisplayPort HPD Drops Cause Disconnections - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/why-long-display-port-hpd-drops-cause-disconnections" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="When using a DisplayPort connection, the Hot Plug Detect (HPD) line acts as the primary communication bridge for physical presence detection and hardware interrupts between a monitor and a computer. A brief voltage drop on the HPD line signals an interrup" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="why-long-displayport-hpd-drops-cause-disconnections">Why Long
+DisplayPort HPD Drops Cause Disconnections</h1>
+<p>When using a DisplayPort connection, the Hot Plug Detect (HPD) line
+acts as the primary communication bridge for physical presence detection
+and hardware interrupts between a monitor and a computer. A brief
+voltage drop on the HPD line signals an interrupt request, prompting the
+graphics card to read status registers, whereas an excessively long drop
+exceeds the standard threshold defined by VESA specifications. Once this
+low-signal threshold is breached, the graphics driver can no longer
+distinguish between a temporary glitch and an intentional cable removal,
+forcing the system to tear down the active display pipeline and register
+a complete device disconnection.</p>
+<h3 id="the-role-of-hot-plug-detect-in-displayport">The Role of Hot Plug
+Detect in DisplayPort</h3>
+<p>The DisplayPort interface uses dedicated physical pins to establish
+and maintain a video link. While high-speed lanes carry video data and
+the AUX channel handles metadata like Extended Display Identification
+Data (EDID), the HPD line (Pin 18) operates as a simple DC-voltage
+signaling line (nominally 3.3V) driven by the sink (monitor) and
+monitored by the source (computer/GPU).</p>
+<p>The monitor keeps the HPD line held high to indicate it is powered,
+connected, and ready to receive data. The computer monitors this state
+to determine when to allocate hardware resources, configure resolutions,
+and stream video payloads.</p>
+<h3 id="the-timing-difference-irq-pulse-vs-unplug-event">The Timing
+Difference: IRQ Pulse vs. Unplug Event</h3>
+<p>The DisplayPort standard defines two distinct behaviors for when the
+HPD signal drops to a low state (0V):</p>
+<ol type="1">
+<li><strong>HPD Interrupt (HPD_IRQ):</strong> A short low pulse lasting
+between 0.5 milliseconds and 1.0 millisecond. This short pulse tells the
+GPU that the display remains connected, but something has changed—such
+as an HDCP handshake request, an audio status update, or an automated
+request for link retraining.</li>
+<li><strong>Disconnection Event (Plug/Unplug):</strong> Any continuous
+low state lasting longer than 2.0 milliseconds. When the line stays low
+beyond this period, the source hardware treats it not as an interrupt,
+but as a loss of physical connection.</li>
+</ol>
+<h3 id="why-an-excessively-long-drop-triggers-a-full-disconnect">Why an
+Excessively Long Drop Triggers a Full Disconnect</h3>
+<p>When electrical interference, monitor firmware lag, or bad cabling
+causes the HPD line to stay low well past the 2.0-millisecond mark, the
+source initiates a standard disconnect sequence:</p>
+<ul>
+<li><strong>Hardware Link Teardown:</strong> The GPU immediately
+disables its main link transmitters to conserve power and protect the
+high-speed signaling circuitry.</li>
+<li><strong>Flushing of Cached Metadata:</strong> The graphics driver
+purges the stored DisplayPort Configuration Data (DPCD) and EDID
+information for that port, assuming the monitor has been physically
+unplugged.</li>
+<li><strong>Operating System Notification:</strong> The graphics driver
+reports the disconnect to the operating system’s window manager. This
+causes the operating system to reorganize open windows, disable the
+corresponding desktop workspace, and shift active applications to a
+secondary monitor or default virtual resolution.</li>
+</ul>
+<p>Even if the HPD line returns to high immediately after this prolonged
+drop, the connection cannot simply resume where it left off. The GPU
+must treat the rising edge as a completely new device arrival, requiring
+a full re-read of the EDID via the AUX channel, a fresh link training
+sequence to negotiate lane count and voltage swing, and a display
+reconfiguration at the OS level.</p>
+<h3 id="common-causes-of-prolonged-hpd-drops">Common Causes of Prolonged
+HPD Drops</h3>
+<p>Excessive drops on the HPD line rarely stem from intentional
+disconnection. They are usually caused by:</p>
+<ul>
+<li><strong>Monitor Sleep and Power States:</strong> Poorly configured
+monitor firmware may drop the HPD line for several seconds when
+transitioning to deep sleep or switching inputs, tricking the computer
+into thinking the display was removed.</li>
+<li><strong>High Line Capacitance and Long Cables:</strong> Excessively
+long or out-of-spec passive cables can introduce parasitic capacitance,
+which slows down the rise time of the HPD line and keeps the voltage
+below the logic-high threshold for too long.</li>
+<li><strong>KVM Switches and Adapters:</strong> Inexpensive or
+non-emulating KVM switches drop the HPD pin completely when switching
+between systems, resulting in desktop rearrangement and resolution
+resets on the disconnected machine.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

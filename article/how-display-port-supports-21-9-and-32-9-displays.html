@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How DisplayPort Supports 21:9 and 32:9 Displays - dp</title>
+    <meta name="description" content="DisplayPort seamlessly handles ultra-wide aspect ratios such as 21:9 and 32:9 by decoupling the physical transmission of video signals from fixed, traditional screen geometries. Instead of relying on rigid television standards, DisplayPort utilizes a high">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/how-display-port-supports-21-9-and-32-9-displays">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How DisplayPort Supports 21:9 and 32:9 Displays - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/how-display-port-supports-21-9-and-32-9-displays" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="DisplayPort seamlessly handles ultra-wide aspect ratios such as 21:9 and 32:9 by decoupling the physical transmission of video signals from fixed, traditional screen geometries. Instead of relying on rigid television standards, DisplayPort utilizes a high" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-displayport-supports-219-and-329-displays">How DisplayPort
+Supports 21:9 and 32:9 Displays</h1>
+<p>DisplayPort seamlessly handles ultra-wide aspect ratios such as 21:9
+and 32:9 by decoupling the physical transmission of video signals from
+fixed, traditional screen geometries. Instead of relying on rigid
+television standards, DisplayPort utilizes a high-bandwidth,
+packet-based data architecture, dynamic display timing standards, and
+visually lossless compression technologies. This design allows modern
+GPUs and monitors to negotiate custom resolutions and non-standard
+horizontal pixel counts without requiring specialized hardware adapters
+or firmware modifications.</p>
+<h3 id="packetized-data-architecture">Packetized Data Architecture</h3>
+<p>Unlike traditional display interfaces that transmit video as a
+continuous, raster-based analog-style stream, DisplayPort transmits data
+in micro-packets, similar to standard computer networking protocols like
+Ethernet. Because the interface treats video as raw digital payloads
+divided into packets, it does not intrinsically depend on a 16:9 or 4:3
+frame boundary.</p>
+<p>As long as the total pixel throughput (horizontal pixels multiplied
+by vertical pixels, color depth, and refresh rate) remains within the
+interface’s maximum data rate, the physical shape or aspect ratio of the
+image is completely irrelevant to the transmission line.</p>
+<h3 id="high-throughput-bandwidth-standards">High-Throughput Bandwidth
+Standards</h3>
+<p>Ultra-wide formats significantly increase the horizontal pixel
+footprint compared to standard widescreen formats:</p>
+<ul>
+<li><strong>21:9 UWQHD (3440 x 1440):</strong> Requires roughly 34% more
+bandwidth than standard 16:9 QHD (2560 x 1440).</li>
+<li><strong>32:9 "Super Ultra-Wide" DQHD (5120 x 1440):</strong>
+Represents two full 1440p displays fused horizontally, requiring twice
+the data throughput.</li>
+<li><strong>32:9 Dual UHD (7680 x 2160):</strong> Matches the pixel
+volume of two side-by-side 4K screens.</li>
+</ul>
+<p>DisplayPort standards are built with the throughput required to
+sustain these non-standard geometries at high refresh rates:</p>
+<ul>
+<li><strong>DisplayPort 1.4:</strong> Delivers up to 32.4 Gbps of total
+bandwidth (25.92 Gbps effective data rate via HBR3), natively supporting
+3440 x 1440 at up to 144Hz uncompressed, or 5120 x 1440 up to 120Hz
+uncompressed.</li>
+<li><strong>DisplayPort 2.1:</strong> Provides up to 80 Gbps of
+bandwidth (UHBR20), easily pushing dual-4K 32:9 panels at 240Hz without
+relying on aggressive compromises in color fidelity or chroma
+subsampling.</li>
+</ul>
+<h3 id="display-stream-compression-dsc">Display Stream Compression
+(DSC)</h3>
+<p>When pushing ultra-wide formats to high refresh rates (such as 144Hz
+or 240Hz) with 10-bit HDR enabled, the uncompressed data rate can exceed
+the raw physical bandwidth of DisplayPort 1.4 or lower-tier DisplayPort
+2.1 profiles. To overcome this limitation, DisplayPort integrates VESA
+Display Stream Compression (DSC).</p>
+<p>DSC is a visually lossless, low-latency compression algorithm that
+reduces the required bandwidth by up to a 3:1 ratio. This technology
+allows high-end super ultra-wide monitors (like 49-inch and 57-inch 32:9
+displays) to operate at maximum resolution and high frame rates over a
+single DisplayPort cable without visible artifacts or input lag.</p>
+<h3 id="edid-and-flexible-video-timings">EDID and Flexible Video
+Timings</h3>
+<p>DisplayPort negotiates screen parameters through Extended Display
+Identification Data (EDID) and DisplayID standards over an auxiliary
+channel (AUX). When an ultra-wide monitor connects to a source:</p>
+<ol type="1">
+<li><strong>Capability Reporting:</strong> The monitor sends its exact
+horizontal and vertical pixel matrix along with supported refresh rates
+via DisplayID to the GPU.</li>
+<li><strong>VESA CVT-RB Compatibility:</strong> DisplayPort natively
+recognizes VESA Coordinated Video Timings-Reduced Blanking (CVT-RB).
+Reduced blanking eliminates the obsolete transmission pauses originally
+required for the electron guns in CRT monitors, maximizing the
+efficiency of the bandwidth used for the expanded horizontal field of
+view.</li>
+<li><strong>Link Training:</strong> The GPU and monitor conduct an
+automatic link training sequence over the DisplayPort lanes to ensure
+signal integrity at the necessary speed, establishing the full 21:9 or
+32:9 canvas instantly.</li>
+</ol></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

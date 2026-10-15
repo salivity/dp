@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How a GPU Reads DisplayPort Link Status Registers - dp</title>
+    <meta name="description" content="When a transmission error occurs over a DisplayPort connection, a GPU determines the nature of the failure by querying the sink&#39;s link status registers through an out-of-band communication process. The display (sink) detects signal degradation or synchron">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/how-a-gpu-reads-display-port-link-status-registers">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How a GPU Reads DisplayPort Link Status Registers - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/how-a-gpu-reads-display-port-link-status-registers" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="When a transmission error occurs over a DisplayPort connection, a GPU determines the nature of the failure by querying the sink&#39;s link status registers through an out-of-band communication process. The display (sink) detects signal degradation or synchron" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-a-gpu-reads-displayport-link-status-registers">How a GPU
+Reads DisplayPort Link Status Registers</h1>
+<p>When a transmission error occurs over a DisplayPort connection, a GPU
+determines the nature of the failure by querying the sink's link status
+registers through an out-of-band communication process. The display
+(sink) detects signal degradation or synchronization loss on the main
+data link, updates its internal DisplayPort Configuration Data (DPCD)
+registers, and triggers a low-level interrupt via the Hot Plug Detect
+(HPD) pin. In response, the GPU (source) issues a series of read
+requests over the bidirectional Auxiliary (AUX) channel to inspect the
+DPCD registers, evaluate the link integrity, and initiate recovery
+procedures such as link retraining.</p>
+<h3 id="1-error-detection-by-the-sink-device">1. Error Detection by the
+Sink Device</h3>
+<p>The sink continuously monitors the high-speed Main Link physical
+layer (PHY) while decoding video and audio streams. Transmission errors
+typically manifest as lost symbol lock, loss of clock recovery,
+bit-level disparities, or lane-to-lane deskew failure. When these errors
+exceed standard thresholds, the sink hardware updates its internal
+status flags within the DPCD address space, specifically the Link Status
+block located at DPCD addresses <code>0x00200</code> through
+<code>0x0020F</code>.</p>
+<h3 id="2-signalling-via-the-irq_hpd-pulse">2. Signalling via the
+IRQ_HPD Pulse</h3>
+<p>Because the high-speed Main Link is unidirectional (flowing strictly
+from GPU to display), the sink cannot notify the GPU of errors directly
+over the main data lanes. Instead, it utilizes the dedicated physical
+Hot Plug Detect (HPD) line.</p>
+<p>To signal an interrupt without indicating a full display
+disconnection, the sink pulls the HPD voltage level low for a short
+duration—typically between 0.5 milliseconds and 1.0 millisecond. This
+short pulse is recognized by the GPU's display controller as an
+<code>IRQ_HPD</code> event rather than an unplug event (which requires
+the line to remain low for over 100 milliseconds).</p>
+<h3 id="3-reading-dpcd-via-the-aux-channel">3. Reading DPCD via the AUX
+Channel</h3>
+<p>Upon detecting the <code>IRQ_HPD</code> pulse, the GPU driver's
+interrupt service routine immediately queues a sideband query. The GPU
+uses the dedicated, bidirectional DisplayPort AUX channel, which
+operates independently of the Main Link using Manchester-II encoding at
+1 Mbps.</p>
+<p>The GPU sends a native AUX read command targeting the DPCD Link/Sink
+Status registers. Most implementations read a contiguous block
+(typically <code>0x00202</code> to <code>0x00207</code>) in a single AUX
+transaction to minimize latency. Key registers retrieved include:</p>
+<ul>
+<li><strong>LANE0_1_STATUS and LANE2_3_STATUS
+(<code>0x00202</code>–<code>0x00203</code>):</strong> Indicate whether
+Clock Recovery (CR) and Channel Equalization / Symbol Lock (EQ) are
+achieved for each active lane.</li>
+<li><strong>LANE_ALIGN_STATUS_UPDATED (<code>0x00204</code>):</strong>
+Reports inter-lane alignment status and whether the sink's internal
+status has changed.</li>
+<li><strong>SINK_STATUS (<code>0x00205</code>):</strong> Shows receiver
+port status and synchronization health.</li>
+</ul>
+<h3 id="4-evaluation-and-error-recovery">4. Evaluation and Error
+Recovery</h3>
+<p>The GPU parses the payload returned over the AUX channel to identify
+the root cause of the transmission error:</p>
+<ul>
+<li><strong>Clock Recovery Loss:</strong> If the
+<code>LANE_CR_DONE</code> bits have dropped, the receiver can no longer
+extract the bit clock from the incoming physical signal.</li>
+<li><strong>Equalization / Framing Loss:</strong> If
+<code>LANE_CHANNEL_EQ_DONE</code> or <code>LANE_SYMBOL_LOCKED</code>
+bits are clear, high-frequency signal degradation or phase noise has
+disrupted data integrity.</li>
+<li><strong>Alignment Loss:</strong> If the
+<code>INTERLANE_ALIGN_DONE</code> bit is clear, the sink cannot align
+the incoming parallel data streams across multiple lanes.</li>
+</ul>
+<p>Once the failure mode is categorized, the GPU executes recovery
+logic. If the error is transient, the GPU may attempt fast link
+retraining without dropping the display mode. If persistent signal
+attenuation is detected, the GPU dynamically increases drive current
+(voltage swing), adjusts pre-emphasis levels, or reduces the link rate
+(e.g., dropping from HBR3 to HBR2) to restore a stable, error-free
+connection.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

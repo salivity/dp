@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisplayPort Link Retraining Error Thresholds - dp</title>
+    <meta name="description" content="This article provides an overview of the error rate conditions and thresholds that trigger a link retraining sequence in DisplayPort interfaces. It examines the symbol error rate monitoring mechanisms defined by the VESA DisplayPort standard, the Bit Erro">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/display-port-link-retraining-error-thresholds">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DisplayPort Link Retraining Error Thresholds - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/display-port-link-retraining-error-thresholds" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article provides an overview of the error rate conditions and thresholds that trigger a link retraining sequence in DisplayPort interfaces. It examines the symbol error rate monitoring mechanisms defined by the VESA DisplayPort standard, the Bit Erro" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="displayport-link-retraining-error-thresholds">DisplayPort Link
+Retraining Error Thresholds</h1>
+<p>This article provides an overview of the error rate conditions and
+thresholds that trigger a link retraining sequence in DisplayPort
+interfaces. It examines the symbol error rate monitoring mechanisms
+defined by the VESA DisplayPort standard, the Bit Error Rate (BER)
+baseline requirements, and how the sink device signals the source device
+via the Hot Plug Detect (HPD) pin to initiate retraining.</p>
+<p>In the DisplayPort specification, link retraining is primarily
+governed by the target Bit Error Rate (BER) and the sink device’s
+ability to maintain physical layer synchronization. For legacy 8b/10b
+encoding (RBR, HBR, HBR2, and HBR3 link rates), the standard requires an
+operational BER of less than or equal to <span
+class="math inline">\(10^{-9}\)</span>. A BER exceeding <span
+class="math inline">\(10^{-9}\)</span> corresponds roughly to a Symbol
+Error Rate (SER) greater than <span
+class="math inline">\(10^{-8}\)</span>. When link degradation causes
+errors to surpass this threshold, the sink device triggers a retraining
+sequence to restore signal integrity or negotiate a lower link rate.</p>
+<p>In modern DisplayPort revisions utilizing 128b/132b channel encoding
+(such as UHBR links in DisplayPort 2.1) alongside Forward Error
+Correction (FEC), the threshold model is split. The pre-FEC raw BER must
+typically stay below <span class="math inline">\(10^{-4}\)</span> to
+allow FEC logic to function properly, while the post-FEC target is
+maintained at a BER of <span class="math inline">\(10^{-12}\)</span>. If
+uncorrectable FEC blocks occur consistently or if the raw symbol error
+rate overwhelms the decoder beyond these operating margins, retraining
+is initiated.</p>
+<p>Link monitoring is handled directly by the sink device using
+DisplayPort Configuration Data (DPCD) registers. The sink continuously
+monitors the incoming bitstream and updates error parameters within the
+<code>SYMBOL_ERROR_COUNT_LANE</code> registers (addresses
+<code>00210h</code> through <code>00217h</code>). These 15-bit registers
+accumulate symbol errors over defined measurement intervals. When the
+counter reaches its saturation limit or calculates an error density
+higher than the specified BER allowance, the link is considered
+compromised.</p>
+<p>In addition to accumulated symbol errors, instantaneous triggers
+cause an immediate link retraining request without waiting for error
+rate calculations. These immediate triggers include:</p>
+<ul>
+<li>Loss of Clock Recovery (CR) on any active lane.</li>
+<li>Loss of Channel Equalization (EQ) or Symbol Lock
+(<code>SYMBOL_LOCKED = 0</code>).</li>
+<li>Loss of Inter-Lane Alignment
+(<code>INTERLANE_ALIGN_DONE = 0</code>).</li>
+</ul>
+<p>Once the error rate threshold is crossed or symbol lock is lost, the
+sink asserts an interrupt request by pulsing the Hot Plug Detect line
+low for a duration between 0.5 ms and 1.0 ms (<code>HPD_IRQ</code>).
+Upon detecting the pulse, the source device reads the DPCD link status
+registers (addresses <code>00200h</code> to <code>0020Ch</code>) to
+verify the failure mode. Finding that the symbol error count has
+exceeded the threshold or that synchronization has dropped, the source
+halts standard data transmission and re-executes the link training
+protocol across all active lanes.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

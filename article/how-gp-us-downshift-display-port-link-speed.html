@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How GPUs Downshift DisplayPort Link Speed - dp</title>
+    <meta name="description" content="Modern GPUs determine whether to downshift DisplayPort link speed through a standardized hardware handshake called Link Training. When a display is connected or signal degradation occurs, the GPU and monitor test physical signal integrity across transmiss">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/how-gp-us-downshift-display-port-link-speed">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How GPUs Downshift DisplayPort Link Speed - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/how-gp-us-downshift-display-port-link-speed" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Modern GPUs determine whether to downshift DisplayPort link speed through a standardized hardware handshake called Link Training. When a display is connected or signal degradation occurs, the GPU and monitor test physical signal integrity across transmiss" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-gpus-downshift-displayport-link-speed">How GPUs Downshift
+DisplayPort Link Speed</h1>
+<p>Modern GPUs determine whether to downshift DisplayPort link speed
+through a standardized hardware handshake called Link Training. When a
+display is connected or signal degradation occurs, the GPU and monitor
+test physical signal integrity across transmission lanes via
+bidirectional communication. If a poor-quality cable causes excessive
+bit errors, high jitter, or prevents the receiver from achieving signal
+lock at the maximum supported speed, the GPU drops to a lower
+transmission rate and restarts the negotiation process until a stable
+connection is established.</p>
+<h3 id="the-role-of-the-aux-channel-and-dpcd">The Role of the AUX
+Channel and DPCD</h3>
+<p>DisplayPort relies on two separate pathways: the high-speed Main
+Link, which carries video and audio data across one, two, or four
+physical lanes, and the Auxiliary (AUX) Channel. The AUX Channel is a
+lower-speed, bidirectional sideband link.</p>
+<p>The monitor hosts a standardized set of registers called the
+DisplayPort Configuration Data (DPCD). The GPU reads the DPCD over the
+AUX Channel to discover the monitor's maximum supported link rate (such
+as UHBR, HBR3, or HBR2) and lane count. The GPU also uses the DPCD to
+monitor real-time receiver feedback throughout the connection
+lifecycle.</p>
+<h3 id="the-two-phases-of-link-training">The Two Phases of Link
+Training</h3>
+<p>To verify whether a cable can support a target bandwidth, the GPU
+initiates Link Training using predefined test patterns (Training Pattern
+Sequences, or TPS):</p>
+<ol type="1">
+<li><strong>Clock Recovery (CR):</strong> The GPU sends a continuous
+pattern (such as TPS1) so the display's receiver can lock its internal
+clock to the data stream. The display reports status back via DPCD
+registers. If the receiver cannot achieve lock, it requests changes in
+drive current (voltage swing) and pre-emphasis. If the limit of
+adjustments is reached and clock recovery still fails across all lanes,
+the attempt is marked as failed.</li>
+<li><strong>Channel Equalization (EQ):</strong> Once clock recovery
+succeeds, the GPU transmits more complex pseudo-random bit sequences
+(TPS2, TPS3, or TPS4) to calibrate equalizer circuits and mitigate
+inter-symbol interference. The receiver checks for symbol lock,
+lane-to-lane deskew, and an adequately open "eye diagram" (indicating
+low jitter and acceptable Bit Error Rates).</li>
+</ol>
+<h3 id="the-downshifting-trigger">The Downshifting Trigger</h3>
+<p>A cable with high impedance, poor shielding, or excessive length
+attenuates high-frequency signals. When signal attenuation degrades the
+transmission, Link Training fails at the channel equalization or clock
+recovery stage.</p>
+<p>The VESA specification limits the number of equalization
+attempts—typically up to five iterations at varying drive strengths. If
+the DPCD registers indicate that the receiver cannot achieve symbol lock
+or acceptable error tolerances within these limits:</p>
+<ol type="1">
+<li><strong>Failure Registration:</strong> The GPU driver recognizes
+that the physical channel cannot support the current link speed.</li>
+<li><strong>Rate Reduction:</strong> The GPU selects the next lower
+standardized data rate. For instance, if an HBR3 (8.1 Gbps/lane) link
+fails, the GPU drops to HBR2 (5.4 Gbps/lane). If HBR2 fails, it steps
+down to HBR (2.7 Gbps/lane), and finally to RBR (1.62 Gbps/lane).</li>
+<li><strong>Retraining:</strong> The GPU restarts the Link Training
+process from the Clock Recovery phase at the newly selected rate.</li>
+<li><strong>Lane Count Reduction (Fallback):</strong> If downshifting
+the data rate still fails to produce a stable link, the GPU may attempt
+to reduce the active lane count (e.g., falling back from four lanes to
+two lanes).</li>
+</ol>
+<h3 id="in-service-monitoring-and-dynamic-retraining">In-Service
+Monitoring and Dynamic Retraining</h3>
+<p>Link negotiation is not restricted to initial connection. During
+active operation, the monitor monitors the incoming data stream for
+symbol errors and physical link instability.</p>
+<p>If interference causes the Bit Error Rate (BER) to spike beyond
+standard thresholds, the monitor asserts the Hot Plug Detect (HPD) line
+by sending an interrupt pulse (an IRQ_HPD) back to the GPU. The GPU then
+queries the DPCD error-status registers, detects the link corruption,
+and immediately re-triggers Link Training, often downshifting to a lower
+data rate to prevent persistent black screens or visual artifacts.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

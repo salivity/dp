@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Is the DisplayPort Main Link? - dp</title>
+    <meta name="description" content="The Main Link in a DisplayPort interface is the primary high-bandwidth, unidirectional communication channel responsible for transmitting multimedia content from a video source to a display device. Unlike bidirectional control channels, the Main Link is d">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/what-is-the-display-port-main-link">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What Is the DisplayPort Main Link? - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/what-is-the-display-port-main-link" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The Main Link in a DisplayPort interface is the primary high-bandwidth, unidirectional communication channel responsible for transmitting multimedia content from a video source to a display device. Unlike bidirectional control channels, the Main Link is d" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="what-is-the-displayport-main-link">What Is the DisplayPort Main
+Link?</h1>
+<p>The Main Link in a DisplayPort interface is the primary
+high-bandwidth, unidirectional communication channel responsible for
+transmitting multimedia content from a video source to a display device.
+Unlike bidirectional control channels, the Main Link is dedicated
+exclusively to delivering continuous, high-throughput payload data,
+including uncompressed video streams, synchronized digital audio, and
+essential display metadata. This article explores the architecture of
+the Main Link, its physical configuration, and the specific
+unidirectional data types it transports.</p>
+<h3 id="architecture-of-the-main-link">Architecture of the Main
+Link</h3>
+<p>The DisplayPort interface divides communication into distinct paths:
+the Auxiliary (AUX) Channel for bidirectional device management and the
+Main Link for content delivery.</p>
+<p>The Main Link is physically structured using one, two, or four
+AC-coupled differential pairs known as "lanes." The number of active
+lanes and the transmission rate per lane are negotiated during the link
+training process between the source (such as a graphics card) and the
+sink (such as a monitor).</p>
+<p>Key architectural characteristics include:</p>
+<ul>
+<li><strong>Embedded Clocking:</strong> The Main Link does not utilize a
+dedicated clock lane. Instead, the clock signal is embedded directly
+into the data stream using line coding schemes (such as 8b/10b in older
+standards or 128b/132b in DisplayPort 2.0/2.1), reducing pin counts and
+electromagnetic interference.</li>
+<li><strong>Scalable Bandwidth:</strong> Depending on the DisplayPort
+version, the Main Link scales from legacy rates like Reduced Bit Rate
+(RBR at 1.62 Gbps per lane) up to Ultra High Bit Rate (UHBR 20 at 20
+Gbps per lane), providing up to 80 Gbps of raw bandwidth across four
+lanes.</li>
+<li><strong>Isochronous Transport:</strong> Data is packetized and
+transferred with strictly controlled timing to prevent jitter and
+maintain continuous playback.</li>
+</ul>
+<h3 id="unidirectional-data-carried-by-the-main-link">Unidirectional
+Data Carried by the Main Link</h3>
+<p>Because the Main Link operates strictly in a downstream direction
+(Source to Sink), it carries only the data required to render multimedia
+on the receiving display:</p>
+<h4 id="1-uncompressed-digital-video">1. Uncompressed Digital Video</h4>
+<p>The vast majority of Main Link bandwidth is consumed by video pixel
+data. This includes:</p>
+<ul>
+<li><strong>Color Information:</strong> Pixel streams formatted in RGB
+or YCbCr (with 4:4:4, 4:2:2, or 4:2:0 chroma subsampling).</li>
+<li><strong>Deep Color Formats:</strong> Color depths ranging from
+standard 8-bit per channel (24-bit true color) up to 10-bit, 12-bit, or
+16-bit precision.</li>
+<li><strong>Visually Lossless Compressed Streams:</strong> In modern
+implementations using Display Stream Compression (DSC), the Main Link
+carries the compressed video bitstream to support extreme resolutions
+such as 8K and 16K without perceptible latency or quality loss.</li>
+</ul>
+<h4 id="2-digital-audio-streams">2. Digital Audio Streams</h4>
+<p>Digital audio is interleaved into the blanking intervals of the video
+stream across the Main Link. It carries:</p>
+<ul>
+<li><strong>Multi-Channel LPCM:</strong> Uncompressed, high-definition
+linear audio up to 32 distinct audio channels.</li>
+<li><strong>Encapsulated Bitstreams:</strong> Compressed surround-sound
+formats, including Dolby Atmos, Dolby TrueHD, and DTS-HD Master
+Audio.</li>
+<li><strong>Audio Timing Metadata:</strong> Time stamps that ensure
+audio samples remain precisely synchronized with the corresponding video
+frames (lip-sync alignment).</li>
+</ul>
+<h4 id="3-framing-timing-and-display-metadata">3. Framing, Timing, and
+Display Metadata</h4>
+<p>To accurately reconstruct the multimedia stream, the Main Link embeds
+several categories of non-pixel data packets:</p>
+<ul>
+<li><strong>Stream Timing Attributes (MSA):</strong> Main Stream
+Attributes describe horizontal and vertical active areas, blanking
+periods, refresh rates, and pixel clock frequencies.</li>
+<li><strong>High Dynamic Range (HDR) Metadata:</strong> Dynamic and
+static metadata packets (such as HDR10 or Dolby Vision parameters) that
+inform the display's tone-mapping algorithms how to handle luminance and
+color spaces.</li>
+<li><strong>Content Protection (HDCP):</strong> Encryption framing and
+validation packets required by High-bandwidth Digital Content Protection
+to secure digital media across the physical connection.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

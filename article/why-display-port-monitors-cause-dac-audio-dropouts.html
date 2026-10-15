@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why DisplayPort Monitors Cause DAC Audio Dropouts - dp</title>
+    <meta name="description" content="Routing audio through a DisplayPort monitor to an external digital-to-analog converter (DAC) often leads to dropped samples, clicks, pops, or intermittent audio dropouts. This problem typically occurs because monitors are not engineered as dedicated audio">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/why-display-port-monitors-cause-dac-audio-dropouts">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Why DisplayPort Monitors Cause DAC Audio Dropouts - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/why-display-port-monitors-cause-dac-audio-dropouts" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Routing audio through a DisplayPort monitor to an external digital-to-analog converter (DAC) often leads to dropped samples, clicks, pops, or intermittent audio dropouts. This problem typically occurs because monitors are not engineered as dedicated audio" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="why-displayport-monitors-cause-dac-audio-dropouts">Why
+DisplayPort Monitors Cause DAC Audio Dropouts</h1>
+<p>Routing audio through a DisplayPort monitor to an external
+digital-to-analog converter (DAC) often leads to dropped samples,
+clicks, pops, or intermittent audio dropouts. This problem typically
+occurs because monitors are not engineered as dedicated audio transport
+devices, leading to severe clock jitter, packet prioritization conflicts
+over the DisplayPort stream, poor clock regeneration hardware in monitor
+scalers, and buffer underflows when display refresh rates fluctuate.</p>
+<h3 id="audio-clock-regeneration-acr-and-jitter">Audio Clock
+Regeneration (ACR) and Jitter</h3>
+<p>DisplayPort does not transmit audio as a continuous analog waveform
+or a dedicated raw I2S line. Instead, audio data is packetized and
+interleaved alongside high-bandwidth video data packets. Because there
+is no dedicated audio master clock line running through the cable, the
+receiving monitor must reconstruct the audio clock from the video stream
+using time stamps (Mvid and Nvid values) via an Audio Clock Regeneration
+(ACR) circuit.</p>
+<p>Most external DACs, particularly high-resolution or audiophile-grade
+units, rely on precise Phase-Locked Loops (PLLs) to lock onto an
+incoming digital audio signal. The scaler chips inside consumer monitors
+use inexpensive, low-accuracy crystal oscillators and basic PLLs to
+regenerate this clock. This generates substantial timing jitter. When
+the reconstructed clock drifts beyond the tracking range or buffer
+tolerances of the external DAC, the DAC briefly loses synchronization,
+resulting in dropped samples and audible pops.</p>
+<h3 id="bandwidth-interleaving-and-variable-refresh-rates">Bandwidth
+Interleaving and Variable Refresh Rates</h3>
+<p>Audio packets inside a DisplayPort pipeline are scheduled primarily
+during the horizontal and vertical blanking intervals of the video
+signal. If you operate at the limits of DisplayPort bandwidth—such as
+running high resolutions (4K or ultrawide) at high refresh rates (144Hz
+or higher)—the blanking intervals become extremely short.</p>
+<p>This issue is amplified when using Variable Refresh Rate (VRR)
+technologies like G-Sync or FreeSync. As the monitor dynamically changes
+its refresh rate to match the frame output of your GPU, the timing and
+duration of the blanking intervals fluctuate continuously. The monitor’s
+internal audio buffer can easily run out of data (buffer underflow),
+causing the forwarded audio stream to stutter or drop packets entirely
+before reaching the DAC.</p>
+<h3
+id="inadequate-monitor-audio-buffering-and-scaler-hardware">Inadequate
+Monitor Audio Buffering and Scaler Hardware</h3>
+<p>Display controllers prioritize video latency above all else.
+Consequently, the internal FIFO (First-In, First-Out) memory buffers
+dedicated to de-packetizing audio inside the monitor are minimal. If the
+monitor’s internal processing chip experiences a brief spike in
+workload—such as rendering an On-Screen Display (OSD) menu, changing
+color profiles, or managing power states—the audio pipeline is degraded
+first. The monitor fails to output a steady S/PDIF, optical, or analog
+stream to the downstream DAC, manifesting as audio cutouts.</p>
+<h3 id="ground-loops-and-electrical-noise">Ground Loops and Electrical
+Noise</h3>
+<p>Many users route power or signal through the monitor via USB hubs or
+3.5mm line-out jacks. Monitors contain noisy switch-mode power supplies,
+high-power backlights, and complex driving circuitry. This electrical
+noise can corrupt the signal integrity of coaxial S/PDIF connections or
+interfere with the sensitive internal reference clocks of USB DACs
+drawing power from the monitor, directly contributing to digital
+communication dropouts.</p>
+<h3 id="how-to-resolve-the-issue">How to Resolve the Issue</h3>
+<ol type="1">
+<li><strong>Connect Directly to the Host:</strong> Connect your DAC
+directly to your source PC using USB, PCIe, or motherboard
+optical/coaxial S/PDIF outputs to bypass the monitor’s audio processing
+entirely.</li>
+<li><strong>Disable Variable Refresh Rate:</strong> If you must route
+audio through the monitor, turn off G-Sync or FreeSync to maintain
+consistent transmission intervals for audio packets.</li>
+<li><strong>Adjust Display Settings:</strong> Lowering the display
+refresh rate (e.g., from 144Hz to 120Hz or 60Hz) can widen the video
+blanking interval, giving the monitor scaler more headroom to properly
+reconstruct the audio signal.</li>
+<li><strong>Use Optical Isolation:</strong> If routing via S/PDIF from
+the monitor, an optical (TOSLINK) cable avoids electrical ground loop
+interference, though it will not fix hardware-level clock jitter inside
+the monitor.</li>
+</ol></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

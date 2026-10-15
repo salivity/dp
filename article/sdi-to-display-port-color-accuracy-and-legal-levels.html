@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDI to DisplayPort Color Accuracy and Legal Levels - dp</title>
+    <meta name="description" content="Professional SDI-to-DisplayPort converters are essential tools in broadcast, grading, and post-production workflows, bridging specialized video infrastructure with high-resolution computer displays without degrading signal fidelity. This article examines">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/sdi-to-display-port-color-accuracy-and-legal-levels">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="SDI to DisplayPort Color Accuracy and Legal Levels - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/sdi-to-display-port-color-accuracy-and-legal-levels" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Professional SDI-to-DisplayPort converters are essential tools in broadcast, grading, and post-production workflows, bridging specialized video infrastructure with high-resolution computer displays without degrading signal fidelity. This article examines" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="sdi-to-displayport-color-accuracy-and-legal-levels">SDI to
+DisplayPort Color Accuracy and Legal Levels</h1>
+<p>Professional SDI-to-DisplayPort converters are essential tools in
+broadcast, grading, and post-production workflows, bridging specialized
+video infrastructure with high-resolution computer displays without
+degrading signal fidelity. This article examines the technical
+mechanisms these converters use to maintain reference-grade color
+fidelity and strictly manage broadcast legal levels, focusing on color
+space transformations, quantization range scaling, bit-depth integrity,
+and 3D LUT calibration.</p>
+<h2 id="color-space-conversion-and-matrix-processing">Color Space
+Conversion and Matrix Processing</h2>
+<p>Professional SDI signals natively transport video in component color
+spaces—typically YCbCr (such as ITU-R BT.709 for HD or BT.2020 for Ultra
+HD/HDR). Conversely, DisplayPort monitors operate natively in RGB.</p>
+<p>To bridge this gap without introducing chromatic aberration or hue
+shifts, professional converters utilize high-precision hardware matrix
+multipliers. These processors apply standardized mathematical
+transformation matrices to convert YCbCr values into linear RGB.
+Inferior converters often introduce rounding errors during this
+calculation, resulting in subtle color casts or saturation shifts.
+Professional units process these transformations using floating-point or
+minimum 12-bit integer arithmetic to ensure exact color coordinate
+mapping.</p>
+<h2 id="broadcast-legal-levels-vs-full-range-mapping">Broadcast Legal
+Levels vs. Full Range Mapping</h2>
+<p>A fundamental challenge in SDI-to-DisplayPort conversion is the
+discrepancy between broadcast video levels and standard computing
+display ranges:</p>
+<ul>
+<li><strong>Broadcast Legal (Narrow) Range:</strong> In standard 10-bit
+SDI, video signals are constrained to levels 64–940 for luminance (<span
+class="math inline">\(Y\)</span>) and 64–960 for chrominance (<span
+class="math inline">\(Cb/Cr\)</span>). Values below 64 are considered
+"super-black" (sub-blacks), and values above 940/960 are
+"super-white."</li>
+<li><strong>Full (Data) Range:</strong> DisplayPort monitors generally
+expect standard computing levels where black is at level 0 and peak
+white is at level 1023 (in a 10-bit system).</li>
+</ul>
+<p>Professional converters offer selectable scaling modes to handle this
+difference properly:</p>
+<ol type="1">
+<li><strong>Scale to Full Range:</strong> The converter scales broadcast
+legal level 64 down to 0 and level 940 up to 1023. This ensures that the
+monitor displays standard broadcast black and white at the screen’s
+physical minimum and maximum brightness, preserving perceived contrast
+and tone curves.</li>
+<li><strong>Clip or Retain Out-of-Gamut Signals:</strong> High-end units
+allow users to either hard-clip out-of-range codes or preserve
+super-blacks and super-whites by scaling the entire 0–1023 range
+proportionally. Retaining these margins is critical for technical
+monitoring, allowing colorists and engineers to identify illegal
+broadcast excursions before transmission.</li>
+</ol>
+<h2 id="maintaining-bit-depth-and-signal-integrity">Maintaining
+Bit-Depth and Signal Integrity</h2>
+<p>Broadcast environments typically rely on 10-bit (and occasionally
+12-bit) 4:2:2 or 4:4:4 SDI video feeds. Consumer-grade adapters
+frequently truncate these signals to 8-bit RGB, leading to banding,
+posterization, and inaccurate gradient rendering.</p>
+<p>Professional converters maintain a native 10-bit or 12-bit pipeline
+from input to output:</p>
+<ul>
+<li><strong>Chroma Upsampling:</strong> SDI signals running 4:2:2
+subsampling require horizontal chroma interpolation to reach the 4:4:4
+RGB representation required by DisplayPort. High-end converters use
+multi-tap filtering algorithms to avoid color fringing and edge
+artifacts during chroma reconstruction.</li>
+<li><strong>Internal Processing Headroom:</strong> Mathematical
+operations (gamma mapping, range conversions, color matrices) are
+executed at 12-bit to 16-bit processing depth before being mapped to the
+native 10-bit DisplayPort output, eliminating truncation noise.</li>
+</ul>
+<h2 id="hardware-3d-luts-and-display-calibration">Hardware 3D LUTs and
+Display Calibration</h2>
+<p>To guarantee absolute color accuracy on third-party monitors,
+professional converters feature onboard non-volatile memory for 1D and
+3D Look-Up Tables (LUTs), typically with grid sizes of <span
+class="math inline">\(17 \times 17 \times 17\)</span> or <span
+class="math inline">\(33 \times 33 \times 33\)</span>.</p>
+<p>These LUTs serve two distinct functions:</p>
+<ul>
+<li><strong>Color Space Emulation:</strong> Transforming wide-gamut
+inputs (e.g., DCI-P3 or BT.2020) down to the target display's native
+gamut without clipping or non-linear compression.</li>
+<li><strong>Monitor Calibration:</strong> Correcting physical panel
+non-linearities. Calibration software can measure the DisplayPort
+monitor with a colorimeter and generate a corrective 3D LUT loaded
+directly onto the converter, ensuring that the final output matches
+strict broadcast standards regardless of minor panel drifts.</li>
+</ul>
+<h2 id="hdr-and-metadata-handling">HDR and Metadata Handling</h2>
+<p>In modern workflows handling High Dynamic Range (HDR), preserving
+color requires transmitting accurate electro-optical transfer function
+(EOTF) data. Professional SDI-to-DisplayPort converters extract static
+and dynamic metadata carried within SDI ancillary data (SMPTE ST 2108)
+and translate it into standard CTA-861 InfoFrames embedded in the
+DisplayPort stream. This ensures that the connected monitor
+automatically engages the correct EOTF curve (such as PQ/SMPTE ST 2084
+or HLG) and colorimetry mode without manual intervention.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

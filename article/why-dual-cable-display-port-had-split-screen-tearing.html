@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why Dual-Cable DisplayPort Had Split-Screen Tearing - dp</title>
+    <meta name="description" content="Early 4K monitors often relied on dual-cable DisplayPort connections or Multi-Stream Transport (MST) tiling to achieve a 60Hz refresh rate before single-cable hardware matured. However, users frequently encountered noticeable screen tearing directly down">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/why-dual-cable-display-port-had-split-screen-tearing">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Why Dual-Cable DisplayPort Had Split-Screen Tearing - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/why-dual-cable-display-port-had-split-screen-tearing" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Early 4K monitors often relied on dual-cable DisplayPort connections or Multi-Stream Transport (MST) tiling to achieve a 60Hz refresh rate before single-cable hardware matured. However, users frequently encountered noticeable screen tearing directly down" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="why-dual-cable-displayport-had-split-screen-tearing">Why
+Dual-Cable DisplayPort Had Split-Screen Tearing</h1>
+<p>Early 4K monitors often relied on dual-cable DisplayPort connections
+or Multi-Stream Transport (MST) tiling to achieve a 60Hz refresh rate
+before single-cable hardware matured. However, users frequently
+encountered noticeable screen tearing directly down the center of the
+panel, where the left and right halves appeared out of alignment during
+motion. This article explains the technical reasons behind this
+split-screen tearing, focusing on how independent display pipelines,
+clock drift, and the absence of hardware frame synchronization affected
+early dual-cable setups.</p>
+<h3 id="the-need-for-tiled-displays">The Need for Tiled Displays</h3>
+<p>When 4K monitors first entered the consumer market, internal display
+timing controllers (TCONs) and standard video interfaces lacked the
+bandwidth to process a single 3840x2160 stream at 60Hz. To bypass these
+hardware limits, panel manufacturers designed displays as two distinct
+vertical halves (each measuring 1920x2160). The monitor was effectively
+two physical screens housed inside a single bezel, requiring either two
+separate DisplayPort cables or a single cable using Multi-Stream
+Transport to feed two distinct video signals simultaneously.</p>
+<h3 id="independent-display-pipelines">Independent Display
+Pipelines</h3>
+<p>Because the monitor reported itself as two separate panels, the host
+graphics card had to treat the display as a multi-monitor array. The GPU
+relied on display stitching drivers (such as AMD Eyefinity or NVIDIA
+Surround) to present both halves as a single logical desktop to the
+operating system.</p>
+<p>Internally, the GPU pushed two distinct video streams through two
+separate display output engines. Each stream operated with its own:</p>
+<ul>
+<li><strong>Pixel clock:</strong> The frequency at which individual
+pixels are transmitted.</li>
+<li><strong>Scanout timing:</strong> The path tracing pixels
+line-by-line from top to bottom.</li>
+<li><strong>Vertical Blanking Interval (V-Blank):</strong> The brief
+pause signaling the end of a frame.</li>
+</ul>
+<h3 id="lack-of-hardware-genlock-and-phase-drift">Lack of Hardware
+Genlock and Phase Drift</h3>
+<p>Consumer graphics cards lacked the dedicated hardware frame-locking
+(genlock) found in professional workstation hardware. Without
+hardware-level synchronization, the two DisplayPort transmitters could
+not stay permanently locked in phase.</p>
+<p>Microscopic manufacturing differences in clock oscillators and slight
+variations in transmission timing caused clock jitter. Over time, the
+refresh cycles of the two halves drifted apart. Even a microsecond
+difference in phase meant that the left side of the screen and the right
+side of the screen were never scanning lines at the exact same physical
+position at the exact same time.</p>
+<h3 id="desynchronized-page-flipping">Desynchronized Page Flipping</h3>
+<p>The most visible issue occurred during frame rendering in games and
+video playback. When an application completed rendering a frame, the GPU
+executed a "page flip" to switch the front and back display buffers.</p>
+<p>Because the two screen halves ran on independent display engines, the
+page flip did not occur simultaneously across both outputs. One cable’s
+scanout engine might catch the new frame before its V-Blank interval
+closed, while the other cable missed the window and had to wait for the
+next refresh cycle. Consequently, for a fraction of a second, the left
+half of the display showed frame <em>N+1</em> while the right half
+remained on frame <em>N</em>. This created a prominent vertical tear
+right along the center seam of the panel.</p>
+<h3 id="how-the-issue-was-resolved">How the Issue Was Resolved</h3>
+<p>Split-screen tearing eventually disappeared as display technology
+progressed on two fronts:</p>
+<ol type="1">
+<li><strong>Higher-Bandwidth Interfaces:</strong> The release of
+DisplayPort 1.3 and 1.4 provided sufficient bandwidth to carry 4K
+signals at high refresh rates over a single lane without splitting the
+signal.</li>
+<li><strong>Unified TCONs and Single-Stream Transport (SST):</strong>
+Display manufacturers developed scalable timing controllers capable of
+processing the entire panel resolution natively as a single image
+buffer.</li>
+</ol>
+<p>Once GPUs could transmit the entire frame over a single stream to a
+single scaler, the need for dual pipelines and tiled rendering ended,
+permanently eliminating center-line seam tearing.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

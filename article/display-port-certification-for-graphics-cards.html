@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisplayPort Certification for Graphics Cards - dp</title>
+    <meta name="description" content="To legally bear the official DisplayPort logo, a graphics card must successfully pass the Video Electronics Standards Association (VESA) DisplayPort Compliance Program. Because a graphics card outputs video, it is evaluated as a &quot;Source&quot; device against ri">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/display-port-certification-for-graphics-cards">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DisplayPort Certification for Graphics Cards - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/display-port-certification-for-graphics-cards" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="To legally bear the official DisplayPort logo, a graphics card must successfully pass the Video Electronics Standards Association (VESA) DisplayPort Compliance Program. Because a graphics card outputs video, it is evaluated as a &quot;Source&quot; device against ri" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="displayport-certification-for-graphics-cards">DisplayPort
+Certification for Graphics Cards</h1>
+<p>To legally bear the official DisplayPort logo, a graphics card must
+successfully pass the Video Electronics Standards Association (VESA)
+DisplayPort Compliance Program. Because a graphics card outputs video,
+it is evaluated as a "Source" device against rigorous standards defined
+in the DisplayPort Compliance Test Specification (CTS). This
+certification ensures signal integrity, protocol accuracy, and universal
+compatibility across certified displays, cables, and adapters.</p>
+<h3 id="1-physical-layer-phy-testing">1. Physical Layer (PHY)
+Testing</h3>
+<p>Physical layer compliance verifies that the card meets all electrical
+transmission parameters across every transmission speed it
+supports—ranging from legacy Reduced Bit Rate (RBR) to High Bit Rate
+(HBR, HBR2, HBR3) and Ultra High Bit Rate (UHBR).</p>
+<p>Key electrical tests include:</p>
+<ul>
+<li><strong>Eye Diagram Analysis:</strong> Measures signal quality,
+amplitude, rise and fall times to ensure the digital signal is
+distinguishable from noise.</li>
+<li><strong>Jitter and Noise Analysis:</strong> Evaluates deterministic
+and random jitter to guarantee signal stability over defined trace
+lengths and cable loads.</li>
+<li><strong>Spread Spectrum Clocking (SSC):</strong> Confirms that
+clock-frequency modulation remains within limits to reduce
+electromagnetic interference (EMI).</li>
+<li><strong>Auxiliary (AUX) Channel Electricals:</strong> Verifies
+proper voltage levels, termination resistance, and transmission timings
+on the bidirectional AUX channel.</li>
+</ul>
+<h3 id="2-link-layer-testing">2. Link Layer Testing</h3>
+<p>Link layer testing ensures that the graphics card correctly formats,
+transmits, and manages digital data streams and communicates accurately
+with connected monitors.</p>
+<p>Testing areas include:</p>
+<ul>
+<li><strong>Link Training:</strong> Tests the card's ability to
+negotiate transmission speed and lane counts with a display via
+automated handshaking (Clock Recovery and Channel Equalization).</li>
+<li><strong>DPCD and EDID Communication:</strong> Validates that the GPU
+correctly reads the display’s Extended Display Identification Data
+(EDID) and interacts properly with DisplayPort Configuration Data (DPCD)
+registers.</li>
+<li><strong>Stream Handling:</strong> Verifies Main-Link packet framing,
+timing synchronization, and the handling of single-stream (SST) or
+multi-stream transport (MST) topologies.</li>
+<li><strong>Advanced Feature Compliance:</strong> Evaluates proper
+implementation of Display Stream Compression (DSC), High Dynamic Range
+(HDR) metadata delivery, and audio stream transmission.</li>
+</ul>
+<h3 id="3-interoperability-testing">3. Interoperability Testing</h3>
+<p>Interoperability testing evaluates real-world hardware behavior by
+connecting the graphics card to a standardized matrix of certified
+monitors, active and passive adapters, hubs, and cables.</p>
+<p>Criteria include:</p>
+<ul>
+<li><strong>Hot Plug Detect (HPD):</strong> The graphics card must
+reliably detect monitor connection, disconnection, and rapid re-plugging
+without driver crashes or display lockups.</li>
+<li><strong>Power State Transitions:</strong> Evaluates the GPU's
+ability to maintain or re-establish video links during system sleep,
+wake, hibernation, and monitor power-cycling states.</li>
+<li><strong>Resolution and Refresh Switching:</strong> Verifies dynamic
+changes between standard and high-bandwidth display modes without screen
+tearing, color corruption, or link drops.</li>
+</ul>
+<h3 id="4-content-protection-and-administrative-validation">4. Content
+Protection and Administrative Validation</h3>
+<p>While HDCP (High-bandwidth Digital Content Protection) compliance is
+administered separately by Digital Content Protection LLC, VESA
+interoperability testing verifies that HDCP handshakes do not disrupt
+standard DisplayPort signaling.</p>
+<p>Once physical, link, and interoperability criteria are satisfied at a
+VESA-accredited Authorized Test Center (ATC)—or through a qualified VESA
+member self-testing process—the test logs are submitted to VESA. Upon
+official approval and listing in the VESA Certified Product Database,
+the manufacturer is granted the license to place the DisplayPort logo on
+the graphics card and its retail packaging.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

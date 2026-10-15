@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why DisplayPort Pin 20 Cables Cause Hardware Damage - dp</title>
+    <meta name="description" content="Early non-compliant DisplayPort cables caused severe hardware malfunctions and physical component damage due to an improperly connected wire on Pin 20. According to official VESA specifications, standard DisplayPort cables connecting a source (such as a g">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/why-display-port-pin-20-cables-cause-hardware-damage">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Why DisplayPort Pin 20 Cables Cause Hardware Damage - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/why-display-port-pin-20-cables-cause-hardware-damage" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Early non-compliant DisplayPort cables caused severe hardware malfunctions and physical component damage due to an improperly connected wire on Pin 20. According to official VESA specifications, standard DisplayPort cables connecting a source (such as a g" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="why-displayport-pin-20-cables-cause-hardware-damage">Why
+DisplayPort Pin 20 Cables Cause Hardware Damage</h1>
+<p>Early non-compliant DisplayPort cables caused severe hardware
+malfunctions and physical component damage due to an improperly
+connected wire on Pin 20. According to official VESA specifications,
+standard DisplayPort cables connecting a source (such as a graphics
+card) to a display must leave Pin 20 disconnected. However, several
+manufacturers wired all 20 pins straight through end-to-end. This design
+flaw bridged the power rails of the graphics card and monitor together,
+forcing two active voltage sources into conflict, backfeeding electrical
+current into computer motherboards, and frequently burning out sensitive
+silicon.</p>
+<h3 id="the-purpose-of-pin-20-dp_pwr">The Purpose of Pin 20
+(DP_PWR)</h3>
+<p>DisplayPort includes a dedicated power pin labeled Pin 20, known as
+DP_PWR. The Video Electronics Standards Association (VESA) created Pin
+20 to output a direct 3.3V DC line with a maximum current of 500mA.</p>
+<p>This power delivery mechanism was never intended to travel directly
+between a computer and a standard monitor. Instead, DP_PWR exists
+strictly to provide power to bus-powered accessories, such as active
+adapters (e.g., DisplayPort to HDMI or VGA converters), signal
+extenders, and optical hybrid cables that require external power to
+operate without a separate wall adapter.</p>
+<h3 id="the-wiring-failure-in-non-compliant-cables">The Wiring Failure
+in Non-Compliant Cables</h3>
+<p>Under VESA standards, a standard male-to-male DisplayPort cable must
+leave Pin 20 floating (completely disconnected on both ends) or
+internally terminated. Only specialized adapter cables should connect
+Pin 20 to draw power from the host device.</p>
+<p>Despite this requirement, many early cable manufacturers produced
+generic male-to-male DisplayPort cables with a standard, uniform 20-wire
+internal structure. Instead of leaving Pin 20 unpopulated, factories
+connected all 20 pins straight through, creating an electrical bridge
+between Pin 20 on the graphics card and Pin 20 on the monitor.</p>
+<h3 id="electrical-backfeeding-and-component-damage">Electrical
+Backfeeding and Component Damage</h3>
+<p>When a cable connects Pin 20 between a PC and a display, a dangerous
+electrical condition occurs because both devices actively supply 3.3V
+power:</p>
+<ul>
+<li><strong>Voltage Differential and Current Flow:</strong> No two power
+supplies output an identical voltage. Even a tiny variance—such as a
+monitor supplying 3.35V and a graphics card supplying 3.25V—creates a
+closed circuit over Pin 20. Because the connection lacks inline
+current-limiting resistors, significant electrical current flows
+backward from the higher-voltage device into the lower-voltage
+device.</li>
+<li><strong>Backfeeding the PCIe Bus:</strong> The backfed current
+enters the graphics card’s internal power planes and often travels
+directly into the motherboard via the PCIe slot. Users commonly
+experienced systems where fans kept spinning, motherboard LEDs remained
+lit, or systems failed to shut down or restart properly because the
+monitor was continuously powering the PC's 3.3V rail.</li>
+<li><strong>Component Burnout:</strong> Graphics cards, display
+controllers, and motherboards are not engineered to accept unregulated
+reverse-voltage on their output lines. The resulting reverse current
+frequently caused excessive heat, degradation, or catastrophic failure
+of linear regulators, protective diodes, and display output stages on
+the graphics processing unit (GPU).</li>
+</ul>
+<h3 id="diagnosing-and-resolving-the-issue">Diagnosing and Resolving the
+Issue</h3>
+<p>The Pin 20 issue prompted VESA to enforce stricter certification
+testing for DisplayPort products. A certified cable guarantees that Pin
+20 is disconnected.</p>
+<p>Users can identify problematic non-compliant cables using a standard
+digital multimeter set to continuity mode. Touching the probes to Pin 20
+on both ends of a standard male-to-male cable should yield no electrical
+continuity. If a multimeter beeps or shows a closed circuit across Pin
+20, the cable is non-compliant and poses a direct risk to connected
+hardware.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

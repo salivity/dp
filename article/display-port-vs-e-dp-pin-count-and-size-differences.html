@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisplayPort vs eDP: Pin Count and Size Differences - dp</title>
+    <meta name="description" content="While standard DisplayPort (DP) and embedded DisplayPort (eDP) share the same core packet-based transmission protocol, their physical implementations diverge completely to serve distinct environments. Standard DisplayPort is engineered as an external, rug">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/display-port-vs-e-dp-pin-count-and-size-differences">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DisplayPort vs eDP: Pin Count and Size Differences - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/display-port-vs-e-dp-pin-count-and-size-differences" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="While standard DisplayPort (DP) and embedded DisplayPort (eDP) share the same core packet-based transmission protocol, their physical implementations diverge completely to serve distinct environments. Standard DisplayPort is engineered as an external, rug" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="displayport-vs-edp-pin-count-and-size-differences">DisplayPort
+vs eDP: Pin Count and Size Differences</h1>
+<p>While standard DisplayPort (DP) and embedded DisplayPort (eDP) share
+the same core packet-based transmission protocol, their physical
+implementations diverge completely to serve distinct environments.
+Standard DisplayPort is engineered as an external, rugged interface
+built for durability and repeated hot-plugging between computers and
+monitors. In contrast, eDP is an internal interface optimized for
+miniaturization, minimal power consumption, and direct integration
+within ultra-thin devices such as laptops, tablets, and all-in-one
+PCs.</p>
+<h3 id="pin-count-variations">Pin Count Variations</h3>
+<ul>
+<li><strong>Standard DisplayPort (External):</strong> Standard full-size
+DisplayPort and Mini DisplayPort connectors both feature a fixed count
+of <strong>20 pins</strong>. These pins are strictly defined by VESA
+standards to support up to 4 main link data lanes, the bidirectional
+Auxiliary Channel (AUX CH), Hot Plug Detect (HPD), power delivery
+(DP_PWR at 3.3V), and multiple ground/shielding pins to isolate
+differential pairs.</li>
+<li><strong>Embedded DisplayPort (Internal):</strong> Unlike external
+DP, eDP connectors do not have a single fixed pin count. Instead, they
+scale according to panel resolution, color depth, refresh rate, and
+auxiliary device integration (such as touchscreens or integrated LED
+backlight controls). Common eDP configurations include:
+<ul>
+<li><strong>20-pin:</strong> Typically used in older or low-resolution
+panels (e.g., HD or low-end FHD) utilizing 1 or 2 main data lanes with
+minimal integrated control circuitry.</li>
+<li><strong>30-pin:</strong> The most widespread standard for modern FHD
+(1080p) to QHD laptop displays, providing 2 main lanes, AUX channel,
+panel logic power, ground lines, and direct dynamic backlight control
+(PWM and enable lines).</li>
+<li><strong>40-pin:</strong> Required for high-bandwidth displays, such
+as 4K panels, high-refresh-rate displays (120Hz+), or panels integrating
+high-speed touch sensor data and RGB/HDR color signals across a full
+4-lane link.</li>
+</ul></li>
+</ul>
+<h3 id="physical-footprint-and-form-factor">Physical Footprint and Form
+Factor</h3>
+<ul>
+<li><strong>Standard DisplayPort:</strong>
+<ul>
+<li><strong>Dimensions:</strong> A full-size DP receptacle measures
+approximately 16.0 mm in width, 4.8 mm in height, and around 10.0 to
+12.0 mm in PCB mounting depth. Mini DisplayPort reduces the width to
+roughly 7.5 mm and height to 4.6 mm.</li>
+<li><strong>Pitch and Durability:</strong> External DP connectors use a
+relatively coarse contact pitch (roughly 1.0 mm for standard DP)
+enclosed in heavy metal shielding. They feature mechanical friction or
+push-button latching mechanisms and are rated for 10,000 mating
+cycles.</li>
+</ul></li>
+<li><strong>Embedded DisplayPort:</strong>
+<ul>
+<li><strong>Dimensions:</strong> eDP relies on micro-coaxial or flexible
+printed circuit (FPC) board-to-board/wire-to-board connectors (such as
+those from IPEX, Hirose, or JAE). While a 30-pin or 40-pin eDP connector
+may span 15.0 to 22.0 mm in width, its mated profile height is
+microscopic—typically between 0.8 mm and 1.2 mm above the PCB—with a
+depth of only 2.0 to 4.0 mm.</li>
+<li><strong>Pitch and Durability:</strong> eDP connectors utilize
+ultra-fine pitches, commonly <strong>0.4 mm or 0.5 mm</strong>, to pack
+dozens of signal lines into thin display chassis. They lack rugged
+external shells, instead using thin foil shielding, pull-bars, or kapton
+tape for retention, and are rated for limited mating cycles (typically
+20 to 30 cycles), intended solely for factory assembly and hardware
+repair.</li>
+</ul></li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

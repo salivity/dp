@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisplayPort Chroma Subsampling: 4:4:4, 4:2:2, 4:2:0 - dp</title>
+    <meta name="description" content="DisplayPort manages video bandwidth by supporting various pixel encoding formats and chroma subsampling schemes, specifically 4:4:4, 4:2:2, and 4:2:0. By adjusting how color data is sampled relative to luminance, DisplayPort allows sources and displays to">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/display-port-chroma-subsampling-4-4-4-4-2-2-4-2-0">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DisplayPort Chroma Subsampling: 4:4:4, 4:2:2, 4:2:0 - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/display-port-chroma-subsampling-4-4-4-4-2-2-4-2-0" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="DisplayPort manages video bandwidth by supporting various pixel encoding formats and chroma subsampling schemes, specifically 4:4:4, 4:2:2, and 4:2:0. By adjusting how color data is sampled relative to luminance, DisplayPort allows sources and displays to" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="displayport-chroma-subsampling-444-422-420">DisplayPort Chroma
+Subsampling: 4:4:4, 4:2:2, 4:2:0</h1>
+<p>DisplayPort manages video bandwidth by supporting various pixel
+encoding formats and chroma subsampling schemes, specifically 4:4:4,
+4:2:2, and 4:2:0. By adjusting how color data is sampled relative to
+luminance, DisplayPort allows sources and displays to balance visual
+fidelity against available link bandwidth across different revisions of
+the standard. This article explains the technical mechanisms DisplayPort
+uses to transmit these subsampling formats, how they are negotiated
+between devices, and how their implementation has evolved across the
+specification.</p>
+<h3
+id="packetized-data-transmission-and-color-representation">Packetized
+Data Transmission and Color Representation</h3>
+<p>Unlike traditional display interfaces that transmit continuous raster
+streams, DisplayPort packages video into micro-packets across high-speed
+differential lanes. Within each transmission frame, the Source transmits
+Main Stream Attribute (MSA) packets alongside the active pixel data.</p>
+<p>The MSA contains the metadata defining the color space (RGB or
+YCbCr), colorimetry, bit depth (e.g., 8, 10, or 12 bits per component),
+and the chroma subsampling structure. The Sink uses this metadata to
+properly unpack and reconstruct the pixel stream for display
+processing.</p>
+<h3 id="chroma-subsampling-formats-in-displayport">Chroma Subsampling
+Formats in DisplayPort</h3>
+<p>DisplayPort treats pixel data according to standardized packing
+layouts that dictate how luminance (<span
+class="math inline">\(Y\)</span>) and chrominance (<span
+class="math inline">\(Cb\)</span> and <span
+class="math inline">\(Cr\)</span>) samples are distributed across the
+lane architecture:</p>
+<ul>
+<li><strong>RGB and YCbCr 4:4:4:</strong> Every pixel contains full
+luminance and chrominance information. This requires 24 bits per pixel
+(bpp) at 8-bit color depth (or 30 bpp at 10-bit). DisplayPort transmits
+4:4:4 with no subsampling, providing the highest fidelity. It is the
+default format for PC use, preventing color fringing on sharp UI
+elements and text. Full 4:4:4 support has been integral to DisplayPort
+since version 1.0.</li>
+<li><strong>YCbCr 4:2:2:</strong> Horizontal chroma resolution is
+halved, while vertical chroma resolution remains intact. DisplayPort
+packs pairs of adjacent horizontal pixels sharing <span
+class="math inline">\(Cb\)</span> and <span
+class="math inline">\(Cr\)</span> samples, effectively reducing the
+bandwidth requirement to an average of 16 bpp for 8-bit depth (a 33%
+reduction compared to 4:4:4). DisplayPort has natively supported 4:2:2
+pixel packing since the DisplayPort 1.1 specification, primarily for
+video playback compatibility.</li>
+<li><strong>YCbCr 4:2:0:</strong> Both horizontal and vertical chroma
+resolutions are halved, meaning a single chroma sample pair is shared
+across a 2x2 grid of four pixels. This reduces the average payload to 12
+bpp at 8-bit color depth (a 50% bandwidth reduction compared to 4:4:4).
+DisplayPort did not natively support 4:2:0 in its earliest iterations;
+native YCbCr 4:2:0 pixel mapping was formally integrated into the
+DisplayPort standard with version 1.3 to enable high-resolution targets
+(such as 4K at high refresh rates or early 8K configurations) over
+limited link rates.</li>
+</ul>
+<h3 id="hardware-negotiation-via-edid-and-dpcd">Hardware Negotiation via
+EDID and DPCD</h3>
+<p>The selection of chroma subsampling formats is governed by hardware
+negotiation between the source (GPU) and sink (monitor):</p>
+<ol type="1">
+<li><strong>Capability Discovery:</strong> When a connection is
+established, the source reads the display's Extended Display
+Identification Data (EDID) and DisplayID blocks via the AUX channel.
+This data reports supported color spaces, pixel encodings, and maximum
+refresh rates.</li>
+<li><strong>Link Training and Bandwidth Evaluation:</strong> The source
+queries the DisplayPort Configuration Data (DPCD) registers to determine
+lane counts and link rates (e.g., RBR, HBR2, HBR3, UHBR10).</li>
+<li><strong>Format Selection:</strong> If a target resolution and
+refresh rate exceed the physical bandwidth of the negotiated link, the
+source can automatically fall back from 4:4:4 to 4:2:2 or 4:2:0
+(provided the monitor's EDID advertises support) to fit the payload
+within the transmission limits.</li>
+</ol>
+<h3 id="interaction-with-display-stream-compression-dsc">Interaction
+with Display Stream Compression (DSC)</h3>
+<p>Starting with DisplayPort 1.4, the standard introduced Display Stream
+Compression (DSC), a visually lossless compression algorithm. DSC alters
+how chroma subsampling is utilized. Because DSC operates on both 4:4:4
+and subsampled formats, sources can often maintain 4:4:4 color fidelity
+across constrained links via compression rather than forcing a drop to
+4:2:2 or 4:2:0. However, when maximum bandwidth savings are necessary,
+DSC can be combined with 4:2:2 or 4:2:0 input to achieve even lower
+transmission bitrates.</p></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How DisplayPort Converts AUX to I2C Commands - dp</title>
+    <meta name="description" content="This article explains how a DisplayPort (DP) source encapsulates and converts bidirectional Auxiliary (AUX) channel transactions into standard I2C commands. It covers the protocol-level mapping known as I2C-over-AUX, detailing how the source frames I2C ST">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/how-display-port-converts-aux-to-i-2-c-commands">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How DisplayPort Converts AUX to I2C Commands - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/how-display-port-converts-aux-to-i-2-c-commands" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explains how a DisplayPort (DP) source encapsulates and converts bidirectional Auxiliary (AUX) channel transactions into standard I2C commands. It covers the protocol-level mapping known as I2C-over-AUX, detailing how the source frames I2C ST" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-displayport-converts-aux-to-i2c-commands">How DisplayPort
+Converts AUX to I2C Commands</h1>
+<p>This article explains how a DisplayPort (DP) source encapsulates and
+converts bidirectional Auxiliary (AUX) channel transactions into
+standard I2C commands. It covers the protocol-level mapping known as
+I2C-over-AUX, detailing how the source frames I2C START and STOP
+conditions, transfers data payloads, and handles peripheral responses
+such as ACKs, NACKs, and bus stretching via DP sink hardware.</p>
+<h3 id="the-purpose-of-i2c-over-aux">The Purpose of I2C-over-AUX</h3>
+<p>DisplayPort does not include dedicated physical I2C lines (SCL and
+SDA) for display configuration channels like DDC/CI or EDID reading.
+Instead, DisplayPort features an AC-coupled, differential Auxiliary
+(AUX) Channel that operates at 1 Mbps using Manchester II encoding. To
+maintain backward compatibility with legacy display peripherals that
+rely on standard I2C protocols, the DisplayPort standard defines a
+method called "I2C-over-AUX." This protocol allows a DP source to tunnel
+native I2C transactions across the high-speed differential AUX pair.</p>
+<h3 id="packet-encapsulation-and-command-encoding">Packet Encapsulation
+and Command Encoding</h3>
+<p>When an application or graphics driver requests an I2C operation
+(such as reading an EDID at address <code>0x50</code>), the DisplayPort
+source controller translates the operation into an AUX Request packet.
+Each AUX packet contains:</p>
+<ol type="1">
+<li><strong>A 4-bit Command Code:</strong> The DP standard designates
+specific command codes for I2C access, distinguishing between
+I2C-over-AUX Write (<code>0000_b</code>), I2C-over-AUX Read
+(<code>0001_b</code>), and I2C-over-AUX Write Status
+(<code>0010_b</code>).</li>
+<li><strong>A 20-bit Address Field:</strong> The source places the 7-bit
+target I2C slave address into the least significant bits of this field,
+leaving the higher bits cleared to zero.</li>
+<li><strong>A Length Field:</strong> Indicates the number of bytes to
+transfer (from 1 up to 16 bytes per AUX packet).</li>
+<li><strong>Data Payload:</strong> The raw data bytes being written to
+or read from the peripheral.</li>
+</ol>
+<h3 id="managing-bus-states-the-mot-middle-of-transaction-bit">Managing
+Bus States: The MOT (Middle-of-Transaction) Bit</h3>
+<p>Standard I2C communications rely on physical bus states—specifically
+START, Repeated START, and STOP conditions. Because the AUX channel is
+packetized and does not feature persistent line levels, the DisplayPort
+source simulates these states using the MOT (Middle-of-Transaction) bit
+embedded within the AUX command header:</p>
+<ul>
+<li><strong>I2C START Condition:</strong> When the source begins an I2C
+sequence, it issues an I2C-over-AUX command with the MOT bit set to
+<code>1</code>.</li>
+<li><strong>Middle Transactions:</strong> Subsequent read or write
+packets maintain the MOT bit as <code>1</code>, signaling to the sink
+device that the logical I2C bus should remain owned and not release a
+STOP condition.</li>
+<li><strong>I2C STOP Condition:</strong> When the final byte is
+transferred, the source sends the concluding AUX request packet with the
+MOT bit cleared to <code>0</code>. This informs the receiving device
+that it must release the bus and generate an I2C STOP condition.</li>
+</ul>
+<h3 id="hardware-decoding-at-the-sink-device">Hardware Decoding at the
+Sink Device</h3>
+<p>The physical translation to real I2C signals occurs inside the
+DisplayPort sink device (the display controller, scalar chip, or an
+active DP-to-HDMI/VGA converter):</p>
+<ol type="1">
+<li><strong>AUX Transceiver to I2C Master:</strong> The sink controller
+features an integrated I2C master core alongside its DP AUX
+receiver.</li>
+<li><strong>Signal Generation:</strong> Upon receiving an I2C-over-AUX
+command, the sink's internal logic drives physical SCL (clock) and SDA
+(data) pins. It outputs the START condition, clocks out the 7-bit slave
+address plus the R/W bit, and clocks the payload data to or from the
+physical bus.</li>
+<li><strong>Response Forwarding:</strong> The sink monitors the SDA line
+for the slave device's physical ACK or NACK bit and maps it into an AUX
+Reply packet sent back to the source.</li>
+</ol>
+<h3 id="handling-timing-and-bus-latency">Handling Timing and Bus
+Latency</h3>
+<p>Standard I2C runs at 100 kHz or 400 kHz, which is significantly
+slower than the 1 Mbps AUX channel. Additionally, I2C slaves may perform
+clock stretching to delay transmission while processing data. The DP
+protocol manages this speed disparity using specialized AUX replies:</p>
+<ul>
+<li><strong>AUX ACK:</strong> Returned to the source when the I2C slave
+acknowledges the byte.</li>
+<li><strong>AUX NACK:</strong> Returned when the I2C slave fails to
+acknowledge its address or data, allowing the source to abort or
+retry.</li>
+<li><strong>AUX DEFER:</strong> If the physical I2C transaction is still
+in progress because of clock stretching or slow bus speeds, the sink
+cannot immediately return the requested data within the DP AUX timeout
+window (typically 300 to 400 microseconds). In this case, the sink
+responds with <code>AUX DEFER</code>. The DP source detects this
+deferral, pauses briefly, and automatically retries the request until
+the sink completes the physical I2C read or write and can return an
+<code>AUX ACK</code> with the payload.</li>
+</ul></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

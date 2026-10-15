@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding DisplayPort Maud and Naud Values - dp</title>
+    <meta name="description" content="This article explains the function and significance of Maud and Naud values in DisplayPort audio transmission. In DisplayPort standards, these two parameters serve as the foundation for Audio Clock Regeneration (ACR), enabling receiving devices to accurat">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/understanding-display-port-maud-and-naud-values">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Understanding DisplayPort Maud and Naud Values - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/understanding-display-port-maud-and-naud-values" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explains the function and significance of Maud and Naud values in DisplayPort audio transmission. In DisplayPort standards, these two parameters serve as the foundation for Audio Clock Regeneration (ACR), enabling receiving devices to accurat" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="understanding-displayport-maud-and-naud-values">Understanding
+DisplayPort Maud and Naud Values</h1>
+<p>This article explains the function and significance of Maud and Naud
+values in DisplayPort audio transmission. In DisplayPort standards,
+these two parameters serve as the foundation for Audio Clock
+Regeneration (ACR), enabling receiving devices to accurately reconstruct
+the source audio clock from the video link clock. Understanding how Maud
+and Naud operate clarifies how audio stays synchronized and jitter-free
+without requiring a dedicated physical clock line.</p>
+<h3 id="the-role-of-audio-clock-regeneration">The Role of Audio Clock
+Regeneration</h3>
+<p>DisplayPort transmits both video and audio data as serialized digital
+packets across high-speed differential pairs known as the Main Link. The
+Main Link operates at fixed symbol rates (such as 1.62 Gbps, 2.7 Gbps,
+5.4 Gbps, or higher), which are asynchronous to standard audio sampling
+rates (such as 44.1 kHz, 48 kHz, 96 kHz, or 192 kHz).</p>
+<p>Because the audio sample clock is not transmitted directly over a
+physical wire, the sink device (such as a monitor or AV receiver) must
+synthesize the original audio clock locally. This process is called
+Audio Clock Regeneration. To accomplish this, the source device
+transmits the fractional relationship between the link clock and the
+audio clock using the parameters <strong>Maud</strong> and
+<strong>Naud</strong>.</p>
+<h3 id="definition-of-maud-and-naud">Definition of Maud and Naud</h3>
+<p>Within the DisplayPort Secondary Data Packets (specifically Audio
+Clock Regeneration or Audio Stream packets):</p>
+<ul>
+<li><strong>Maud (Audio M-value):</strong> Represents the numerator of
+the clock ratio. It is a dynamically measured or calculated value that
+reflects the exact frequency relationship of the audio sample clock
+relative to the link clock. Because physical clocks experience slight
+drift, Maud can vary dynamically to compensate for clock frequency
+variations over time.</li>
+<li><strong>Naud (Audio N-value):</strong> Represents the denominator of
+the clock ratio. Unlike Maud, Naud is typically a fixed parameter
+defined by the DisplayPort specification based on the link rate and
+audio format (commonly set to a power of two or a standard
+constant).</li>
+</ul>
+<h3 id="the-mathematical-relationship">The Mathematical
+Relationship</h3>
+<p>The receiving sink uses a Phase-Locked Loop (PLL) or digital
+frequency synthesizer to derive the audio stream master clock (<span
+class="math inline">\(f_{audio}\)</span>) from the link symbol clock
+(<span class="math inline">\(f_{LS\_CLK}\)</span>) using the following
+equation:</p>
+<p><span class="math display">\[f_{audio} = f_{LS\_CLK} \times
+\left(\frac{M_{aud}}{N_{aud}}\right)\]</span></p>
+<p>The resulting generated frequency (<span
+class="math inline">\(f_{audio}\)</span>) is typically a multiple of the
+audio sampling rate (often <span class="math inline">\(128 \times
+f_s\)</span> or <span class="math inline">\(512 \times f_s\)</span>),
+which the sink’s digital-to-analog converter (DAC) uses to process audio
+frames.</p>
+<h3 id="why-maud-and-naud-are-essential">Why Maud and Naud Are
+Essential</h3>
+<ol type="1">
+<li><strong>Jitter Reduction:</strong> Continuous transmission of Maud
+updates allows the sink's PLL to track and adapt to minor frequency
+drifts between the source and display, minimizing phase jitter.</li>
+<li><strong>Buffer Management:</strong> Accurate clock regeneration
+ensures that the sink consumes audio data at precisely the rate it is
+sent, preventing audio buffer underflow (which causes dropouts) or
+overflow (which causes crackling and dropped samples).</li>
+<li><strong>Hardware Efficiency:</strong> Transmitting virtual timing
+values eliminates the need for dedicated physical clock lines, reducing
+cable complexity and pin counts while supporting high-resolution
+multi-channel audio.</li>
+</ol></article>
+        <div id="comments-container"></div>
+        <script>
+            const utterancesScript = document.createElement('script');
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/dp'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            utterancesScript.setAttribute('theme', currentTheme === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>
