@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How DisplayPort MST Handles Mid-Stream Hot-Plug Events - dp</title>
+    <meta name="description" content="DisplayPort Multi-Stream Transport (MST) allows multiple independent video streams to travel across a single physical connection via daisy-chaining or hub topologies. When a user connects or disconnects a monitor mid-stream in an active chain, the MST pro">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/how-display-port-mst-handles-mid-stream-hot-plug-events">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How DisplayPort MST Handles Mid-Stream Hot-Plug Events - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/how-display-port-mst-handles-mid-stream-hot-plug-events" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="DisplayPort Multi-Stream Transport (MST) allows multiple independent video streams to travel across a single physical connection via daisy-chaining or hub topologies. When a user connects or disconnects a monitor mid-stream in an active chain, the MST pro" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-displayport-mst-handles-mid-stream-hot-plug-events">How
+DisplayPort MST Handles Mid-Stream Hot-Plug Events</h1>
+<p>DisplayPort Multi-Stream Transport (MST) allows multiple independent
+video streams to travel across a single physical connection via
+daisy-chaining or hub topologies. When a user connects or disconnects a
+monitor mid-stream in an active chain, the MST protocol dynamically
+updates the topology without tearing down unaffected streams. It
+achieves this by using Hot Plug Detect (HPD) interrupt pulses, sideband
+messaging across the Auxiliary (AUX) channel, and dynamic reallocation
+of Virtual Channel (VC) payloads to maintain display continuity.</p>
+<h2 id="1-hot-plug-detection-via-hpd_irq-signaling">1. Hot Plug
+Detection via HPD_IRQ Signaling</h2>
+<p>When a display is plugged into or unplugged from a downstream port in
+an existing daisy chain, the intermediate branch device (the monitor or
+MST hub directly connected to the affected port) detects the physical
+connection change.</p>
+<p>Rather than generating a standard, long-duration HPD drop—which would
+force the source graphics processing unit (GPU) to reset the entire
+link—the branch device asserts an interrupt signal known as an
+<code>HPD_IRQ</code> pulse. This pulse is forwarded hop-by-hop upstream
+to the GPU. The short duration of the pulse alerts the source that an
+internal state change occurred within the MST topology while signaling
+that the main physical link between devices remains intact.</p>
+<h2 id="2-event-identification-via-dpcd-registers">2. Event
+Identification via DPCD Registers</h2>
+<p>Upon receiving the <code>HPD_IRQ</code>, the GPU queries the upstream
+branch device's DisplayPort Configuration Data (DPCD) registers over the
+AUX channel. Specifically, the source reads the
+<code>DEVICE_SERVICE_IRQ_VECTOR</code> and the
+<code>SINK_COUNT_ESI</code> registers to identify the nature of the
+interrupt:</p>
+<ul>
+<li><strong>Downstream Port Status Change:</strong> Flags indicate that
+a device has either been attached or detached from a downstream
+port.</li>
+<li><strong>Message Pending:</strong> Flags indicate that an MST
+sideband message is waiting to be serviced.</li>
+</ul>
+<h2 id="3-sideband-topology-discovery">3. Sideband Topology
+Discovery</h2>
+<p>To understand the exact state of the display tree, the source and MST
+branch devices exchange packets via the MST Sideband Messaging
+Mechanism. This protocol uses dedicated request and broadcast messages
+over the point-to-point AUX links:</p>
+<ul>
+<li><strong><code>CONNECTION_STATUS_NOTIFY</code>:</strong> The branch
+device where the physical event occurred sends this broadcast message
+upstream. It details the port number, whether a sink device is now
+attached, and whether the attached sink supports DisplayPort MST or
+Legacy (SST) mode.</li>
+<li><strong><code>LINK_ADDRESS</code> Query:</strong> In response, the
+GPU issues a <code>LINK_ADDRESS</code> request to discover the updated
+capabilities of the specific node. The response provides the device's
+unique GUID, port capabilities, and available Payload Bandwidth Numbers
+(PBN).</li>
+</ul>
+<h2 id="4-bandwidth-and-time-slot-reallocation">4. Bandwidth and Time
+Slot Reallocation</h2>
+<p>DisplayPort MST divides the high-speed Main Link bandwidth into 64
+distinct time-division multiplexed (TDM) time slots. Active video
+streams are assigned a specific number of slots based on their
+resolution, refresh rate, and color depth via Virtual Channel (VC)
+payloads.</p>
+<h3 id="handling-a-hot-unplug-disconnection">Handling a Hot-Unplug
+(Disconnection)</h3>
+<ol type="1">
+<li><strong>Payload Teardown:</strong> The source stops transmitting the
+pixel stream directed at the disconnected display's Virtual
+Channel.</li>
+<li><strong><code>ALLOCATE_PAYLOAD</code> Update:</strong> The source
+sends an <code>ALLOCATE_PAYLOAD</code> sideband message instructing each
+intermediate branch device along the path to clear the time slots
+allocated to that stream.</li>
+<li><strong>ACT Trigger:</strong> The source issues an Allocate Payload
+Table (ACT) trigger to apply the changes atomically across the chain,
+freeing up the PBN for other devices.</li>
+</ol>
+<h3 id="handling-a-hot-plug-connection">Handling a Hot-Plug
+(Connection)</h3>
+<ol type="1">
+<li><strong>EDID Read:</strong> The GPU reads the Extended Display
+Identification Data (EDID) of the newly connected monitor via the
+<code>REMOTE_I2C_READ</code> sideband message.</li>
+<li><strong>Bandwidth Verification:</strong> The source calculates the
+required PBN for the preferred resolution and verifies that sufficient
+free time slots exist on all upstream segments of the daisy chain.</li>
+<li><strong>Payload Allocation:</strong> The source sends
+<code>ALLOCATE_PAYLOAD</code> messages to configure new VC payload
+assignments in the routing tables of each intermediate node.</li>
+<li><strong>ACT Trigger and Stream Start:</strong> The source asserts
+the ACT trigger and begins transmitting the new stream mapped to its
+designated Virtual Channel.</li>
+</ol>
+<h2 id="5-stream-isolation-and-stability">5. Stream Isolation and
+Stability</h2>
+<p>Throughout a mid-stream hot-plug event, unaffected displays remain
+active because the physical PHY link layer never drops out. The time
+slots occupied by active streams retain their exact index assignments
+within the 64-slot framing structure; only the time slots assigned to
+the newly plugged or unplugged monitor are modified. As a result, the
+source GPU prevents screen blanking and link renegotiation on remaining
+displays across the chain.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/how-display-port-mst-handles-mid-stream-hot-plug-events';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

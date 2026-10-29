@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Can DisplayPort Output Multi-Channel LPCM to an AVR? - dp</title>
+    <meta name="description" content="DisplayPort is fully capable of carrying raw, uncompressed multi-channel Linear Pulse Code Modulation (LPCM) audio to an AV receiver (AVR). The DisplayPort standard natively supports up to eight channels of uncompressed audio (5.1 or 7.1 surround sound) a">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/can-display-port-output-multi-channel-lpcm-to-an-avr">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Can DisplayPort Output Multi-Channel LPCM to an AVR? - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/can-display-port-output-multi-channel-lpcm-to-an-avr" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="DisplayPort is fully capable of carrying raw, uncompressed multi-channel Linear Pulse Code Modulation (LPCM) audio to an AV receiver (AVR). The DisplayPort standard natively supports up to eight channels of uncompressed audio (5.1 or 7.1 surround sound) a" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="can-displayport-output-multi-channel-lpcm-to-an-avr">Can
+DisplayPort Output Multi-Channel LPCM to an AVR?</h1>
+<p>DisplayPort is fully capable of carrying raw, uncompressed
+multi-channel Linear Pulse Code Modulation (LPCM) audio to an AV
+receiver (AVR). The DisplayPort standard natively supports up to eight
+channels of uncompressed audio (5.1 or 7.1 surround sound) at high
+sample rates and bit depths. However, because the vast majority of
+consumer AV receivers only feature HDMI inputs rather than DisplayPort
+connections, successfully routing this audio requires the correct
+adapter hardware, graphics card capabilities, and operating system
+configuration.</p>
+<h3 id="technical-capabilities-of-displayport">Technical Capabilities of
+DisplayPort</h3>
+<p>DisplayPort specifications (from version 1.2 up to the latest
+standards like DisplayPort 2.1) have ample bandwidth for high-resolution
+audio alongside video. The protocol supports up to 8 channels of
+uncompressed LPCM audio at 24-bit depth and 192 kHz sampling rates.
+Because LPCM is an uncompressed digital audio format, it avoids the
+compression artifacts associated with lossy formats like standard Dolby
+Digital or DTS, delivering studio-grade multi-channel sound directly
+from the source to the receiver.</p>
+<h3 id="the-displayport-to-hdmi-connection">The DisplayPort to HDMI
+Connection</h3>
+<p>The primary obstacle in sending multi-channel LPCM from a computer to
+an AV receiver is the physical interface. AV receivers are built around
+HDMI, while computers and graphics cards commonly use DisplayPort.</p>
+<p>To connect a DisplayPort output to an HDMI input on an AVR:</p>
+<ul>
+<li><strong>Passive Adapters (DP++):</strong> If the graphics card
+supports DisplayPort Dual-Mode (indicated by a DP++ icon), a passive
+DisplayPort-to-HDMI cable or adapter can convert the physical signal.
+DP++ allows the GPU to output an HDMI-compatible signal directly through
+the DisplayPort connector, which carries up to 8-channel LPCM.</li>
+<li><strong>Active Adapters:</strong> If the source port does not
+support DP++, or if you need higher video bandwidths (such as 4K at
+120Hz via HDMI 2.1), an active adapter is required. High-quality active
+adapters contain dedicated converter chips that translate the
+DisplayPort audio and video stream into an HDMI stream while preserving
+the multi-channel LPCM packets.</li>
+</ul>
+<h3 id="hardware-and-driver-requirements">Hardware and Driver
+Requirements</h3>
+<p>Modern dedicated graphics cards from NVIDIA and AMD, as well as
+integrated graphics from Intel, include integrated high-definition audio
+controllers capable of outputting 8-channel LPCM over DisplayPort.</p>
+<p>When connected, the source device reads the Extended Display
+Identification Data (EDID) from the AV receiver. This handshake informs
+the graphics card of the receiver’s audio capabilities, including
+supported channel counts (e.g., 2.0, 5.1, or 7.1) and supported sample
+rates. If the adapter or cable interrupts this handshake, the system may
+fall back to standard 2-channel stereo.</p>
+<h3 id="operating-system-configuration">Operating System
+Configuration</h3>
+<p>Unlike bitstreamed compressed formats (such as Dolby Atmos or DTS:X)
+that are decoded directly by the receiver, multi-channel LPCM requires
+the host operating system or playback software to decode the audio
+tracks first.</p>
+<p>To ensure the signal reaches the receiver properly:</p>
+<ol type="1">
+<li>Open the sound settings of the operating system (such as the Windows
+Sound Control Panel).</li>
+<li>Select the DisplayPort audio device representing your AVR.</li>
+<li>Configure the speaker setup manually to "5.1 Surround" or "7.1
+Surround" rather than "Stereo."</li>
+<li>Set the default format to 24-bit, 48000 Hz or higher.</li>
+</ol>
+<p>Once configured, any multi-channel audio decoded by games, media
+players, or editing software will travel over the DisplayPort connection
+as pristine, raw multi-channel LPCM to your AV receiver.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/can-display-port-output-multi-channel-lpcm-to-an-avr';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

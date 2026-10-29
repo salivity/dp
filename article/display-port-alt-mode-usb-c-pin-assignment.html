@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisplayPort Alt Mode USB-C Pin Assignment - dp</title>
+    <meta name="description" content="DisplayPort Alternate Mode (DP Alt Mode) allows a USB Type-C connector to transmit native DisplayPort audio and video signals directly to displays while preserving power delivery and legacy data transmission. By negotiating through USB Power Delivery (USB">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/display-port-alt-mode-usb-c-pin-assignment">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DisplayPort Alt Mode USB-C Pin Assignment - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/display-port-alt-mode-usb-c-pin-assignment" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="DisplayPort Alternate Mode (DP Alt Mode) allows a USB Type-C connector to transmit native DisplayPort audio and video signals directly to displays while preserving power delivery and legacy data transmission. By negotiating through USB Power Delivery (USB" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="displayport-alt-mode-usb-c-pin-assignment">DisplayPort Alt Mode
+USB-C Pin Assignment</h1>
+<p>DisplayPort Alternate Mode (DP Alt Mode) allows a USB Type-C
+connector to transmit native DisplayPort audio and video signals
+directly to displays while preserving power delivery and legacy data
+transmission. By negotiating through USB Power Delivery (USB PD), the
+host and display dynamically repurpose the high-speed differential data
+lanes and sideband pins within the symmetrical 24-pin USB-C connector.
+The physical reversibility of the cable is managed by identifying the
+plug's orientation via the Configuration Channel (CC) pins before any
+DisplayPort lanes are mapped.</p>
+<h3 id="orientation-detection-and-configuration">Orientation Detection
+and Configuration</h3>
+<p>A standard USB Type-C connector features 24 pins arranged in two
+opposing rows of 12 (designated as rows A and B). Because the cable is
+mechanically reversible, the connection is not mirror-symmetric;
+instead, it is rotationally symmetric.</p>
+<p>When a cable is inserted, the host detects orientation using the
+Configuration Channel pins (CC1 at A5 and CC2 at B5). The pin that
+establishes a direct connection becomes the active CC line used for USB
+PD communication, while the alternate pin is repurposed as VCONN to
+power active cable circuitry. Once orientation is established, the
+multiplexers within the host and device route the DisplayPort signals to
+the correct physical pins regardless of which way the cable is plugged
+in.</p>
+<h3 id="high-speed-lane-mapping-configurations">High-Speed Lane Mapping
+Configurations</h3>
+<p>The USB-C interface contains four high-speed differential pairs
+primarily designed for SuperSpeed USB data:</p>
+<ul>
+<li><strong>Lane 0:</strong> TX1+ / TX1- (Pins A2, A3)</li>
+<li><strong>Lane 1:</strong> RX1+ / RX1- (Pins B11, B10)</li>
+<li><strong>Lane 2:</strong> TX2+ / TX2- (Pins B2, B3)</li>
+<li><strong>Lane 3:</strong> RX2+ / RX2- (Pins A11, A10)</li>
+</ul>
+<p>Under the VESA DisplayPort Alt Mode standard, these four pairs are
+reassigned into specific configurations depending on bandwidth
+needs:</p>
+<h4 id="1-four-lane-displayport-pin-assignment-c-and-e">1. Four-Lane
+DisplayPort (Pin Assignment C and E)</h4>
+<p>In this full-bandwidth configuration, all four high-speed
+differential pairs are reassigned to carry DisplayPort data:</p>
+<ul>
+<li><strong>ML0 (Main Link Lane 0):</strong> TX1+ / TX1- (A2, A3)</li>
+<li><strong>ML1 (Main Link Lane 1):</strong> RX1+ / RX1- (B11, B10)</li>
+<li><strong>ML2 (Main Link Lane 2):</strong> TX2+ / TX2- (B2, B3)</li>
+<li><strong>ML3 (Main Link Lane 3):</strong> RX2+ / RX2- (A10, A11)</li>
+</ul>
+<p>This mode yields maximum display resolution and refresh rates (such
+as high-refresh 4K or 8K video). Because all high-speed lanes are
+allocated to video, USB 3.x/4 data is unavailable, though USB 2.0
+remains operational.</p>
+<h4 id="2-two-lane-displayport-with-usb-3x-pin-assignment-d-and-f">2.
+Two-Lane DisplayPort with USB 3.x (Pin Assignment D and F)</h4>
+<p>In this shared configuration, often used by docking stations and
+monitors with integrated USB hubs:</p>
+<ul>
+<li><strong>ML0 and ML1:</strong> Mapped to two differential pairs (Pins
+A2/A3 and B11/B10).</li>
+<li><strong>USB 3.x Data:</strong> The remaining two pairs (Pins B2/B3
+and A10/A11) continue to operate as a standard bidirectional SuperSpeed
+USB data lane.</li>
+</ul>
+<p>This enables multi-gigabit USB data transfer and native DisplayPort
+video to travel over the same cable concurrently.</p>
+<h3 id="aux-channel-and-sideband-use-sbu">AUX Channel and Sideband Use
+(SBU)</h3>
+<p>DisplayPort requires an auxiliary channel (AUX CH) for link
+management, Extended Display Identification Data (EDID) handshaking, and
+HDCP authentication. DP Alt Mode maps this bidirectional communication
+channel to the USB-C Sideband Use pins:</p>
+<ul>
+<li><strong>AUX+:</strong> Assigned to SBU1 (Pin A8) or SBU2 (Pin B8),
+depending on cable orientation.</li>
+<li><strong>AUX-:</strong> Assigned to the opposing SBU pin.</li>
+</ul>
+<p>Hot Plug Detect (HPD), which alerts the host when a display is
+connected or disconnected, is signaled either via logical interrupts
+transmitted over the AUX channel or through USB PD messaging over the CC
+line.</p>
+<h3 id="retained-dedicated-pins">Retained Dedicated Pins</h3>
+<p>Throughout any DP Alt Mode configuration, the core legacy pins remain
+untouched:</p>
+<ul>
+<li><strong>Power (VBUS and GND):</strong> Pins A4, A9, B4, B9 (VBUS)
+and A1, A12, B1, B12 (GND) continue to handle USB Power Delivery up to
+240W.</li>
+<li><strong>USB 2.0 (D+ and D-):</strong> Pins A6, A7, B6, and B7 remain
+dedicated to standard USB 2.0 data, ensuring low-speed peripherals (like
+mice and keyboards) function uninterrupted regardless of the video
+configuration in use.</li>
+</ul></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/display-port-alt-mode-usb-c-pin-assignment';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

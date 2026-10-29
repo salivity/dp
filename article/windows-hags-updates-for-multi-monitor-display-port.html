@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows HAGS Updates for Multi-Monitor DisplayPort - dp</title>
+    <meta name="description" content="Recent Windows updates have significantly refined Hardware-Accelerated GPU Scheduling (HAGS) to resolve long-standing stability, stutter, and latency issues in multi-monitor setups connected via DisplayPort. By improving how the Windows Display Driver Mod">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/windows-hags-updates-for-multi-monitor-display-port">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Windows HAGS Updates for Multi-Monitor DisplayPort - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/windows-hags-updates-for-multi-monitor-display-port" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Recent Windows updates have significantly refined Hardware-Accelerated GPU Scheduling (HAGS) to resolve long-standing stability, stutter, and latency issues in multi-monitor setups connected via DisplayPort. By improving how the Windows Display Driver Mod" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="windows-hags-updates-for-multi-monitor-displayport">Windows HAGS
+Updates for Multi-Monitor DisplayPort</h1>
+<p>Recent Windows updates have significantly refined
+Hardware-Accelerated GPU Scheduling (HAGS) to resolve long-standing
+stability, stutter, and latency issues in multi-monitor setups connected
+via DisplayPort. By improving how the Windows Display Driver Model
+(WDDM) interacts with DisplayPort-specific communication standards,
+these updates eliminate refresh rate conflicts, enhance Variable Refresh
+Rate (VRR) reliability, and prevent pipeline crashes caused by
+DisplayPort sleep states.</p>
+<h3
+id="decoupled-refresh-rates-and-desktop-window-manager-pacing">Decoupled
+Refresh Rates and Desktop Window Manager Pacing</h3>
+<p>A common problem in multi-monitor environments occurs when running
+displays with mismatched refresh rates, such as a 144Hz primary gaming
+panel paired with a standard 60Hz secondary display. Previously, running
+GPU-accelerated tasks—such as video playback or web browsers—on the
+secondary display forced the Desktop Window Manager (DWM) into an
+unsynchronized state, causing micro-stuttering, dropped frames, and
+locked framerates on the primary monitor.</p>
+<p>Recent updates enable HAGS to isolate presentation queues per display
+output. By shifting frame scheduling directly to the GPU's dedicated
+scheduling processor rather than routing it through CPU software queues,
+the system handles independent frame pacing natively. A secondary
+DisplayPort monitor can now render at 60Hz without throttling or
+desynchronizing a high-refresh-rate primary DisplayPort connection.</p>
+<h3 id="displayport-hot-plug-detect-hpd-and-sleep-recovery">DisplayPort
+Hot Plug Detect (HPD) and Sleep Recovery</h3>
+<p>DisplayPort connections utilize Hot Plug Detect (HPD) signaling,
+which frequently caused issues when monitors entered power-saving or
+deep sleep modes. Historically, the GPU would interpret a sleeping
+DisplayPort monitor as completely disconnected, causing the OS to
+reshuffle open windows, drop the display pipeline, and occasionally
+stall the HAGS execution context upon waking.</p>
+<p>Windows updates integrated improved state-retention mechanisms within
+HAGS. The scheduler now preserves graphics memory allocations, command
+buffers, and display topologies during momentary DisplayPort link drops.
+When monitors wake from sleep or recover from a link state change, the
+GPU resumes rendering without resetting the display pipeline or crashing
+driver contexts.</p>
+<h3 id="multi-plane-overlay-mpo-and-adaptive-sync-stability">Multi-Plane
+Overlay (MPO) and Adaptive Sync Stability</h3>
+<p>The integration between HAGS, Multi-Plane Overlays (MPO), and
+adaptive synchronization technologies (AMD FreeSync and NVIDIA G-Sync)
+over DisplayPort has also been overhauled. Previously, running a
+borderless windowed game on a primary DisplayPort display while running
+hardware-accelerated media on another would often disable
+G-Sync/FreeSync or cause display flickering.</p>
+<p>The updated scheduling logic allows MPO planes to bypass standard DWM
+compositing independently per display. This ensures that Variable
+Refresh Rate protocols over DisplayPort operate uninterrupted on the
+primary display, maintaining low input latency and tear-free output even
+while the secondary display renders video or desktop applications under
+full hardware acceleration.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/windows-hags-updates-for-multi-monitor-display-port';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How DisplayPort Link Fallback Works - dp</title>
+    <meta name="description" content="DisplayPort link fall-back is an automated failsafe mechanism that preserves video output when high-frequency signal integrity degrades. Instead of allowing a complete connection failure or a black screen, the DisplayPort source and display negotiate lowe">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/how-display-port-link-fallback-works">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How DisplayPort Link Fallback Works - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/how-display-port-link-fallback-works" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="DisplayPort link fall-back is an automated failsafe mechanism that preserves video output when high-frequency signal integrity degrades. Instead of allowing a complete connection failure or a black screen, the DisplayPort source and display negotiate lowe" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-displayport-link-fallback-works">How DisplayPort Link
+Fallback Works</h1>
+<p>DisplayPort link fall-back is an automated failsafe mechanism that
+preserves video output when high-frequency signal integrity degrades.
+Instead of allowing a complete connection failure or a black screen, the
+DisplayPort source and display negotiate lower transmission speeds or
+fewer active data lanes. This article explains the underlying link
+training process, the metrics that trigger fall-back, and how hardware
+gracefully degrades bandwidth to sustain an operational display
+link.</p>
+<h3 id="the-role-of-link-training">The Role of Link Training</h3>
+<p>Before a DisplayPort source (such as a graphics card) transmits video
+data to a sink (such as a monitor), the two devices perform a
+negotiation phase called <strong>Link Training</strong>. This exchange
+occurs over the auxiliary channel (AUX CH), an independent, low-speed
+bidirectional communication pathway that operates separately from the
+high-speed main video lanes.</p>
+<p>During link training, the transmitter and receiver agree on link
+parameters that ensure reliable data delivery. Link training evaluates
+the physical connection in two primary phases:</p>
+<ol type="1">
+<li><strong>Clock Recovery (CR):</strong> The sink attempts to lock onto
+the clock signal of the incoming bitstream across all available
+lanes.</li>
+<li><strong>Channel Equalization (EQ), Symbol Lock, and Inter-lane
+Alignment:</strong> The sink verifies that it can eliminate inter-symbol
+interference, decode valid 8b/10b or 128b/132b symbols, and align the
+arrival time of data across all lanes.</li>
+</ol>
+<h3 id="triggers-for-signal-integrity-degradation">Triggers for Signal
+Integrity Degradation</h3>
+<p>High-frequency signals (such as DisplayPort HBR3 at 8.1 Gbps per lane
+or UHBR20 at 20 Gbps per lane) are highly susceptible to physical
+degradation. Common causes of compromised signal integrity include:</p>
+<ul>
+<li>Excessive cable length or low-quality shielding.</li>
+<li>Physical damage to the cable or oxidation in connector pins.</li>
+<li>Electromagnetic interference (EMI) from surrounding hardware.</li>
+<li>Temperature variations affecting transmission line impedance.</li>
+</ul>
+<p>When these conditions introduce high Bit Error Rates (BER), the sink
+fails to achieve or maintain clock recovery or symbol alignment.</p>
+<h3 id="the-link-fall-back-sequence">The Link Fall-back Sequence</h3>
+<p>If the sink reports that signal integrity is insufficient during link
+training, the DisplayPort protocol executes a sequential step-down
+procedure:</p>
+<h4 id="1-voltage-swing-and-pre-emphasis-adjustments">1. Voltage Swing
+and Pre-Emphasis Adjustments</h4>
+<p>Before reducing bandwidth, the source attempts to compensate for
+high-frequency attenuation directly. The DisplayPort specification
+defines up to four levels of voltage swing (signal amplitude) and
+pre-emphasis (boosting high frequencies relative to low frequencies).
+The source steps through these drive settings as requested by the sink
+via the AUX channel.</p>
+<h4 id="2-link-rate-reduction">2. Link Rate Reduction</h4>
+<p>If channel equalization fails despite maximizing voltage swing and
+pre-emphasis, the source initiates a rate fall-back. It abandons the
+target link rate and tests the connection at the next lowest
+standardized frequency. For example:</p>
+<ul>
+<li><strong>UHBR (Ultra High Bit Rate):</strong> Steps down from UHBR 20
+(20 Gbps) to UHBR 13.5 (13.5 Gbps), then to UHBR 10 (10 Gbps).</li>
+<li><strong>Standard DisplayPort Rates:</strong> Steps down from HBR3
+(8.1 Gbps) to HBR2 (5.4 Gbps), to HBR (2.7 Gbps), and finally to RBR
+(Reduced Bit Rate at 1.62 Gbps).</li>
+</ul>
+<p>Once the transmission speed drops, the channel experiences
+significantly less high-frequency attenuation, allowing the sink to
+properly resolve the digital signal.</p>
+<h4 id="3-lane-count-reduction">3. Lane Count Reduction</h4>
+<p>If the minimum bit error rate cannot be achieved across all
+designated lanes even at lower transmission speeds, the source reduces
+the active lane count. A standard DisplayPort link uses four physical
+lanes; fall-back reduces this topology down to two lanes, or as a last
+resort, a single lane.</p>
+<h3 id="in-service-fall-back-dynamic-link-monitoring">In-Service
+Fall-back (Dynamic Link Monitoring)</h3>
+<p>Signal integrity can degrade after initial link training has
+finished—for example, if a cable is bent or subjected to new
+interference while in use. DisplayPort monitors the health of an active
+link using the Hot Plug Detect (HPD) line:</p>
+<ol type="1">
+<li><strong>Error Detection:</strong> When the sink detects symbol
+errors or loss of clock synchronization beyond acceptable thresholds, it
+pulls the HPD pin low momentarily (an "HPD Pulse" or IRQ).</li>
+<li><strong>Status Read:</strong> The source reads the Sink Status
+registers via the AUX channel to determine which lanes failed.</li>
+<li><strong>Re-training:</strong> The source immediately restarts the
+link training sequence, lowering the link rate or lane count as
+necessary to re-establish a stable connection without requiring manual
+user intervention.</li>
+</ol>
+<h3 id="user-impact-of-link-fall-back">User Impact of Link
+Fall-back</h3>
+<p>Because DisplayPort prioritizes link stability over raw throughput, a
+fall-back event directly reduces the total available data bandwidth.
+When this occurs, the graphics subsystem adapts the video stream to fit
+the narrower pipeline. Depending on driver and monitor capabilities, the
+system may compress data using Display Stream Compression (DSC), drop
+the color bit-depth (e.g., from 10-bit to 8-bit), reduce chroma
+subsampling (e.g., from 4:4:4 to 4:2:2), or lower the display's native
+refresh rate and resolution to prevent a complete loss of signal.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/how-display-port-link-fallback-works';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

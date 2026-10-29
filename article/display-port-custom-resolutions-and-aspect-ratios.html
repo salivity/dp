@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisplayPort Custom Resolutions and Aspect Ratios - dp</title>
+    <meta name="description" content="DisplayPort accommodates variable aspect ratios and non-standard custom resolutions primarily through its packetized data transport architecture, decoupled pixel clocking system, and modern metadata standards. Unlike legacy video interfaces that rely on r">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/display-port-custom-resolutions-and-aspect-ratios">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DisplayPort Custom Resolutions and Aspect Ratios - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/display-port-custom-resolutions-and-aspect-ratios" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="DisplayPort accommodates variable aspect ratios and non-standard custom resolutions primarily through its packetized data transport architecture, decoupled pixel clocking system, and modern metadata standards. Unlike legacy video interfaces that rely on r" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="displayport-custom-resolutions-and-aspect-ratios">DisplayPort
+Custom Resolutions and Aspect Ratios</h1>
+<p>DisplayPort accommodates variable aspect ratios and non-standard
+custom resolutions primarily through its packetized data transport
+architecture, decoupled pixel clocking system, and modern metadata
+standards. Unlike legacy video interfaces that rely on rigid, continuous
+pixel clock signals tied directly to physical display timings,
+DisplayPort treats video data much like a network protocol. This
+decoupled framework allows the source device (such as a GPU) and the
+display (sink) to negotiate virtually any combination of horizontal and
+vertical pixel counts, refresh rates, and timing parameters within the
+interface's maximum bandwidth.</p>
+<h3 id="packetized-architecture-the-main-link">Packetized Architecture
+(The Main Link)</h3>
+<p>Traditional video standards transmit data as a continuous raster
+stream governed directly by the pixel clock. In contrast, DisplayPort
+transmits data across its Main Link using discrete micro-packets,
+similar to PCI Express or Ethernet.</p>
+<p>Because video frames are broken down into packets, the transmission
+over the physical lanes is agnostic to the native physical layout of the
+display panel. Whether a screen requires a traditional 16:9 layout, an
+ultra-wide 32:9 ratio, or an arbitrary vertical banner resolution, the
+data is simply packaged as a sequence of pixel data symbols within the
+link's active lanes.</p>
+<h3 id="decoupled-pixel-clocks-via-mn-values">Decoupled Pixel Clocks via
+M/N Values</h3>
+<p>In older display architectures, transmitting an unusual resolution
+required matching the link frequency precisely to the custom pixel
+clock. DisplayPort eliminates this hardware constraint by running its
+physical lanes at fixed link rates (such as RBR, HBR, HBR2, HBR3, or
+UHBR).</p>
+<p>To accurately reproduce non-standard pixel clocks without altering
+the physical link frequency, DisplayPort uses a fractional rate-matching
+mechanism known as the M and N values:</p>
+<ul>
+<li>The source calculates a ratio between the desired custom pixel clock
+(<span class="math inline">\(LS\_CLK\)</span>) and the fixed link clock
+(<span class="math inline">\(Link\_Sym\_CLK\)</span>).</li>
+<li>These values, designated as <span
+class="math inline">\(M_{VID}\)</span> and <span
+class="math inline">\(N_{VID}\)</span>, are continuously transmitted
+within Main Stream Attribute (MSA) packets.</li>
+<li>The display uses these values to regenerate the exact pixel clock
+required to drive the panel correctly.</li>
+</ul>
+<p>This mechanism allows any arbitrary pixel timing to be supported
+natively, provided the resulting bandwidth fits within the selected
+fixed link rate.</p>
+<h3 id="main-stream-attribute-msa-packets">Main Stream Attribute (MSA)
+Packets</h3>
+<p>Between active video lines, the DisplayPort transmitter sends Main
+Stream Attribute packets during the blanking intervals. The MSA contains
+critical metadata that dictates the geometry of the incoming frame:</p>
+<ul>
+<li>Horizontal and vertical active pixel counts</li>
+<li>Total frame dimensions including blanking intervals</li>
+<li>Synchronization polarities and porch widths</li>
+</ul>
+<p>Because the values in the MSA can define arbitrary integer numbers of
+pixels and lines, the source is free to specify non-standard resolutions
+without hardware-level scaling or format conversion.</p>
+<h3 id="displayid-and-edid-communication">DisplayID and EDID
+Communication</h3>
+<p>Before video is transmitted, the source and display communicate over
+the auxiliary channel (AUX CH) using Extended Display Identification
+Data (EDID) and VESA DisplayID structures.</p>
+<p>DisplayID, specifically designed to supersede older EDID constraints,
+introduces flexible, modular data blocks that support:</p>
+<ul>
+<li>Arbitrary aspect ratios that do not conform to legacy 4:3, 16:9, or
+16:10 standards.</li>
+<li>Extremely high horizontal or vertical dimensions beyond legacy
+descriptor limits.</li>
+<li>Tiled display topologies, where multiple independent physical or
+logical scalers assemble a non-standard composite resolution.</li>
+</ul>
+<p>This bidirectional handshake allows a display with an atypical form
+factor to present its exact timing requirements directly to the graphics
+driver.</p>
+<h3 id="display-stream-compression-dsc">Display Stream Compression
+(DSC)</h3>
+<p>When non-standard resolutions demand high pixel counts—such as
+extreme panoramic formats (e.g., dual-4K 32:9 displays)—Display Stream
+Compression (DSC) ensures the custom frame fits within the available
+physical bandwidth. DSC operates as a visually lossless, low-latency
+slice-based compression algorithm that dynamically manages bandwidth
+without altering the aspect ratio or introducing scaling artifacts to
+custom timing profiles.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/display-port-custom-resolutions-and-aspect-ratios';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

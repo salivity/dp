@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lock DisplayPort Monitor Layouts on Windows - dp</title>
+    <meta name="description" content="DisplayPort&#39;s Hot Plug Detect (HPD) feature frequently causes Windows to treat powered-down or sleeping monitors as completely disconnected, leading to rearranged desktop icons, misplaced application windows, and reset resolutions. This article covers the">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/lock-display-port-monitor-layouts-on-windows">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Lock DisplayPort Monitor Layouts on Windows - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/lock-display-port-monitor-layouts-on-windows" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="DisplayPort&#39;s Hot Plug Detect (HPD) feature frequently causes Windows to treat powered-down or sleeping monitors as completely disconnected, leading to rearranged desktop icons, misplaced application windows, and reset resolutions. This article covers the" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="lock-displayport-monitor-layouts-on-windows">Lock DisplayPort
+Monitor Layouts on Windows</h1>
+<p>DisplayPort's Hot Plug Detect (HPD) feature frequently causes Windows
+to treat powered-down or sleeping monitors as completely disconnected,
+leading to rearranged desktop icons, misplaced application windows, and
+reset resolutions. This article covers the most effective third-party
+utilities and native Windows registry modifications available to lock
+monitor configurations, preserve window positions, and prevent
+DisplayPort disconnect issues.</p>
+<h3 id="the-displayport-hpd-issue">The DisplayPort HPD Issue</h3>
+<p>When a DisplayPort monitor enters low-power sleep, it drops the Hot
+Plug Detect signal. Windows interprets this physical state change as a
+hardware removal, forcing all open windows onto the remaining active
+screen and dropping the display configuration into a fallback
+"simulated" mode. When the display wakes up, Windows often fails to
+restore the original layout.</p>
+<hr />
+<h3 id="third-party-utility-tools">Third-Party Utility Tools</h3>
+<h4 id="1-persistentwindows">1. PersistentWindows</h4>
+<p>PersistentWindows is a lightweight, open-source utility designed
+specifically to counter the DisplayPort sleeping bug.</p>
+<ul>
+<li><strong>How it works:</strong> It runs silently in the system tray,
+constantly tracking the positions of windows and monitors. When it
+detects a screen disconnect or wake-up event, it automatically restores
+windows to their exact pre-sleep coordinates.</li>
+<li><strong>Key advantage:</strong> It requires no configuration, uses
+negligible system resources, and does not require administrative
+privileges to manage window restoration.</li>
+</ul>
+<h4 id="2-custom-resolution-utility-cru">2. Custom Resolution Utility
+(CRU)</h4>
+<p>CRU allows users to modify the EDID (Extended Display Identification
+Data) values directly in the Windows registry for graphics drivers.</p>
+<ul>
+<li><strong>How it works:</strong> You can remove low-resolution
+fallback modes and define an explicit native resolution profile for your
+specific DisplayPort monitor.</li>
+<li><strong>Key advantage:</strong> If Windows drops back to a default
+1024x768 resolution when the monitor disconnects, CRU overrides driver
+defaults by deleting unwanted resolutions, effectively locking the
+system to display only your desired configurations.</li>
+</ul>
+<h4 id="3-displayfusion">3. DisplayFusion</h4>
+<p>DisplayFusion is an advanced multi-monitor management suite that
+includes monitor configuration locking.</p>
+<ul>
+<li><strong>How it works:</strong> Users can save "Monitor Profiles" and
+assign hotkeys or triggers to them. When monitors disconnect or
+reconnect, DisplayFusion can be configured to automatically re-apply the
+designated profile.</li>
+<li><strong>Key advantage:</strong> Beyond window restoration, it can
+force specific refresh rates, color settings, and desktop layouts via
+automated system event triggers.</li>
+</ul>
+<h4 id="4-monitorkeeper">4. MonitorKeeper</h4>
+<p>MonitorKeeper is a dedicated, single-purpose tool developed to stop
+Windows from rearranging desktops on multi-monitor setups after lock,
+sleep, or screensaver events. It creates a background watcher that
+enforces display geometry whenever power state changes occur.</p>
+<hr />
+<h3
+id="windows-registry-modifications-locking-simulated-resolutions">Windows
+Registry Modifications: Locking Simulated Resolutions</h3>
+<p>When Windows loses the EDID signal from a sleeping DisplayPort
+monitor, it falls back to default simulated registry keys. You can edit
+these keys to match your monitor's native resolution, preventing windows
+from shrinking into the top-left corner upon wake.</p>
+<ol type="1">
+<li><p>Press <code>Win + R</code>, type <code>regedit</code>, and press
+<strong>Enter</strong>.</p></li>
+<li><p>Navigate to the following path:</p>
+<pre class="text"><code>HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Configuration</code></pre></li>
+<li><p>Look for keys beginning with <code>SIMULATED_</code> or
+<code>NOEDID_</code>.</p></li>
+<li><p>Expand the target key, select the subfolder named
+<code>00</code>, and locate the following DWORD values:</p>
+<ul>
+<li><code>PrimSurfSize.cx</code> (Width)</li>
+<li><code>PrimSurfSize.cy</code> (Height)</li>
+</ul></li>
+<li><p>Double-click each entry, switch the base to
+<strong>Decimal</strong>, and change the value to your native resolution
+(e.g., <code>2560</code> for <code>cx</code> and <code>1440</code> for
+<code>cy</code>).</p></li>
+<li><p>Expand the nested <code>00</code> subfolder directly beneath the
+first one, locate <code>ActiveSize.cx</code> and
+<code>ActiveSize.cy</code>, switch the base to <strong>Decimal</strong>,
+and input the same native resolution values.</p></li>
+<li><p>Restart the computer for changes to take effect.</p></li>
+</ol>
+<hr />
+<h3 id="hardware-passthrough-alternative">Hardware Passthrough
+Alternative</h3>
+<p>If software utilities and registry overrides do not resolve the issue
+due to stubborn graphics driver implementations, a hardware-level
+solution is a <strong>DisplayPort EDID Passthrough Emulator</strong>
+(also called an EDID ghost adapter). Placed inline between your graphics
+card and the DisplayPort cable, it continuously feeds a steady EDID
+handshake to Windows, completely preventing the operating system from
+recognizing that the monitor has entered sleep mode.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/lock-display-port-monitor-layouts-on-windows';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

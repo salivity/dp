@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisplayPort Colorimetry Metadata Packets Explained - dp</title>
+    <meta name="description" content="DisplayPort conveys custom colorimetry and advanced color profile data by encapsulating metadata inside Secondary Data Packets (SDPs) multiplexed within the video stream&#39;s blanking intervals. This article explains how the DisplayPort protocol negotiates d">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/display-port-colorimetry-metadata-packets-explained">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DisplayPort Colorimetry Metadata Packets Explained - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/display-port-colorimetry-metadata-packets-explained" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="DisplayPort conveys custom colorimetry and advanced color profile data by encapsulating metadata inside Secondary Data Packets (SDPs) multiplexed within the video stream&#39;s blanking intervals. This article explains how the DisplayPort protocol negotiates d" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="displayport-colorimetry-metadata-packets-explained">DisplayPort
+Colorimetry Metadata Packets Explained</h1>
+<p>DisplayPort conveys custom colorimetry and advanced color profile
+data by encapsulating metadata inside Secondary Data Packets (SDPs)
+multiplexed within the video stream's blanking intervals. This article
+explains how the DisplayPort protocol negotiates device capabilities via
+the Auxiliary (AUX) Channel, the specific structure of Video Stream
+Configuration (VSC) and InfoFrame packets used to transmit colorimetry
+metadata, and how custom color spaces are mapped and synchronized
+frame-by-frame from host GPU to target sink.</p>
+<h3 id="the-transport-mechanism-secondary-data-packets-sdps">The
+Transport Mechanism: Secondary Data Packets (SDPs)</h3>
+<p>DisplayPort structures its primary physical connection into the Main
+Link (for high-speed pixel and audio transport) and the bi-directional
+AUX Channel (for link management and device discovery). Active pixel
+data flows across the Main Link during active display periods, while
+metadata—including custom color profiles, high dynamic range (HDR)
+parameters, and colorimetry definitions—is packetized into Secondary
+Data Packets.</p>
+<p>SDPs are interleaved into the data stream specifically during the
+horizontal blanking intervals (HBlank) and vertical blanking intervals
+(VBlank). Because they occupy the blanking periods rather than active
+video cycles, metadata updates do not compromise pixel throughput or
+display bandwidth.</p>
+<h3 id="capability-negotiation-via-the-aux-channel">Capability
+Negotiation via the AUX Channel</h3>
+<p>Before a source device can transmit non-standard or custom
+colorimetry data, it must verify the sink device's decoding
+capabilities:</p>
+<ol type="1">
+<li><strong>EDID and DisplayID Reading:</strong> Upon connection, the
+source queries the sink device over the 1 Mbps Manchester-encoded AUX
+Channel to read its Extended Display Identification Data (EDID) and
+DisplayID 2.0 structures.</li>
+<li><strong>Colorimetry Descriptor Blocks:</strong> The sink advertises
+its native color primaries (CIE 1931 xy coordinates for red, green,
+blue, and white point), native electro-optical transfer functions
+(EOTFs), and supported color spaces (such as sRGB, DCI-P3, BT.2020, or
+Adobe RGB).</li>
+<li><strong>Protocol Extension Support:</strong> The sink’s DisplayPort
+Configuration Data (DPCD) registers are queried to verify support for
+advanced SDP types, such as VSC Extension packets and Dynamic Range and
+Mastering (DRM) InfoFrames.</li>
+</ol>
+<h3 id="packet-types-for-custom-colorimetry">Packet Types for Custom
+Colorimetry</h3>
+<p>DisplayPort utilizes specific SDP definitions to handle different
+tiers of color metadata:</p>
+<h4 id="1-video-stream-configuration-vsc-packets">1. Video Stream
+Configuration (VSC) Packets</h4>
+<p>Introduced extensively in DisplayPort 1.4 and enhanced in DisplayPort
+2.0/2.1, the VSC SDP governs pixel encoding formats (RGB, YCbCr 4:4:4,
+YCbCr 4:2:2, YCbCr 4:2:0), color bit depth (6, 8, 10, 12, or 16 bits per
+component), and standardized dynamic ranges.</p>
+<h4 id="2-vsc-extension-sdps">2. VSC Extension SDPs</h4>
+<p>For color spaces that deviate from legacy broadcast standards,
+DisplayPort relies on VSC Extension packets. These packets contain data
+fields that indicate custom color primaries, non-standard EOTFs, and
+extended color gamuts. The packet header designates the secondary packet
+type, while the payload contains dedicated payload bytes mapping the
+chromaticity coordinates and mastering parameters.</p>
+<h4 id="3-cta-861-infoframe-encapsulation">3. CTA-861 InfoFrame
+Encapsulation</h4>
+<p>DisplayPort can encapsulate Consumer Technology Association (CTA-861)
+InfoFrames directly into SDPs:</p>
+<ul>
+<li><strong>Dynamic Range and Mastering (DRM) InfoFrames:</strong> Carry
+SMPTE ST 2086 mastering display data, including MaxFALL (Maximum Frame
+Average Light Level) and MaxCLL (Maximum Content Light Level).</li>
+<li><strong>Colorimetry Data Blocks:</strong> Specify whether content
+uses extended gamuts such as scRGB, opRGB, or BT.2020.</li>
+</ul>
+<h4 id="4-vendor-specific-infoframes-vsifs">4. Vendor-Specific
+InfoFrames (VSIFs)</h4>
+<p>When an implementation requires fully proprietary color profiles or
+hardware-specific calibration data (such as direct 3D LUT loading or
+hardware-specific gamma matrices), the DisplayPort protocol allows
+transmission of Vendor-Specific SDPs. These packets bypass standard
+CTA/VESA parsing and are processed directly by proprietary scaler
+firmware on the sink.</p>
+<h3 id="packet-structure-and-framing">Packet Structure and Framing</h3>
+<p>An SDP carrying colorimetry metadata is framed using four main
+components:</p>
+<ul>
+<li><strong>Stream Framing:</strong> Special framing characters, such as
+<code>SS</code> (Secondary-data Start) and <code>SE</code>
+(Secondary-data End), delimit the packet boundary within the stream
+lanes.</li>
+<li><strong>Header (4 Bytes):</strong> Defines the SDP type (e.g.,
+<code>Type = 0x07</code> for VSC, <code>Type = 0x80</code> series for
+InfoFrames), packet revision number, and the length of the payload.</li>
+<li><strong>Header Parity:</strong> Error-checking bytes protecting the
+header.</li>
+<li><strong>Payload (Up to 32 Bytes per Data Block):</strong> Contains
+the colorimetry payload, including color space identifier bits,
+coordinate matrices, or transfer curve definitions.</li>
+<li><strong>Payload Parity/ECC:</strong> Interleaved parity protection
+to ensure that line errors do not lead to color distortion or mode
+drops.</li>
+</ul>
+<h3 id="synchronization-and-application">Synchronization and
+Application</h3>
+<p>Colorimetry metadata is state-based but regularly repeated. The host
+graphics processor injects color metadata SDPs at least once every frame
+during the vertical blanking interval preceding the frame to which the
+color profile applies.</p>
+<p>Upon receipt, the display pipeline's receiver deserializes the Main
+Link, validates the packet checksums, and routes the payload to the
+internal color management engine. The display then recalculates or swaps
+its internal 1D/3D Look-Up Tables (LUTs) and color space matrix before
+the first active pixel of the target frame is scanned out, preventing
+visual artifacts or frame tearing.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/display-port-colorimetry-metadata-packets-explained';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

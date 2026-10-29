@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisplayPort Handling of Sudden Monitor Power Loss - dp</title>
+    <meta name="description" content="When a connected monitor experiences a sudden power cutoff, the DisplayPort (DP) protocol relies on hardware-level signaling and software-level handshakes to immediately update the display topology. The protocol drops the Hot Plug Detect (HPD) signal, hal">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/display-port-handling-of-sudden-monitor-power-loss">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DisplayPort Handling of Sudden Monitor Power Loss - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/display-port-handling-of-sudden-monitor-power-loss" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="When a connected monitor experiences a sudden power cutoff, the DisplayPort (DP) protocol relies on hardware-level signaling and software-level handshakes to immediately update the display topology. The protocol drops the Hot Plug Detect (HPD) signal, hal" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="displayport-handling-of-sudden-monitor-power-loss">DisplayPort
+Handling of Sudden Monitor Power Loss</h1>
+<p>When a connected monitor experiences a sudden power cutoff, the
+DisplayPort (DP) protocol relies on hardware-level signaling and
+software-level handshakes to immediately update the display topology.
+The protocol drops the Hot Plug Detect (HPD) signal, halts main-link
+video transmission, invalidates DisplayPort Configuration Data (DPCD),
+and triggers the host operating system to reallocate desktop workspace
+and active windows to remaining displays.</p>
+<h3 id="the-role-of-hot-plug-detect-hpd">The Role of Hot Plug Detect
+(HPD)</h3>
+<p>The primary mechanism for detecting a sudden power loss is the
+physical Hot Plug Detect (HPD) pin (Pin 18 on a standard DisplayPort
+connector). Under normal operation, the monitor (the Sink) supplies a
+steady +3.3V signal to the source (the GPU).</p>
+<p>When power is severed unexpectedly:</p>
+<ul>
+<li>The monitor's internal power rail collapses, causing the voltage on
+the HPD line to drop to 0V (logical low).</li>
+<li>According to the VESA DisplayPort standard, a low signal lasting
+longer than 2 milliseconds (specifically 2ms to 100ms depending on the
+implementation) is recognized not as an interrupt request (IRQ_HPD), but
+as a physical disconnection event.</li>
+<li>The GPU's display controller registers this transition via hardware
+interrupt immediately.</li>
+</ul>
+<h3 id="aux-channel-and-main-link-teardown">AUX Channel and Main-Link
+Teardown</h3>
+<p>DisplayPort separates audio/video delivery (Main Link) from control
+communication (Auxiliary Channel, or AUX CH). A sudden power loss halts
+both:</p>
+<ol type="1">
+<li><strong>AUX Channel Communication Failure:</strong> Any pending
+read/write transactions to the sink's DPCD or Extended Display
+Identification Data (EDID) over the AUX channel fail with an immediate
+timeout or NACK (negative acknowledge).</li>
+<li><strong>Main-Link Transmission Halt:</strong> The source GPU
+deactivates the high-speed differential lanes used for video data. It
+stops link training patterns and clock transmission to avoid
+transmitting data into an unpowered, un-terminated load, which prevents
+electrical reflections and unnecessary GPU compute overhead.</li>
+</ol>
+<h3 id="os-and-desktop-topology-re-enumeration">OS and Desktop Topology
+Re-enumeration</h3>
+<p>Once the graphics driver confirms the loss of HPD and the failure of
+AUX handshaking, it signals the operating system's window management
+system:</p>
+<ul>
+<li><strong>Display Enumeration:</strong> The OS removes the
+disconnected display from the active monitor list.</li>
+<li><strong>Window Repositioning:</strong> Unlike legacy analog
+connections (like VGA) that remained persistent despite power states,
+DisplayPort strictly enforces state consistency. As a result, the OS
+automatically gathers all open application windows and desktop icons
+previously located on the disconnected screen and moves them to the
+primary or remaining active displays.</li>
+<li><strong>Rendering Pipeline Adjustments:</strong> The graphics
+pipeline scales down the desktop canvas and frees framebuffers
+associated with the disconnected display's native resolution and refresh
+rate.</li>
+</ul>
+<h3 id="multi-stream-transport-mst-dynamics">Multi-Stream Transport
+(MST) Dynamics</h3>
+<p>In a Multi-Stream Transport (daisy-chain) environment, a sudden power
+loss depends on the monitor's position in the chain:</p>
+<ul>
+<li><strong>End-Point (Leaf) Monitor Loss:</strong> If the last monitor
+in the chain loses power, the upstream hub notifies the source using an
+<code>IRQ_HPD</code> message over the AUX channel. The GPU reallocates
+the available link bandwidth without disrupting upstream monitors.</li>
+<li><strong>Intermediate (Branch) Device Loss:</strong> If an
+intermediate monitor providing the daisy-chain hub loses power, all
+downstream displays drop simultaneously. The upstream connection reports
+a broken link, and the GPU tears down the virtual channels for all
+affected displays downstream.</li>
+</ul>
+<h3 id="recovery-upon-power-restoration">Recovery Upon Power
+Restoration</h3>
+<p>When power returns to the monitor, the device initializes its
+internal scaler and asserts the HPD line back to a high state (+3.3V).
+The GPU detects this rising edge, reads the monitor's EDID and DPCD
+registers via the AUX channel, executes the full Link Training routine
+(adjusting voltage swing and pre-emphasis levels), and begins streaming
+video data again.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/display-port-handling-of-sudden-monitor-power-loss';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Static vs Dynamic HDR Metadata Over DisplayPort - dp</title>
+    <meta name="description" content="High Dynamic Range (HDR) significantly enhances visual fidelity by expanding contrast ratios and color palettes, relying on metadata to tell a display how to render these wider ranges. Over DisplayPort connections, this metadata is transmitted as either s">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/static-vs-dynamic-hdr-metadata-over-display-port">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Static vs Dynamic HDR Metadata Over DisplayPort - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/static-vs-dynamic-hdr-metadata-over-display-port" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="High Dynamic Range (HDR) significantly enhances visual fidelity by expanding contrast ratios and color palettes, relying on metadata to tell a display how to render these wider ranges. Over DisplayPort connections, this metadata is transmitted as either s" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="static-vs-dynamic-hdr-metadata-over-displayport">Static vs
+Dynamic HDR Metadata Over DisplayPort</h1>
+<p>High Dynamic Range (HDR) significantly enhances visual fidelity by
+expanding contrast ratios and color palettes, relying on metadata to
+tell a display how to render these wider ranges. Over DisplayPort
+connections, this metadata is transmitted as either static or dynamic
+data. This article explores how static and dynamic HDR metadata differ,
+how DisplayPort transports each format, the standards required to
+support them, and how each approach affects real-world image
+quality.</p>
+<h3 id="understanding-hdr-metadata">Understanding HDR Metadata</h3>
+<p>HDR metadata contains luminance and colorimetry instructions—such as
+peak brightness, minimum black levels, and color primaries—used by a
+display's tone-mapping engine to match the source video to the panel's
+physical capabilities. Without this data, the display cannot accurately
+place highlights or shadow details, leading to blown-out whites or
+crushed blacks.</p>
+<h3 id="static-hdr-metadata-transmission">Static HDR Metadata
+Transmission</h3>
+<p>Static HDR, most commonly represented by the HDR10 standard, uses
+fixed metadata for an entire piece of content.</p>
+<ul>
+<li><strong>Transmission Method:</strong> The source sets metadata
+values—such as Maximum Content Light Level (MaxCLL) and Maximum
+Frame-Average Light Level (MaxFALL)—at the beginning of playback. Over
+DisplayPort, these are encapsulated in Secondary Data Packets (SDPs)
+sent during the video blanking intervals.</li>
+<li><strong>Update Frequency:</strong> Because the values do not change
+from scene to scene, the data packets are sent infrequently, typically
+once at the start of the stream and periodically repeated at a low rate
+to ensure synchronization.</li>
+<li><strong>Standard Support:</strong> Static HDR metadata transmission
+has been native to DisplayPort since version 1.4, which added formal
+support for CTA-861-based static metadata InfoFrames.</li>
+<li><strong>Performance Impact:</strong> Because a single brightness
+target applies to both dark and bright scenes, tone mapping is a
+compromise. Bright scenes may appear clipped, or dark scenes may look
+overly dim.</li>
+</ul>
+<h3 id="dynamic-hdr-metadata-transmission">Dynamic HDR Metadata
+Transmission</h3>
+<p>Dynamic HDR, utilized by formats such as Dolby Vision and HDR10+,
+continuously updates tone-mapping instructions on a frame-by-frame or
+scene-by-scene basis.</p>
+<ul>
+<li><strong>Transmission Method:</strong> Dynamic metadata relies on
+extended Secondary Data Packets (specifically Dynamic Range and
+Mastering InfoFrames defined in standards like CTA-861-G and CTA-861-H).
+DisplayPort transports these variable payloads during the vertical or
+horizontal blanking intervals synchronized directly with the
+corresponding video frames.</li>
+<li><strong>Update Frequency:</strong> Packets are transmitted
+continuously alongside the active video data. The display receives
+precise tone-mapping instructions tailored specifically to the exact
+frame or scene currently rendering.</li>
+<li><strong>Standard Support:</strong> While DisplayPort 1.4 can
+technically carry dynamic metadata through vendor-specific SDPs or
+Display Stream Compression (DSC) tunnels, robust native handling and
+broad compliance were formalized in the DisplayPort 2.0 and 2.1
+specifications. Both the source GPU and the sink (display) must
+explicitly negotiate support for dynamic SDP handling via DisplayPort
+Configuration Data (DPCD).</li>
+<li><strong>Performance Impact:</strong> Dynamic metadata eliminates the
+compromises of static tone mapping. Dark scenes preserve subtle shadow
+detail, while bright scenes retain high-contrast highlights without
+clipping.</li>
+</ul>
+<h3 id="key-technical-differences">Key Technical Differences</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Feature</th>
+<th style="text-align: left;">Static HDR Metadata</th>
+<th style="text-align: left;">Dynamic HDR Metadata</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Primary Formats</strong></td>
+<td style="text-align: left;">HDR10</td>
+<td style="text-align: left;">HDR10+, Dolby Vision</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Transmission
+Frequency</strong></td>
+<td style="text-align: left;">Sent periodically / once per title</td>
+<td style="text-align: left;">Sent continuously per frame or scene</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Packet Overhead</strong></td>
+<td style="text-align: left;">Negligible secondary data payload</td>
+<td style="text-align: left;">Higher packet frequency in blanking
+intervals</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>DisplayPort
+Requirement</strong></td>
+<td style="text-align: left;">DisplayPort 1.4 or higher</td>
+<td style="text-align: left;">DisplayPort 1.4 (limited/vendor-dependent)
+to DisplayPort 2.0/2.1</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Visual Result</strong></td>
+<td style="text-align: left;">Fixed compromise across entire
+runtime</td>
+<td style="text-align: left;">Frame-accurate contrast and luminance</td>
+</tr>
+</tbody>
+</table>
+<p>In summary, the fundamental difference between static and dynamic HDR
+metadata over DisplayPort lies in timing and adaptation. Static metadata
+delivers a single set of parameters across the link for an entire
+session, whereas dynamic metadata utilizes continuous, synchronized
+packet delivery to optimize tone mapping continuously throughout
+playback.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/static-vs-dynamic-hdr-metadata-over-display-port';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

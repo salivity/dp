@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Is a DisplayPort Branch Device in an MST Hub? - dp</title>
+    <meta name="description" content="A DisplayPort branch device is an active hardware component defined in the VESA DisplayPort standard that enables a single video output to connect to multiple independent displays. This article explains what a branch device is, its role within Multi-Strea">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/what-is-a-display-port-branch-device-in-an-mst-hub">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What Is a DisplayPort Branch Device in an MST Hub? - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/what-is-a-display-port-branch-device-in-an-mst-hub" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="A DisplayPort branch device is an active hardware component defined in the VESA DisplayPort standard that enables a single video output to connect to multiple independent displays. This article explains what a branch device is, its role within Multi-Strea" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="what-is-a-displayport-branch-device-in-an-mst-hub">What Is a
+DisplayPort Branch Device in an MST Hub?</h1>
+<p>A DisplayPort branch device is an active hardware component defined
+in the VESA DisplayPort standard that enables a single video output to
+connect to multiple independent displays. This article explains what a
+branch device is, its role within Multi-Stream Transport (MST)
+technology, and the step-by-step process of how it manages, routes, and
+splits video signals inside an MST hub.</p>
+<h3 id="defining-the-displayport-branch-device">Defining the DisplayPort
+Branch Device</h3>
+<p>In the VESA DisplayPort specification, devices in a video
+transmission chain are categorized into two primary types: Source/Sink
+devices and Branch devices. While a source generates the signal (such as
+a GPU) and a sink consumes it (such as a monitor), a branch device acts
+as an intermediate routing node.</p>
+<p>Introduced alongside the Multi-Stream Transport (MST) protocol in
+DisplayPort 1.2, a branch device accepts an incoming multi-stream signal
+from a single upstream port and distributes individual video streams to
+downstream ports. Physical implementations of branch devices include
+standalone MST hubs, daisy-chainable monitors with DP-out ports, and
+docking stations.</p>
+<h3 id="how-a-branch-device-functions-inside-an-mst-hub">How a Branch
+Device Functions Inside an MST Hub</h3>
+<p>An MST hub relies on an internal branch device chip to manage
+communication, allocate bandwidth, and route data. Its operation
+involves four primary functions:</p>
+<h4 id="1-topology-discovery-and-communication">1. Topology Discovery
+and Communication</h4>
+<p>When an MST hub is plugged into a host PC, the branch device
+communicates with the GPU using the DisplayPort Auxiliary (AUX) channel.
+It reports its presence and queries any connected monitors downstream to
+gather their Extended Display Identification Data (EDID) and DisplayPort
+Configuration Data (DPCD). The branch device presents this layout to the
+host operating system as a tree topology, allowing the system to
+recognize each connected screen as an independent physical display
+rather than a mirrored clone.</p>
+<h4 id="2-bandwidth-negotiation-and-management">2. Bandwidth Negotiation
+and Management</h4>
+<p>The total bandwidth of the single DisplayPort connection from the
+host is shared among all connected screens. The branch device negotiates
+link rates with the host (such as HBR2, HBR3, or UHBR rates) and
+verifies that the sum of the downstream displays' resolutions, refresh
+rates, and color depths does not exceed the link's maximum throughput.
+If bandwidth is constrained, the branch device and host coordinate
+fallback resolutions or utilize Display Stream Compression (DSC) if
+supported.</p>
+<h4 id="3-stream-demultiplexing-and-routing">3. Stream Demultiplexing
+and Routing</h4>
+<p>In MST mode, the graphics card packets multiple independent video and
+audio streams into a single, time-multiplexed data stream across the
+main link lanes. The branch device's internal switching fabric inspects
+the transport packet headers, extracts the individual streams according
+to their Virtual Channel IDs, and routes each stream directly to its
+designated downstream physical port without adding perceptible
+latency.</p>
+<h4 id="4-signal-conversion">4. Signal Conversion</h4>
+<p>Many branch devices inside MST hubs also incorporate protocol
+converters. In addition to routing native DisplayPort streams, they can
+convert downstream DisplayPort signals into other formats such as HDMI,
+DVI, or legacy VGA, allowing diverse display setups from a single source
+connection.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/what-is-a-display-port-branch-device-in-an-mst-hub';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

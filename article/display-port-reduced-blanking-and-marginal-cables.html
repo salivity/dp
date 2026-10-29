@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisplayPort Reduced Blanking and Marginal Cables - dp</title>
+    <meta name="description" content="Using an aggressive reduced blanking timing mode can lead to severe display instability and compatibility issues when paired with a marginal DisplayPort cable. While reduced blanking lowers the pixel clock to save transmission bandwidth, DisplayPort’s uni">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/display-port-reduced-blanking-and-marginal-cables">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DisplayPort Reduced Blanking and Marginal Cables - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/display-port-reduced-blanking-and-marginal-cables" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Using an aggressive reduced blanking timing mode can lead to severe display instability and compatibility issues when paired with a marginal DisplayPort cable. While reduced blanking lowers the pixel clock to save transmission bandwidth, DisplayPort’s uni" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="displayport-reduced-blanking-and-marginal-cables">DisplayPort
+Reduced Blanking and Marginal Cables</h1>
+<p>Using an aggressive reduced blanking timing mode can lead to severe
+display instability and compatibility issues when paired with a marginal
+DisplayPort cable. While reduced blanking lowers the pixel clock to save
+transmission bandwidth, DisplayPort’s unique packetized architecture
+handles data differently than legacy standards like HDMI or DVI. On
+substandard or deteriorating cables, tight blanking intervals reduce
+error margins for clock reconstruction and sink-side processing, often
+transforming minor transmission degradations into visible signal
+dropouts, flickering, or complete loss of sync.</p>
+<h3
+id="displayport-transmission-architecture-vs-reduced-blanking">DisplayPort
+Transmission Architecture vs. Reduced Blanking</h3>
+<p>In traditional interfaces such as DVI and standard HDMI, the physical
+clock line scales directly with the pixel clock. Lowering the blanking
+interval decreases the pixel clock, directly reducing the physical
+frequency on the wire and making signal transmission easier for
+low-quality cables.</p>
+<p>DisplayPort operates fundamentally differently. It uses
+fixed-frequency physical link rates—such as RBR (1.62 Gbps), HBR (2.7
+Gbps), HBR2 (5.4 Gbps), or HBR3 (8.1 Gbps) per lane. Video data is
+packed into micro-packets and transmitted across these fixed-rate lanes.
+If an aggressive reduced blanking mode (such as VESA CVT-RB or CVT-RBv2)
+does not lower the total bandwidth enough to drop the connection to a
+lower fixed link rate tier, the physical stress on the cable remains
+identical. The physical layer continues to run at the same high
+frequency regardless of the reduced blanking parameters.</p>
+<h3 id="pixel-clock-recovery-and-timing-margins">Pixel Clock Recovery
+and Timing Margins</h3>
+<p>Because DisplayPort does not carry a dedicated clock lane, the
+receiving display (sink) must reconstruct the native pixel clock from
+the incoming stream using software and hardware parameters known as
+Multiplier and Divider (M and N) values.</p>
+<p>A marginal cable introduces inter-symbol interference (ISI), high bit
+error rates (BER), and phase jitter into the high-speed data lanes. When
+aggressive reduced blanking is applied:</p>
+<ul>
+<li>The horizontal and vertical blanking periods are compressed to
+minimal operational thresholds.</li>
+<li>The sink device's Phase-Locked Loop (PLL) has significantly fewer
+idle cycles to lock onto the signal, compensate for jitter, and maintain
+synchronization.</li>
+<li>Any packet corruption or delay caused by the marginal cable cannot
+be absorbed by the buffer, leading to immediate sync loss.</li>
+</ul>
+<h3 id="display-scaler-and-line-buffer-limitations">Display Scaler and
+Line Buffer Limitations</h3>
+<p>Aggressive reduced blanking drastically cuts horizontal blanking
+(H-blank). Internal display controllers, scalers, and timing controllers
+(TCONs) rely on the H-blank interval to perform housekeeping tasks, line
+buffer clearing, and internal memory resets between scan lines.</p>
+<p>When a marginal cable forces the receiver to deal with high packet
+error counts while an aggressive timing profile simultaneously starves
+the scaler of processing time, the hardware can fail to reconstruct the
+raster lines. This results in:</p>
+<ul>
+<li><strong>Intermittent Black Screens:</strong> The TCON temporarily
+resets its timing state machine when buffer under-runs or sync-word
+errors occur.</li>
+<li><strong>Sparkling or Pixel Artifacts:</strong> Bit errors occurring
+during tight data bursts that cannot be corrected or masked in
+time.</li>
+<li><strong>Link Degradation Handshakes:</strong> The graphics card and
+monitor continually drop link rates to recover sync, resulting in
+continuous disconnect and reconnect cycles.</li>
+</ul>
+<h3 id="conclusion">Conclusion</h3>
+<p>Aggressive reduced blanking provides no physical signal relief over
+DisplayPort unless it enables the link to negotiate a slower physical
+link rate tier. Instead, it tightens timing tolerances on the receiving
+end. When combined with a marginal cable suffering from high jitter or
+attenuation, this lack of timing headroom reliably causes display
+degradation and connection failures. Resolving these issues requires
+either reverting to standard VESA timing intervals or replacing the
+cable with a certified, higher-bandwidth alternative.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/display-port-reduced-blanking-and-marginal-cables';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

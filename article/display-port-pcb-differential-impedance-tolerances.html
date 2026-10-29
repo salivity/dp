@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisplayPort PCB Differential Impedance Tolerances - dp</title>
+    <meta name="description" content="The DisplayPort standard requires strict PCB trace layout controls to maintain signal integrity across its multi-gigabit differential data lanes. This article outlines the specific intra-pair differential impedance values, standard tolerances, and layout">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/display-port-pcb-differential-impedance-tolerances">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DisplayPort PCB Differential Impedance Tolerances - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/display-port-pcb-differential-impedance-tolerances" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The DisplayPort standard requires strict PCB trace layout controls to maintain signal integrity across its multi-gigabit differential data lanes. This article outlines the specific intra-pair differential impedance values, standard tolerances, and layout" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="displayport-pcb-differential-impedance-tolerances">DisplayPort
+PCB Differential Impedance Tolerances</h1>
+<p>The DisplayPort standard requires strict PCB trace layout controls to
+maintain signal integrity across its multi-gigabit differential data
+lanes. This article outlines the specific intra-pair differential
+impedance values, standard tolerances, and layout constraints
+established by the Video Electronics Standards Association (VESA) for
+DisplayPort physical layer compliance.</p>
+<h3 id="nominal-differential-impedance-and-standard-tolerances">Nominal
+Differential Impedance and Standard Tolerances</h3>
+<p>The VESA DisplayPort Physical Layer (PHY) Compliance Standard
+specifies that all high-speed main link differential lanes—as well as
+the AUX channel—must be routed with a nominal differential impedance
+(<span class="math inline">\(Z_{diff}\)</span>) of 100 <span
+class="math inline">\(\Omega\)</span>.</p>
+<p>The standard tolerance allowance on printed circuit boards (PCBs)
+is:</p>
+<ul>
+<li><strong>Nominal Differential Impedance:</strong> 100 <span
+class="math inline">\(\Omega\)</span></li>
+<li><strong>Tolerance Window:</strong> <span class="math inline">\(\pm
+10\%\)</span> (acceptable range of 90 <span
+class="math inline">\(\Omega\)</span> to 110 <span
+class="math inline">\(\Omega\)</span>)</li>
+<li><strong>Nominal Single-Ended (Odd-Mode) Impedance:</strong> 50 <span
+class="math inline">\(\Omega\)</span> nominal (<span
+class="math inline">\(\pm 10\%\)</span>, acceptable range of 45 <span
+class="math inline">\(\Omega\)</span> to 55 <span
+class="math inline">\(\Omega\)</span>)</li>
+</ul>
+<p>For newer, ultra-high bit rate standards (UHBR 10, UHBR 13.5, and
+UHBR 20 under DisplayPort 2.0/2.1), designers typically aim for a
+tighter fabrication tolerance of <span class="math inline">\(\pm
+5\%\)</span> to <span class="math inline">\(\pm 8\%\)</span> (92 <span
+class="math inline">\(\Omega\)</span> to 108 <span
+class="math inline">\(\Omega\)</span>). This tighter window accounts for
+severe high-frequency attenuation, return loss, and parasitic effects at
+frequencies reaching up to 10 GHz Nyquist.</p>
+<h3 id="intra-pair-geometry-and-coupling">Intra-Pair Geometry and
+Coupling</h3>
+<p>Intra-pair differential impedance depends on the uniform physical
+coupling between the positive (TX+/RX+) and negative (TX-/RX-)
+traces:</p>
+<ul>
+<li><strong>Uniform Spacing:</strong> The edge-to-edge spacing between
+the two conductors in a differential pair must remain consistent along
+the entire routing path. Any widening or narrowing of this spacing
+creates localized impedance discontinuities.</li>
+<li><strong>Continuous Reference Planes:</strong> The pair must be
+referenced to an uninterrupted, solid ground plane directly on the
+adjacent layer. Reference plane splits or routing across power domains
+causes immediate impedance spikes and common-mode conversion.</li>
+<li><strong>Tight vs. Loose Coupling:</strong> While DisplayPort
+supports both edge-coupled and loosely coupled lines provided the 100
+<span class="math inline">\(\Omega\)</span> target is met, tight
+coupling is preferred to ensure environmental noise couples equally into
+both conductors as common-mode noise, which is then rejected by the
+differential receiver.</li>
+</ul>
+<h3 id="intra-pair-length-matching-and-phase-skew">Intra-Pair Length
+Matching and Phase Skew</h3>
+<p>Differential impedance balance relies heavily on phase symmetry.
+DisplayPort specifies strict intra-pair skew limits to prevent phase
+mismatch from degrading the differential impedance profile:</p>
+<ul>
+<li><strong>Skew Limit:</strong> Intra-pair skew must generally not
+exceed 2 ps to 5 ps (depending on the transmission mode: RBR, HBR, HBR2,
+HBR3, or UHBR).</li>
+<li><strong>Length Matching:</strong> Traces within the same
+differential pair must be matched within a maximum tolerance of 5 mils
+(0.127 mm), with high-data-rate designs often targeting under 2 mils
+(0.05 mm).</li>
+<li><strong>Compensation Placement:</strong> When serpentine delay bends
+are required to match trace lengths, the compensation must occur as
+close to the point of divergence (such as an unavoidable bend or
+component breakout) as possible.</li>
+</ul>
+<h3
+id="discontinuity-management-and-compliance-verification">Discontinuity
+Management and Compliance Verification</h3>
+<p>VESA compliance testing validates impedance specifications using
+Time-Domain Reflectometry (TDR) with a defined signal rise time
+(typically around 130 ps for standard HBR or faster for HBR3/UHBR).</p>
+<p>To ensure PCB traces pass TDR validation:</p>
+<ul>
+<li><strong>Via Transitions:</strong> Signal vias introduce capacitive
+discontinuities. When changing layers, GND stitching vias must be placed
+adjacent to the signal vias to preserve the 100 <span
+class="math inline">\(\Omega\)</span> return current path.</li>
+<li><strong>Anti-Pads:</strong> Ground planes beneath AC-coupling
+capacitors (0402 or 0201 packages) and connector surface-mount pads must
+feature cutouts (anti-pads) to offset the capacitive impedance drop and
+keep the localized impedance within the 90–110 <span
+class="math inline">\(\Omega\)</span> boundary.</li>
+</ul></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/display-port-pcb-differential-impedance-tolerances';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

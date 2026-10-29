@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How LFC Works Below DisplayPort VRR Range - dp</title>
+    <meta name="description" content="Low Framerate Compensation (LFC) is a display technology that prevents stuttering and screen tearing when a video game&#39;s framerate drops below the minimum refresh rate supported by a Variable Refresh Rate (VRR) monitor. Operating over DisplayPort interfac">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/how-lfc-works-below-display-port-vrr-range">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How LFC Works Below DisplayPort VRR Range - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/how-lfc-works-below-display-port-vrr-range" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Low Framerate Compensation (LFC) is a display technology that prevents stuttering and screen tearing when a video game&#39;s framerate drops below the minimum refresh rate supported by a Variable Refresh Rate (VRR) monitor. Operating over DisplayPort interfac" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-lfc-works-below-displayport-vrr-range">How LFC Works Below
+DisplayPort VRR Range</h1>
+<p>Low Framerate Compensation (LFC) is a display technology that
+prevents stuttering and screen tearing when a video game's framerate
+drops below the minimum refresh rate supported by a Variable Refresh
+Rate (VRR) monitor. Operating over DisplayPort interfaces through
+protocols like AMD FreeSync and NVIDIA G-SYNC Compatible, LFC
+dynamically duplicates rendered frames to keep the monitor’s refresh
+rate within its active VRR window, ensuring smooth gameplay even under
+heavy rendering loads.</p>
+<h3 id="the-vrr-window-problem">The VRR Window Problem</h3>
+<p>DisplayPort Variable Refresh Rate relies on the VESA Adaptive-Sync
+standard to dynamically synchronize the monitor's vertical refresh rate
+to the GPU’s output framerate. However, all VRR monitors feature a
+specific operating range, commonly 48 Hz to 144 Hz or 48 Hz to 240
+Hz.</p>
+<p>When a game’s output falls below the bottom threshold (for example,
+dropping to 35 FPS on a 48–144 Hz panel), the monitor can no longer slow
+its refresh cycle down to match the GPU. Without an intervention
+mechanism, the monitor would be forced to drop out of VRR mode,
+reverting to fixed refresh behavior that triggers noticeable visual
+stutter or screen tearing.</p>
+<h3 id="how-lfc-operates-frame-multiplication">How LFC Operates: Frame
+Multiplication</h3>
+<p>LFC solves this issue by mathematically multiplying the framerate at
+the GPU driver level before sending the signal across the DisplayPort
+link:</p>
+<ol type="1">
+<li><strong>Threshold Detection:</strong> The graphics driver
+continuously monitors frame presentation times. As soon as the rendering
+rate dips below the monitor’s lower VRR limit, the driver engages LFC
+algorithms.</li>
+<li><strong>Frame Duplication:</strong> The GPU repeats each rendered
+frame multiple times. If a game renders at 30 FPS on a display with a 48
+Hz minimum limit, the GPU sends each frame twice, creating an effective
+transmission rate of 60 Hz.</li>
+<li><strong>Synchronized Display:</strong> Because 60 Hz falls
+comfortably within the monitor's 48–144 Hz VRR range, the DisplayPort
+Adaptive-Sync connection remains active. The display refreshes twice for
+each single game frame, matching the multiplied rate perfectly without
+dropping synchronization.</li>
+</ol>
+<p>If framerates collapse even further—such as down to 20 FPS—the driver
+can increase the multiplier, displaying each frame three times to hit a
+stable 60 Hz, or four times to hit 80 Hz, dynamically adjusting the
+multiplier based on real-time performance.</p>
+<h3 id="hardware-requirements-for-lfc">Hardware Requirements for
+LFC</h3>
+<p>LFC does not require specialized hardware inside the display scaler,
+but it does require a specific refresh rate ratio. For LFC to function
+effectively, the display’s maximum refresh rate must typically be at
+least double its minimum refresh rate (a 2:1 ratio or greater).</p>
+<p>A display with a range of 48 Hz to 144 Hz easily supports LFC because
+144 is three times 48. Conversely, a budget monitor with an
+Adaptive-Sync range of 40 Hz to 60 Hz lacks sufficient headroom;
+doubling a 35 FPS signal would require 70 Hz, exceeding the monitor's
+maximum capability and making LFC mathematically impossible.</p>
+<h3 id="transition-smoothness">Transition Smoothness</h3>
+<p>The primary technical challenge of LFC over DisplayPort is managing
+the boundary transition where framerates hover directly around the
+minimum threshold (e.g., fluctuating between 46 FPS and 50 FPS). Modern
+GPU drivers utilize adaptive hysteresis algorithms to prevent rapid
+toggling between standard VRR and LFC modes. By smoothly ramping the
+refresh multiplier up and down, the system prevents sudden luminance
+shifts and frame pacing spikes, maintaining consistent visual
+fluidity.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/how-lfc-works-below-display-port-vrr-range';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

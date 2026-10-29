@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How DisplayPort Pre-Emphasis Improves Signal Integrity - dp</title>
+    <meta name="description" content="High-bandwidth display interfaces like DisplayPort encounter severe signal degradation when transmitting data over passive copper cabling due to high-frequency attenuation and dielectric loss. Pre-emphasis filtering is a transmitter-side equalization tech">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/how-display-port-pre-emphasis-improves-signal-integrity">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How DisplayPort Pre-Emphasis Improves Signal Integrity - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/how-display-port-pre-emphasis-improves-signal-integrity" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="High-bandwidth display interfaces like DisplayPort encounter severe signal degradation when transmitting data over passive copper cabling due to high-frequency attenuation and dielectric loss. Pre-emphasis filtering is a transmitter-side equalization tech" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-displayport-pre-emphasis-improves-signal-integrity">How
+DisplayPort Pre-Emphasis Improves Signal Integrity</h1>
+<p>High-bandwidth display interfaces like DisplayPort encounter severe
+signal degradation when transmitting data over passive copper cabling
+due to high-frequency attenuation and dielectric loss. Pre-emphasis
+filtering is a transmitter-side equalization technique that directly
+counters these physical limitations by amplifying high-frequency signal
+transitions relative to low-frequency states. This article examines the
+transmission challenges inherent to copper media, the operational
+mechanics of pre-emphasis filtering, and how this process mitigates
+inter-symbol interference to preserve signal integrity and maintain an
+open eye diagram at high data rates.</p>
+<h3 id="the-physics-of-high-frequency-signal-loss-in-copper">The Physics
+of High-Frequency Signal Loss in Copper</h3>
+<p>Copper wire behaves like a low-pass filter at multi-gigabit
+transmission speeds, such as those used in DisplayPort High Bit Rate
+(HBR) and Ultra High Bit Rate (UHBR) modes. Two primary physical
+phenomena drive this behavior:</p>
+<ol type="1">
+<li><strong>The Skin Effect:</strong> At high frequencies, electrical
+current tends to flow primarily along the outer perimeter (skin) of a
+conductor rather than uniformly through its cross-section. This reduces
+the effective cross-sectional area of the wire, drastically increasing
+electrical resistance and leading to high resistive losses.</li>
+<li><strong>Dielectric Loss:</strong> The insulating dielectric material
+surrounding the copper conductors absorbs electromagnetic energy. This
+loss increases linearly with frequency, causing rapid attenuation of the
+fastest electrical transitions.</li>
+</ol>
+<p>Because sharp signal edges (transitions from low-to-high or
+high-to-low) consist of high-frequency harmonics, these edges attenuate
+much faster than continuous sequences of identical bits (low-frequency
+components). Without correction, this differential attenuation causes
+pulse dispersion, where energy from one bit bleeds into subsequent bit
+intervals—a phenomenon known as Inter-Symbol Interference (ISI).</p>
+<h3 id="how-pre-emphasis-filtering-works">How Pre-Emphasis Filtering
+Works</h3>
+<p>Pre-emphasis operates at the DisplayPort transmitter (source)
+Physical Layer (PHY) before the signal enters the copper cable. Instead
+of transmitting a uniform voltage level for all data bits, the
+transmitter boosts the voltage level of the first bit following any
+signal transition.</p>
+<ul>
+<li><strong>Transition Bits:</strong> When a data bit changes state
+(from 0 to 1, or 1 to 0), the transmitter applies an elevated voltage
+swing for that specific bit duration. This injects excess high-frequency
+energy into the signal edge.</li>
+<li><strong>Non-Transition Bits:</strong> If the following bits remain
+in the same state (such as a string of consecutive 1s or 0s), the
+transmitter drops the voltage back to a standard nominal level (often
+referred to in implementation as de-emphasis).</li>
+</ul>
+<p>By artificially boosting high-frequency components prior to
+transmission, pre-emphasis pre-distorts the signal in an inverted
+profile to the cable's expected attenuation curve. As the signal travels
+through the copper wire, the natural low-pass filtering of the cable
+attenuates the boosted edges. By the time the signal reaches the
+receiver (sink), the excessive high-frequency components have degraded
+just enough to match the low-frequency levels, resulting in a balanced,
+restored waveform.</p>
+<h3 id="link-training-and-dynamic-adjustment">Link Training and Dynamic
+Adjustment</h3>
+<p>DisplayPort does not rely on a static, one-size-fits-all pre-emphasis
+level. Because copper cables vary in gauge, shielding, and length,
+DisplayPort employs a bidirectional negotiation process known as Link
+Training, conducted over the Auxiliary (AUX) channel:</p>
+<ol type="1">
+<li>The transmitter sends test patterns to the receiver using a baseline
+voltage swing and pre-emphasis setting.</li>
+<li>The receiver measures the incoming signal quality, assessing jitter,
+noise margins, and edge definitions.</li>
+<li>The receiver sends feedback via the AUX channel, requesting specific
+adjustments across standard predefined levels of voltage swing (Levels
+0–3) and pre-emphasis (Levels 0–3).</li>
+<li>The process iterates until the receiver achieves bit-lock and
+symbol-lock across all active main lanes.</li>
+</ol>
+<p>This dynamic closed-loop adjustment ensures that short copper cables
+do not suffer from over-equalization (which causes excessive overshoot
+and electromagnetic interference), while longer or lower-quality cables
+receive sufficient high-frequency boosting.</p>
+<h3 id="measurable-impacts-on-signal-integrity">Measurable Impacts on
+Signal Integrity</h3>
+<p>By sharpening transition edges and counteracting high-frequency
+losses, pre-emphasis filtering delivers critical measurable improvements
+to the transmission channel:</p>
+<ul>
+<li><strong>Eye Diagram Restoration:</strong> It expands both the
+horizontal (timing) and vertical (voltage) margins of the signal eye
+pattern at the receiver, directly counteracting the eye-closure caused
+by cable dispersion.</li>
+<li><strong>Jitter Reduction:</strong> It minimizes deterministic jitter
+caused by ISI, ensuring that transition edges arrive precisely within
+the expected clock phase margins.</li>
+<li><strong>Lower Bit Error Rate (BER):</strong> By presenting distinct,
+non-overlapping voltage thresholds to the receiver's decision circuits,
+pre-emphasis ensures the link operates below the required BER limits
+without relying entirely on aggressive receiver-side equalization.</li>
+</ul></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/how-display-port-pre-emphasis-improves-signal-integrity';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

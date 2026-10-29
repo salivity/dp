@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why Drivers Detect DisplayPort Monitors as TVs - dp</title>
+    <meta name="description" content="Graphics card drivers occasionally misidentify a dedicated DisplayPort computer monitor as a television and apply a Limited RGB color range (16–235) instead of the standard Full RGB range (0–255). This issue results in washed-out blacks, dull contrast, an">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/why-drivers-detect-display-port-monitors-as-t-vs">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Why Drivers Detect DisplayPort Monitors as TVs - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/why-drivers-detect-display-port-monitors-as-t-vs" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Graphics card drivers occasionally misidentify a dedicated DisplayPort computer monitor as a television and apply a Limited RGB color range (16–235) instead of the standard Full RGB range (0–255). This issue results in washed-out blacks, dull contrast, an" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="why-drivers-detect-displayport-monitors-as-tvs">Why Drivers
+Detect DisplayPort Monitors as TVs</h1>
+<p>Graphics card drivers occasionally misidentify a dedicated
+DisplayPort computer monitor as a television and apply a Limited RGB
+color range (16–235) instead of the standard Full RGB range (0–255).
+This issue results in washed-out blacks, dull contrast, and compromised
+color accuracy on desktop displays. The problem stems from how modern
+monitors communicate their capabilities to GPU drivers via metadata
+structures, combined with the legacy broadcast assumptions hardcoded
+into driver heuristics.</p>
+<h3 id="the-role-of-edid-and-cea-861-extension-blocks">The Role of EDID
+and CEA-861 Extension Blocks</h3>
+<p>When a monitor connects to a PC, it sends an Extended Display
+Identification Data (EDID) block to the graphics card. This metadata
+informs the driver about the display's native resolution, refresh rates,
+manufacturer details, and supported color formats.</p>
+<p>To support features like integrated speakers, headphone jacks, or
+HDR, monitor manufacturers frequently include Consumer Electronics
+Association (CEA/CTA-861) extension blocks in the display’s EDID.
+Because CTA-861 is a standard developed primarily for consumer
+televisions and home theater equipment, graphics drivers often
+misinterpret the presence of these blocks. If the driver’s parsing logic
+detects audio pipelines or broadcast-oriented timing flags, it may
+assume the connected device is a living-room television rather than a PC
+monitor.</p>
+<h3 id="fail-safe-color-standards-and-broadcast-legacy">Fail-Safe Color
+Standards and Broadcast Legacy</h3>
+<p>Televisions historically process color differently from computer
+monitors. Broadcast standards dictate that digital video signals use
+Limited Dynamic Range (RGB 16–235) to leave headroom and "footroom" for
+broadcast sync signals. Computer monitors operate on Full Dynamic Range
+(RGB 0–255).</p>
+<p>When a graphics driver (whether from NVIDIA, AMD, or Intel) is
+uncertain about the display type due to conflicting EDID data, it
+defaults to the lowest common denominator: Limited Range. This is a
+deliberate fail-safe. Outputting a Full Range signal to a television
+that only expects Limited Range causes "black crush" (loss of detail in
+dark scenes) and blown-out highlights. Conversely, outputting a Limited
+Range signal to a Full Range display only produces elevated black levels
+and reduced contrast—a noticeable flaw, but one that preserves all
+visible picture information.</p>
+<h3 id="displayport-to-hdmi-interoperability-dp">DisplayPort to HDMI
+Interoperability (DP++)</h3>
+<p>Many DisplayPort outputs feature Dual-Mode DisplayPort (DP++), which
+allows the port to transmit standard HDMI or DVI signals using passive
+adapters. Monitor manufacturers often use unified scaler boards and
+firmware across multiple display models, sharing internals between
+monitors that feature both HDMI and DisplayPort inputs.</p>
+<p>If the internal scaler firmware handles DisplayPort handshakes using
+an HDMI-derived signal pipeline, the monitor can mistakenly request or
+accept television-standard color encodings, such as YCbCr4:2:2 or
+YCbCr4:4:4, triggering the driver to enforce TV-oriented limited range
+presets automatically.</p>
+<h3 id="resolving-the-misidentification">Resolving the
+Misidentification</h3>
+<p>When the driver applies this setting mistakenly, users must manually
+override the output settings in their GPU software:</p>
+<ul>
+<li><strong>NVIDIA:</strong> Open the NVIDIA Control Panel, navigate to
+<strong>Change Resolution</strong>, select the affected display, change
+output dynamic range from <strong>Default</strong> to <strong>Use NVIDIA
+color settings</strong>, and set <strong>Output dynamic range</strong>
+to <strong>Full</strong>.</li>
+<li><strong>AMD:</strong> Open AMD Software: Adrenalin Edition, navigate
+to <strong>Gaming</strong> &gt; <strong>Display</strong>, and toggle the
+<strong>Pixel Format</strong> to <strong>RGB 4:4:4 Pixel Format PC
+Standard (Full RGB)</strong>.</li>
+<li><strong>Intel:</strong> Open the Intel Graphics Command Center,
+select <strong>Display</strong>, navigate to the <strong>Color</strong>
+or <strong>Video</strong> tab, and set the <strong>Input Range</strong>
+or <strong>Quantization Range</strong> to <strong>Full</strong>.</li>
+</ul></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/why-drivers-detect-display-port-monitors-as-t-vs';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

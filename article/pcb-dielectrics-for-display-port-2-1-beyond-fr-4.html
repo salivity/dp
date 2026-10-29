@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PCB Dielectrics for DisplayPort 2.1 Beyond FR-4 - dp</title>
+    <meta name="description" content="DisplayPort 2.1 introduces Ultra-High Bit Rate (UHBR) transmission modes—UHBR10, UHBR13.5, and UHBR20—capable of delivering up to 20 Gbps per lane and an aggregate bandwidth of 80 Gbps. At these elevated signaling rates, standard FR-4 dielectric materials">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/pcb-dielectrics-for-display-port-2-1-beyond-fr-4">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="PCB Dielectrics for DisplayPort 2.1 Beyond FR-4 - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/pcb-dielectrics-for-display-port-2-1-beyond-fr-4" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="DisplayPort 2.1 introduces Ultra-High Bit Rate (UHBR) transmission modes—UHBR10, UHBR13.5, and UHBR20—capable of delivering up to 20 Gbps per lane and an aggregate bandwidth of 80 Gbps. At these elevated signaling rates, standard FR-4 dielectric materials" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="pcb-dielectrics-for-displayport-21-beyond-fr-4">PCB Dielectrics
+for DisplayPort 2.1 Beyond FR-4</h1>
+<p>DisplayPort 2.1 introduces Ultra-High Bit Rate (UHBR) transmission
+modes—UHBR10, UHBR13.5, and UHBR20—capable of delivering up to 20 Gbps
+per lane and an aggregate bandwidth of 80 Gbps. At these elevated
+signaling rates, standard FR-4 dielectric materials exhibit excessive
+attenuation, dielectric absorption, and phase jitter, rendering them
+unsuitable for reliable signal delivery. This article details the
+advanced, low-loss dielectric substrates recommended for routing
+DisplayPort 2.1 traces, evaluates their physical and electrical
+properties, and outlines critical stackup design considerations.</p>
+<h3 id="the-limitations-of-standard-fr-4-at-uhbr-speeds">The Limitations
+of Standard FR-4 at UHBR Speeds</h3>
+<p>DisplayPort 2.1 signals operating in UHBR20 mode run at a fundamental
+Nyquist frequency of 10 GHz. Standard FR-4 possesses a high dissipation
+factor (<span class="math inline">\(\tan\delta\)</span> or <span
+class="math inline">\(D_f\)</span>) typically between 0.015 and 0.020,
+along with a dielectric constant (<span
+class="math inline">\(D_k\)</span>) around 4.2 to 4.5.</p>
+<p>At 10 GHz, dielectric loss dominates over conductor skin effect loss.
+Utilizing FR-4 at these frequencies causes massive insertion loss across
+trace lengths greater than an inch or two, severe eye closure, and
+inter-symbol interference (ISI). To satisfy the strict compliance eye
+masks and reach requirements of DisplayPort 2.1, materials with
+significantly lower loss profiles must be used.</p>
+<h3 id="recommended-high-performance-substrates">Recommended
+High-Performance Substrates</h3>
+<h4 id="1-very-low-loss-vll-thermoset-resins">1. Very Low-Loss (VLL)
+Thermoset Resins</h4>
+<p>Very Low-Loss materials are the primary industry choice for
+high-speed digital interconnects like PCIe 5.0, DisplayPort 2.1, and
+100GbE per lane implementations.</p>
+<ul>
+<li><strong>Panasonic Megtron 6:</strong> Widely regarded as the
+industry benchmark for ultra-high-speed routing up to 25 Gbps per
+channel. It features a <span class="math inline">\(D_f\)</span> of
+approximately 0.002 to 0.004 and a <span
+class="math inline">\(D_k\)</span> of 3.4 to 3.7 at 10 GHz. Megtron 6
+provides thermal stability, high glass transition temperature (<span
+class="math inline">\(T_g\)</span>), and low moisture absorption.</li>
+<li><strong>Isola Tachyon 100G / I-Tera MT40:</strong> Designed
+specifically for high-speed digital designs requiring high thermal
+endurance and minimal dielectric loss. Tachyon 100G maintains a stable
+<span class="math inline">\(D_k\)</span> (around 3.02) and a <span
+class="math inline">\(D_f\)</span> of approximately 0.0021 up to 40 GHz,
+making it an excellent candidate for long-trace DP 2.1 designs.</li>
+<li><strong>Nelco N4000-13 / N4000-13 EPSI:</strong> A reinforced epoxy
+resin system offering a <span class="math inline">\(D_f\)</span> around
+0.008 to 0.009 (standard) down to 0.006 (EPSI). While higher in loss
+than Megtron 6, it can serve as a cost-effective option for shorter
+trace lengths (UHBR10 or localized UHBR13.5 routing).</li>
+</ul>
+<h4 id="2-ultra-low-loss-ull-resins">2. Ultra-Low-Loss (ULL) Resins</h4>
+<p>For extended cable driver circuits, docking stations, or long routing
+runs where insertion loss budgets are extremely tight, Ultra-Low-Loss
+laminates are required.</p>
+<ul>
+<li><strong>Panasonic Megtron 7 and Megtron 8:</strong> These
+formulations push loss factors down further (<span
+class="math inline">\(D_f \approx 0.0015\)</span> at 10 GHz), offering
+superior low transmission loss, near-zero dispersion, and minimal signal
+skew over temperature fluctuations.</li>
+<li><strong>Rogers RO4000 Series (e.g., RO4350B, RO4835):</strong>
+Hydrocarbon ceramic laminates traditionally used in RF designs. They
+offer exceptional high-frequency performance (<span
+class="math inline">\(D_f \approx 0.0037\)</span>, <span
+class="math inline">\(D_k \approx 3.48\)</span>) and rigid mechanical
+properties. They are often applied selectively in hybrid constructions
+due to processing complexities and cost.</li>
+</ul>
+<h3 id="critical-substrate-properties-beyond-base-resins">Critical
+Substrate Properties Beyond Base Resins</h3>
+<p>Selecting the correct resin system is only part of maintaining signal
+integrity at 20 Gbps per lane. The physical makeup of the substrate must
+also address high-frequency parasitics:</p>
+<ul>
+<li><strong>Spread Glass Weave:</strong> Standard E-glass fabric creates
+alternating localized windows of glass fiber and resin. Because the
+<span class="math inline">\(D_k\)</span> of glass (<span
+class="math inline">\(\approx 6.0\)</span>) differs significantly from
+the resin (<span class="math inline">\(\approx 3.0\)</span>),
+differential pairs routed across non-uniform weave suffer from
+fiber-weave-induced skew. Substrates specified for DisplayPort 2.1 must
+use mechanically flattened, spread-glass fabrics (e.g., glass styles
+1067, 1086, or 3313) to ensure a uniform <span
+class="math inline">\(D_k\)</span> distribution.</li>
+<li><strong>Copper Profile (HVLP/VLP):</strong> At 10 GHz, the skin
+depth of copper is less than 0.7 microns. Surface roughness on the foil
+creates significant conductor loss. Specifying Very Low Profile (VLP) or
+Hyper Very Low Profile (HVLP) copper foils with roughness (<span
+class="math inline">\(R_z\)</span>) below 1.5 µm is mandatory to prevent
+conductor losses from negating the advantages of the low-loss
+dielectric.</li>
+</ul>
+<h3 id="cost-effective-implementation-hybrid-stackups">Cost-Effective
+Implementation: Hybrid Stackups</h3>
+<p>Full-board fabrication using high-grade materials like Megtron 6 or
+Tachyon 100G across high-layer-count motherboards or graphics cards can
+be cost-prohibitive.</p>
+<p>Hardware designers typically implement <strong>hybrid
+stackups</strong>. In a hybrid configuration, ultra-low-loss laminates
+are assigned exclusively to the outer microstrip layers or critical
+inner stripline layers where DisplayPort 2.1 differential pairs travel.
+The inner power, ground, and low-speed digital layers utilize mid-loss
+or standard FR-4 cores. This approach controls manufacturing costs while
+confining the UHBR signals to an optimal, low-attenuation
+environment.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/pcb-dielectrics-for-display-port-2-1-beyond-fr-4';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

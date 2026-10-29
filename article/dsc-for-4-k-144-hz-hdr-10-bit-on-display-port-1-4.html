@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSC for 4K 144Hz HDR 10-Bit on DisplayPort 1.4 - dp</title>
+    <meta name="description" content="Running a 4K display at a 144Hz refresh rate with 10-bit High Dynamic Range (HDR) color requires far more data throughput than DisplayPort 1.4 can physically handle in an uncompressed state. Display Stream Compression (DSC) is essential because it applies">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/dsc-for-4-k-144-hz-hdr-10-bit-on-display-port-1-4">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DSC for 4K 144Hz HDR 10-Bit on DisplayPort 1.4 - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/dsc-for-4-k-144-hz-hdr-10-bit-on-display-port-1-4" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Running a 4K display at a 144Hz refresh rate with 10-bit High Dynamic Range (HDR) color requires far more data throughput than DisplayPort 1.4 can physically handle in an uncompressed state. Display Stream Compression (DSC) is essential because it applies" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="dsc-for-4k-144hz-hdr-10-bit-on-displayport-14">DSC for 4K 144Hz
+HDR 10-Bit on DisplayPort 1.4</h1>
+<p>Running a 4K display at a 144Hz refresh rate with 10-bit High Dynamic
+Range (HDR) color requires far more data throughput than DisplayPort 1.4
+can physically handle in an uncompressed state. Display Stream
+Compression (DSC) is essential because it applies a visually lossless,
+ultra-low-latency compression algorithm to the video signal, shrinking
+the bandwidth demand so that cutting-edge monitors and graphics cards
+can deliver uncompromised, high-fidelity visuals over existing cable
+standards.</p>
+<h3 id="the-displayport-14-bandwidth-limit">The DisplayPort 1.4
+Bandwidth Limit</h3>
+<p>DisplayPort 1.4 uses High Bit Rate 3 (HBR3) transmission across four
+lanes, providing a total theoretical bandwidth of 32.4 Gbps. However,
+due to 8b/10b channel encoding overhead, the actual usable data
+throughput caps out at roughly 25.92 Gbps. Every frame, pixel, and color
+channel sent from the GPU to the display must fit entirely within this
+25.92 Gbps pipeline.</p>
+<h3 id="the-uncompressed-data-footprint-of-4k-144hz-10-bit">The
+Uncompressed Data Footprint of 4K 144Hz 10-Bit</h3>
+<p>Calculating the raw data required for this display configuration
+reveals why a standard connection fails without compression:</p>
+<ul>
+<li><strong>Resolution:</strong> 4K UHD is 3840 × 2160 pixels, totaling
+roughly 8.29 million pixels per frame.</li>
+<li><strong>Color Depth:</strong> Standard 8-bit color uses 24 bits per
+pixel (bpp). HDR requires 10-bit color depth (Wide Color Gamut), using
+30 bits per pixel across the Red, Green, and Blue subpixels (RGB
+4:4:4).</li>
+<li><strong>Refresh Rate:</strong> Refreshing this volume of data 144
+times per second requires massive throughput.</li>
+<li><strong>Timing and Blanking Overheads:</strong> Video standards
+include blanking intervals required for synchronization.</li>
+</ul>
+<p>Multiplying these factors results in an uncompressed data rate of
+approximately 35.8 to 43 Gbps (depending on the exact timing standard
+used, such as CVT-RBv2). Because 35.8 Gbps vastly exceeds the 25.92 Gbps
+maximum capacity of DisplayPort 1.4, an uncompressed signal cannot
+physically transmit.</p>
+<h3 id="how-display-stream-compression-dsc-bridges-the-gap">How Display
+Stream Compression (DSC) Bridges the Gap</h3>
+<p>Adopted by VESA in the DisplayPort 1.4 specification (specifically
+DSC version 1.2a), Display Stream Compression provides a real-time,
+visually lossless compression method with up to a 3:1 compression
+ratio.</p>
+<p>DSC divides each frame into horizontal slices and compresses them on
+the fly using line buffers. This design introduces virtually zero input
+lag—latency is measured in microseconds (fractions of a single scan
+line)—making it imperceptible during fast-paced gaming or real-time
+work.</p>
+<p>By applying DSC at a typical 2:1 or 3:1 ratio, the required data
+stream of roughly 36 Gbps is reduced to around 12 to 18 Gbps. This
+easily fits inside the 25.92 Gbps payload limit of DisplayPort 1.4 while
+maintaining full signal integrity.</p>
+<h3 id="the-compromises-avoided-by-dsc">The Compromises Avoided by
+DSC</h3>
+<p>Without DSC, a user attempting to output 4K at 144Hz with 10-bit
+color over DisplayPort 1.4 would be forced into severe visual
+compromises:</p>
+<ul>
+<li><strong>Chroma Subsampling (4:2:2 or 4:2:0):</strong> Reducing color
+resolution discards half or three-quarters of the color data, resulting
+in blurry text and fringing artifacts around sharp UI elements.</li>
+<li><strong>Lowering Color Depth to 8-bit:</strong> Dropping from 10-bit
+to 8-bit introduces noticeable color banding in gradients and disables
+true HDR performance.</li>
+<li><strong>Dropping Refresh Rates:</strong> The refresh rate would need
+to be capped at roughly 98Hz (for 10-bit RGB) or 120Hz (for 8-bit RGB),
+sacrificing the fluidity of 144Hz.</li>
+</ul>
+<p>DSC eliminates all of these compromises. By fitting the full 4K 144Hz
+10-bit RGB 4:4:4 HDR signal within the hardware limits of DisplayPort
+1.4, DSC makes elite-tier display performance possible without requiring
+users to wait for or upgrade to newer physical interface standards like
+DisplayPort 2.1.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/dsc-for-4-k-144-hz-hdr-10-bit-on-display-port-1-4';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dual 4K 60Hz Displays Over a Single USB4 Cable - dp</title>
+    <meta name="description" content="Yes, a single USB4 connection can simultaneously encapsulate and transmit two distinct 4K video streams at 60Hz. Thanks to the architecture of USB4, which supports bandwidths up to 40 Gbps (and 80 Gbps in USB4 2.0) alongside native DisplayPort protocol tu">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/dual-4-k-60-hz-displays-over-a-single-usb-4-cable">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Dual 4K 60Hz Displays Over a Single USB4 Cable - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/dual-4-k-60-hz-displays-over-a-single-usb-4-cable" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Yes, a single USB4 connection can simultaneously encapsulate and transmit two distinct 4K video streams at 60Hz. Thanks to the architecture of USB4, which supports bandwidths up to 40 Gbps (and 80 Gbps in USB4 2.0) alongside native DisplayPort protocol tu" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="dual-4k-60hz-displays-over-a-single-usb4-cable">Dual 4K 60Hz
+Displays Over a Single USB4 Cable</h1>
+<p>Yes, a single USB4 connection can simultaneously encapsulate and
+transmit two distinct 4K video streams at 60Hz. Thanks to the
+architecture of USB4, which supports bandwidths up to 40 Gbps (and 80
+Gbps in USB4 2.0) alongside native DisplayPort protocol tunneling, the
+standard easily accommodates the throughput requirements for dual
+high-resolution displays. Depending on the host hardware, this is
+accomplished either through DisplayPort Multi-Stream Transport (MST) or
+through routing two separate DisplayPort adapter instances within the
+USB4 fabric.</p>
+<h3 id="bandwidth-and-protocol-tunneling">Bandwidth and Protocol
+Tunneling</h3>
+<p>A single uncompressed 4K stream (3840x2160 at 60Hz with 8-bit color
+depth) requires approximately 12.54 Gbps of video data bandwidth.
+Transmitting two such streams uncompressed requires roughly 25 Gbps.</p>
+<p>Standard USB4 40Gbps provides an actual usable data bandwidth of up
+to roughly 32 Gbps for tunneled traffic. Because the DisplayPort
+Tunneling protocol encapsulates raw DisplayPort main-link data packets
+directly into USB4 transport frames, the required ~25 Gbps fits
+comfortably within the physical bandwidth limit of a 40 Gbps connection,
+leaving additional headroom for concurrent PCIe or USB 3.2 data.</p>
+<h3 id="uncompressed-vs-compressed-video-dsc">Uncompressed vs.
+Compressed Video (DSC)</h3>
+<ul>
+<li><strong>Uncompressed Streams:</strong> When using DisplayPort 1.4
+HBR2 or HBR3 link rates without compression, standard 8-bit 4K 60Hz
+RGB/4:4:4 signals can run concurrently over a 40 Gbps USB4
+connection.</li>
+<li><strong>Display Stream Compression (DSC):</strong> If higher color
+depths (such as 10-bit HDR) are used, uncompressed bandwidth
+requirements increase. USB4 can carry DisplayPort streams compressed via
+visually lossless DSC. DSC reduces the bandwidth requirement by up to a
+3:1 ratio, enabling dual 4K 60Hz HDR streams with minimal overhead.</li>
+</ul>
+<h3 id="implementation-methods-mst-vs-dual-dp-tunnels">Implementation
+Methods: MST vs. Dual DP Tunnels</h3>
+<p>USB4 provides two distinct mechanisms to handle two independent 4K
+60Hz streams:</p>
+<ol type="1">
+<li><strong>Dual Independent DP Tunnels:</strong> USB4 host controllers
+typically contain two internal DisplayPort Input (DP-IN) adapters
+connected to the system's GPU. The USB4 router can encapsulate both
+adapters as separate, parallel tunnel pathways over the same physical
+cable. A downstream USB4 dock then demuxes these back into two
+physically distinct DisplayPort or HDMI outputs. This method works
+across all major operating systems, including macOS and Windows.</li>
+<li><strong>DisplayPort Multi-Stream Transport (MST):</strong> A host
+can also tunnel a single DisplayPort link operating in MST mode. Once
+the tunneled stream arrives at the target hub, an integrated MST hub
+splits the single encapsulated stream into two independent video
+outputs. (Note that macOS does not natively support MST
+daisy-chaining/splitting, making the dual-tunnel approach necessary on
+Apple hardware).</li>
+</ol>
+<h3 id="system-requirements">System Requirements</h3>
+<p>For dual 4K 60Hz display output over a single USB4 port to function
+properly, the setup must meet the following criteria:</p>
+<ul>
+<li><strong>Host Support:</strong> The host device must possess a 40
+Gbps-capable USB4 port and an internal GPU routed with at least two
+available display pipelines to the USB4 host router.</li>
+<li><strong>Cable:</strong> A certified 40 Gbps USB4 or Thunderbolt 4
+cable must be used to ensure the connection does not fall back to 20
+Gbps (USB4 Gen 2x2).</li>
+<li><strong>Dock or Monitor:</strong> The receiving dock or monitor must
+feature a USB4 or Thunderbolt peripheral controller capable of either
+demultiplexing two independent DP tunnels or splitting an MST stream to
+multiple monitor outputs.</li>
+</ul></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/dual-4-k-60-hz-displays-over-a-single-usb-4-cable';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

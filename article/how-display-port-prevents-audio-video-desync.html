@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How DisplayPort Prevents Audio Video Desync - dp</title>
+    <meta name="description" content="Modern monitors and televisions frequently employ computationally intensive onboard video processing—such as motion smoothing, upscaling, local dimming calculations, and HDR tone mapping—which introduces noticeable display latency. To prevent audio-visual">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/how-display-port-prevents-audio-video-desync">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How DisplayPort Prevents Audio Video Desync - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/how-display-port-prevents-audio-video-desync" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Modern monitors and televisions frequently employ computationally intensive onboard video processing—such as motion smoothing, upscaling, local dimming calculations, and HDR tone mapping—which introduces noticeable display latency. To prevent audio-visual" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-displayport-prevents-audio-video-desync">How DisplayPort
+Prevents Audio Video Desync</h1>
+<p>Modern monitors and televisions frequently employ computationally
+intensive onboard video processing—such as motion smoothing, upscaling,
+local dimming calculations, and HDR tone mapping—which introduces
+noticeable display latency. To prevent audio-visual (AV)
+desynchronization over DisplayPort, systems rely on a combination of
+internal audio delay buffering, standardized latency reporting back to
+the source device, and tightly coupled clock regeneration. Together,
+these mechanisms ensure that audio either waits inside the display’s
+hardware buffer or is pre-delayed by the host source to perfectly match
+the time it takes to process and render a video frame.</p>
+<h3 id="internal-hardware-audio-buffering">Internal Hardware Audio
+Buffering</h3>
+<p>The most direct line of defense against lip-sync errors is the
+display's internal scalar and digital signal processing (DSP)
+architecture. When DisplayPort transmits audio, it encapsulates audio
+samples into Secondary Data Packets interleaved between active video
+lines on the main link.</p>
+<p>When video processing introduces a delay (often between 10 to 100
+milliseconds depending on the complexity of the algorithms enabled), the
+display does not play or output the audio immediately upon packet
+arrival. Instead, the monitor routes the incoming audio stream into an
+internal First-In, First-Out (FIFO) buffer. The display's firmware
+calculates the exact processing time required for the current video mode
+and holds the audio in the buffer, releasing it to the internal speakers
+or audio-out jack in exact lockstep with the corresponding scanned-out
+video frame.</p>
+<h3 id="latency-reporting-via-edid-and-dpcd">Latency Reporting via EDID
+and DPCD</h3>
+<p>In scenarios where audio is routed upstream or handled by an external
+audio receiver rather than processed entirely inside the monitor,
+hardware buffering alone cannot prevent desync. In this case,
+DisplayPort relies on bidirectional metadata communication:</p>
+<ul>
+<li><strong>CTA-861 Latency Fields in EDID:</strong> The display
+provides its operational parameters to the host via Extended Display
+Identification Data (EDID). Within the CTA-861 extension blocks, the
+display can populate explicit "Video Latency" and "Audio Latency"
+fields. If a user activates a high-latency image processing mode (such
+as deep deinterlacing or dynamic noise reduction), the display reports
+this processing delay.</li>
+<li><strong>DisplayPort Configuration Data (DPCD):</strong> The DPCD
+registers, read via the AUX channel, allow dynamic handshake
+capabilities. When supported, the host graphics processing unit (GPU) or
+operating system reads the video processing delay and shifts the audio
+playback stream backward in time relative to the video, neutralizing the
+display's processing lag before the data ever leaves the computer.</li>
+</ul>
+<h3 id="clock-regeneration-and-drift-prevention">Clock Regeneration and
+Drift Prevention</h3>
+<p>Latency mitigation prevents fixed offsets, but displays also require
+continuous synchronization to prevent temporal drift over long sessions.
+DisplayPort lacks a dedicated hardware clock wire; instead, it transmits
+audio and video across the main link using an embedded clock
+architecture.</p>
+<p>To synchronize both media streams, DisplayPort uses fractional <span
+class="math inline">\(M\)</span> and <span
+class="math inline">\(N\)</span> divider values:</p>
+<ul>
+<li><strong>Video Time-Stamping:</strong> Uses <span
+class="math inline">\(M_{vid}\)</span> and <span
+class="math inline">\(N_{vid}\)</span> values embedded in the transport
+stream to reconstruct the pixel clock at the display.</li>
+<li><strong>Audio Clock Regeneration:</strong> Employs <span
+class="math inline">\(M_{aud}\)</span> and <span
+class="math inline">\(N_{aud}\)</span> values transmitted in the audio
+stream headers, deriving the original audio sample clock directly from
+the shared link symbol rate.</li>
+</ul>
+<p>Because both the audio and video clocks are derived from the exact
+same physical link symbol clock, the display's timebase for audio cannot
+drift relative to its video clock. As long as the internal audio delay
+buffer correctly offsets the initial processing latency, the audio and
+video will remain continuously in phase throughout operation.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/how-display-port-prevents-audio-video-desync';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

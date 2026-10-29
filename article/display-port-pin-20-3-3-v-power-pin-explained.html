@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisplayPort Pin 20: 3.3V Power Pin Explained - dp</title>
+    <meta name="description" content="This article explores the function of Pin 20 in DisplayPort connections, explaining its intended purpose, how it operates, and why it is a critical specification detail. Pin 20 provides 3.3V DC power designed to operate active adapters and external conver">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/display-port-pin-20-3-3-v-power-pin-explained">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DisplayPort Pin 20: 3.3V Power Pin Explained - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/display-port-pin-20-3-3-v-power-pin-explained" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explores the function of Pin 20 in DisplayPort connections, explaining its intended purpose, how it operates, and why it is a critical specification detail. Pin 20 provides 3.3V DC power designed to operate active adapters and external conver" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="displayport-pin-20-33v-power-pin-explained">DisplayPort Pin 20:
+3.3V Power Pin Explained</h1>
+<p>This article explores the function of Pin 20 in DisplayPort
+connections, explaining its intended purpose, how it operates, and why
+it is a critical specification detail. Pin 20 provides 3.3V DC power
+designed to operate active adapters and external converter dongles.
+However, in standard passive DisplayPort-to-DisplayPort cables, this pin
+must remain disconnected to avoid electrical conflicts between the
+source and display hardware.</p>
+<h2 id="the-intended-purpose-of-pin-20-dp_pwr">The Intended Purpose of
+Pin 20 (DP_PWR)</h2>
+<p>Pin 20, officially designated as <strong>DP_PWR</strong>, is an
+active power delivery pin integrated into the DisplayPort specification.
+It provides a 3.3V direct current (DC) supply at up to 500 mA
+(delivering up to 1.5 watts of power) directly from the source device,
+such as a graphics card or laptop.</p>
+<p>The primary role of Pin 20 is to supply operating power to active
+accessories without requiring a separate USB power connection or
+external AC adapter. Common use cases include:</p>
+<ul>
+<li><strong>Active Video Adapters:</strong> Converting DisplayPort
+signals to HDMI, DVI, or VGA requires active signal processing chips
+that draw power directly from Pin 20.</li>
+<li><strong>Signal Boosters and Repeaters:</strong> In-line signal
+amplifiers used over extended cable runs draw power from this pin.</li>
+<li><strong>Active Optical Cables (AOC):</strong> Hybrid fiber-optic
+DisplayPort cables use Pin 20 to power the optical transceivers at both
+ends of the cable.</li>
+</ul>
+<h2 id="the-vesa-standard-for-standard-cables">The VESA Standard for
+Standard Cables</h2>
+<p>According to the official VESA (Video Electronics Standards
+Association) DisplayPort specification, standard passive male-to-male
+DisplayPort cables <strong>must not</strong> have Pin 20 connected
+internally between the two ends.</p>
+<p>In a standard setup linking a computer (source) directly to a monitor
+(sink), both devices already have their own independent power supplies.
+Pin 20 is meant solely for host-to-accessory power delivery, not for
+host-to-display transmission.</p>
+<h2 id="issues-caused-by-connected-pin-20-cables">Issues Caused by
+Connected Pin 20 Cables</h2>
+<p>Non-compliant or poorly manufactured cables sometimes link Pin 20
+end-to-end. Connecting two independently powered devices with a wired
+Pin 20 creates an electrical bridge between the power planes of the
+graphics card and the monitor, leading to several hardware
+malfunctions:</p>
+<ul>
+<li><strong>Failure to Boot:</strong> The motherboard or graphics card
+may detect extraneous voltage on the power rail and trigger over-current
+or short-circuit protection, preventing the PC from turning on.</li>
+<li><strong>Ghost Power:</strong> System fans or LEDs may continue to
+spin or glow even after the computer is shut down, as the monitor
+back-feeds 3.3V power into the graphics card.</li>
+<li><strong>Sleep and Wake Failures:</strong> Displays may fail to enter
+sleep mode, fail to wake properly, or intermittently drop video
+signals.</li>
+<li><strong>Hardware Degradation:</strong> Over time, continuous
+back-feeding between the monitor and GPU voltage regulators can degrade
+or permanently damage the circuitry on either device.</li>
+</ul>
+<p>Ensuring that standard cables carry official VESA certification
+guarantees that Pin 20 is completely isolated, preventing back-powering
+issues while maintaining full video and audio performance.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/display-port-pin-20-3-3-v-power-pin-explained';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

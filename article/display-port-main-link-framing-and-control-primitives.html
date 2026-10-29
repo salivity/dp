@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisplayPort Main Link Framing and Control Primitives - dp</title>
+    <meta name="description" content="This article examines the specialized framing and control primitives that govern data transmission across the DisplayPort Main Link. To transport pixel data, audio streams, and ancillary metadata synchronously across multiple AC-coupled differential lanes">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/display-port-main-link-framing-and-control-primitives">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DisplayPort Main Link Framing and Control Primitives - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/display-port-main-link-framing-and-control-primitives" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article examines the specialized framing and control primitives that govern data transmission across the DisplayPort Main Link. To transport pixel data, audio streams, and ancillary metadata synchronously across multiple AC-coupled differential lanes" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1
+id="displayport-main-link-framing-and-control-primitives">DisplayPort
+Main Link Framing and Control Primitives</h1>
+<p>This article examines the specialized framing and control primitives
+that govern data transmission across the DisplayPort Main Link. To
+transport pixel data, audio streams, and ancillary metadata
+synchronously across multiple AC-coupled differential lanes, DisplayPort
+relies on deterministic framing symbols to delineate active data from
+blanking intervals. Below, we detail the primary control primitives,
+special characters, and framing structures utilized across both legacy
+8b/10b systems and newer 128b/132b architectures.</p>
+<h2 id="8b10b-control-primitives-special-characters">8b/10b Control
+Primitives (Special Characters)</h2>
+<p>In DisplayPort versions 1.0 through 1.4a, the Main Link employs
+standard ANSI 8b/10b line coding. While data bytes are encoded into
+10-bit symbols designated as D-codes, link control, boundary framing,
+and clock synchronization are handled by 12 designated special control
+symbols known as K-codes.</p>
+<p>The primary primitives defined in the standard include:</p>
+<ul>
+<li><strong>Blanking Start (BS):</strong> Represented by the symbol
+<code>K28.5</code>. The BS primitive explicitly marks the end of active
+video pixel transmission and the beginning of the horizontal or vertical
+blanking interval.</li>
+<li><strong>Blanking End (BE):</strong> Represented by the symbol
+<code>K27.7</code>. The BE primitive indicates the conclusion of the
+blanking interval, signaling to the receiver that valid active video
+data follows immediately on the next clock cycle.</li>
+<li><strong>Fill Start (FS):</strong> Represented by the symbol
+<code>K28.2</code>. FS signals the start of dummy or stuffing data
+during periods where active bandwidth is lower than the link capacity,
+preventing FIFO underruns.</li>
+<li><strong>Fill End (FE):</strong> Represented by the symbol
+<code>K29.7</code>. FE demarcates the conclusion of the stuffing data
+sequence.</li>
+<li><strong>Secondary-data Start (SS):</strong> Represented by the
+symbol <code>K28.2</code>. The SS primitive indicates the arrival of
+secondary data packets, such as audio packets, InfoFrames, or
+high-dynamic-range (HDR) dynamic metadata, which are multiplexed during
+blanking intervals.</li>
+<li><strong>Secondary-data End (SE):</strong> Represented by the symbol
+<code>K29.7</code>. SE denotes the termination of a secondary data
+packet burst.</li>
+<li><strong>Scrambler Reset (SR):</strong> Represented by the symbol
+<code>K28.5</code>. To prevent electromagnetic interference (EMI), data
+is scrambled using a Linear Feedback Shift Register (LFSR). The SR
+primitive replaces the standard BS symbol once every 512th occurrence
+(and during link training) to force both the transmitter and receiver
+LFSR engines to reset to a known state (<code>0xFFFF</code>).</li>
+</ul>
+<h2 id="link-training-patterns-tps">Link Training Patterns (TPS)</h2>
+<p>Before active framing commences, specific primitives configure and
+align the physical lanes. DisplayPort establishes link integrity through
+dedicated Training Pattern Sequences:</p>
+<ul>
+<li><strong>TPS1 (Training Pattern Sequence 1):</strong> Composed of
+alternating <code>D10.2</code> symbols (<code>0101010101</code>),
+creating a square wave used by the sink device for clock recovery and
+phase locking.</li>
+<li><strong>TPS2 (Training Pattern Sequence 2):</strong> Implements a
+pseudo-random sequence punctuated by <code>K28.5</code> control symbols
+to enable channel equalization, inter-lane deskew alignment, and symbol
+lock.</li>
+<li><strong>TPS3 / TPS4:</strong> Advanced training sequences utilized
+in DP 1.2 and DP 1.4 (HBR2/HBR3 speeds) providing deeper pseudo-random
+binary sequence patterns (PRBS7 and PRBS9) to mitigate complex
+inter-symbol interference (ISI) and optimize adaptive equalizer taps
+without relying solely on simple K-codes.</li>
+</ul>
+<h2 id="multi-stream-transport-mst-framing">Multi-Stream Transport (MST)
+Framing</h2>
+<p>When utilizing Multi-Stream Transport (MST) to drive multiple
+independent displays through a single Main Link, framing shifts to a
+time-division multiplexed scheme:</p>
+<ul>
+<li><strong>MTP (Master Transfer Packet):</strong> The link transfers
+data in fixed 64-time-slot structures called Master Transfer Units
+(MTUs).</li>
+<li><strong>MTP Header Primitive:</strong> Specific control symbols
+designate the boundary of each MTP. A <code>BS</code> or <code>SR</code>
+primitive acts as the start of an MTP frame, followed by slot allocation
+indicators that map which stream owns which subsequent time slot.</li>
+</ul>
+<h2 id="128b132b-uhbr-framing-primitives">128b/132b UHBR Framing
+Primitives</h2>
+<p>With DisplayPort 2.0/2.1 and the introduction of Ultra-High Bit Rate
+(UHBR) modes (UHBR10, UHBR13.5, and UHBR20), the physical layer shifts
+from 8b/10b to a more bandwidth-efficient 128b/132b line code.</p>
+<p>Because K-codes are distinct to 8b/10b systems, 128b/132b systems
+replace them with dedicated control framing blocks:</p>
+<ul>
+<li><strong>2-Bit Sync Headers:</strong> Every 132-bit block begins with
+a 2-bit synchronization header. <code>01b</code> denotes a data block,
+while <code>10b</code> designates a control block.</li>
+<li><strong>Link Training Symbols:</strong> Dedicated 132-bit blocks
+(e.g., TPS128) provide scrambled PRBS sequences for clock recovery and
+equalization.</li>
+<li><strong>Control Tokens:</strong> Control primitives such as Blanking
+Start, Blanking End, and Secondary Data indications are mapped as
+structured, multi-byte payload tokens nested inside designated 128b/132b
+control blocks, protected by forward error correction (FEC) parity bytes
+rather than standalone 10-bit symbols.</li>
+</ul></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/display-port-main-link-framing-and-control-primitives';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Is Display Stream Compression Visually Lossless? - dp</title>
+    <meta name="description" content="Display Stream Compression (DSC) is a standardized, low-latency compression algorithm developed by the Video Electronics Standards Association (VESA) to transmit ultra-high-definition video over existing physical interfaces like DisplayPort and HDMI. Whil">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/is-display-stream-compression-visually-lossless">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Is Display Stream Compression Visually Lossless? - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/is-display-stream-compression-visually-lossless" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Display Stream Compression (DSC) is a standardized, low-latency compression algorithm developed by the Video Electronics Standards Association (VESA) to transmit ultra-high-definition video over existing physical interfaces like DisplayPort and HDMI. Whil" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="is-display-stream-compression-visually-lossless">Is Display
+Stream Compression Visually Lossless?</h1>
+<p>Display Stream Compression (DSC) is a standardized, low-latency
+compression algorithm developed by the Video Electronics Standards
+Association (VESA) to transmit ultra-high-definition video over existing
+physical interfaces like DisplayPort and HDMI. While manufacturers
+market DSC as "visually lossless," it is fundamentally a mathematically
+lossy format. This article examines the human perceptual testing models,
+international standards, and empirical data used to determine whether
+the human visual system can truly perceive a difference between a native
+uncompressed signal and a DSC-compressed stream.</p>
+<h3 id="understanding-the-definition-of-visually-lossless">Understanding
+the Definition of "Visually Lossless"</h3>
+<p>In digital imaging, "visually lossless" means that an observer cannot
+distinguish between an uncompressed source image and its compressed
+counterpart under standard or even demanding viewing conditions. Unlike
+mathematically lossless compression, which preserves every bit of data
+identically, visually lossless algorithms discard data that the human
+eye cannot perceive.</p>
+<p>DSC accomplishes this using predictive coding, color space
+conversion, and an indexed color history, typically achieving
+compression ratios between 2:1 and 3.75:1. The key engineering goal is
+to maintain single-line latency and zero perceptible degradation across
+real-time video, text, and graphics.</p>
+<h3 id="the-testing-standard-isoiec-29170-2">The Testing Standard:
+ISO/IEC 29170-2</h3>
+<p>To validate the claim of being visually lossless, VESA subjected DSC
+to rigorous psychophysical evaluation based on the ISO/IEC 29170-2
+standard. This standard establishes strict visual evaluation procedures
+specifically designed to assess whether picture compression is
+imperceptible to humans.</p>
+<p>The testing protocol employs two primary paradigms:</p>
+<ol type="1">
+<li><strong>Flicker Testing (A/B Alternation):</strong> The compressed
+image and the uncompressed reference image are rapidly alternated at
+specific temporal frequencies (often between 2 Hz and 10 Hz). The human
+visual system is exquisitely sensitive to motion and edge flicker caused
+by pixel discrepancies between the two images.</li>
+<li><strong>Side-by-Side Comparison:</strong> Observers view both the
+compressed and reference images concurrently on calibrated high-end
+displays without knowing which side is compressed.</li>
+</ol>
+<p>Under ISO/IEC 29170-2, a compression algorithm is officially
+considered visually lossless only if human observers cannot perform
+better than random chance (statistically equivalent to guessing) when
+attempting to identify the compressed image.</p>
+<h3 id="performance-under-human-visual-system-hvs-models">Performance
+Under Human Visual System (HVS) Models</h3>
+<p>Human visual perception is constrained by contrast sensitivity,
+spatial frequency limits, and luminance masking:</p>
+<ul>
+<li><strong>Spatial Contrast Sensitivity:</strong> The human eye is
+significantly less sensitive to high spatial frequency chromatic changes
+than luminance changes. DSC exploits this by compressing color detail in
+areas where high-frequency variations mask artifacts.</li>
+<li><strong>Luminance and Texture Masking:</strong> In complex textures
+and dynamic scenes, the human visual threshold for noise increases.
+DSC’s rate control dynamically allocates bits to smooth regions (where
+artifacts like banding would be immediately noticeable) while
+compressing heavily in dense textures where the human eye cannot discern
+subtle discrepancies.</li>
+</ul>
+<p>Extensive testing conducted by VESA, involving expert viewers,
+display engineers, and naive observers, demonstrated that DSC meets the
+ISO/IEC 29170-2 criteria at a compression ratio of 3:1 (reducing 24-bit
+RGB to 8 bits per pixel). Across hundreds of demanding test
+images—including high-contrast text, single-pixel lines, noise patterns,
+and smooth gradients—participants were unable to reliably distinguish
+the compressed image from the original.</p>
+<h3 id="edge-cases-and-pathological-patterns">Edge Cases and
+Pathological Patterns</h3>
+<p>While DSC satisfies the criteria for being visually lossless under
+standard perceptual models, specific pathological stress tests can
+occasionally push the algorithm near its limits:</p>
+<ul>
+<li><strong>Non-Natural Pathological Images:</strong> Synthetic images
+constructed specifically to deplete the rate-buffer (such as alternating
+high-contrast single-pixel checkerboard patterns paired with color
+transitions) can theoretically induce visual artifacts.</li>
+<li><strong>Higher Compression Ratios:</strong> When pushed beyond the
+recommended 3:1 ratio (for example, targeting 4:1 or higher on limited
+bandwidth channels), the likelihood of edge blur or slight luminance
+noise increases, making differences detectable under magnification or
+flicker tests.</li>
+</ul>
+<h3 id="conclusion">Conclusion</h3>
+<p>According to standardized human perceptual testing models, Display
+Stream Compression is genuinely visually lossless at its designated
+operating ratios. While mathematically lossy, its adherence to ISO/IEC
+29170-2 guarantees that the artifacts produced are below the detection
+threshold of the human visual system under all realistic viewing
+conditions.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/is-display-stream-compression-visually-lossless';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

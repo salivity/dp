@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding DPCD in DisplayPort Communication - dp</title>
+    <meta name="description" content="The DisplayPort Configuration Data (DPCD) register set serves as the standardized communication bridge between a DisplayPort source (such as a GPU) and a sink (such as a monitor). Located within the sink device and accessed via the bidirectional Auxiliary">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/understanding-dpcd-in-display-port-communication">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Understanding DPCD in DisplayPort Communication - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/understanding-dpcd-in-display-port-communication" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The DisplayPort Configuration Data (DPCD) register set serves as the standardized communication bridge between a DisplayPort source (such as a GPU) and a sink (such as a monitor). Located within the sink device and accessed via the bidirectional Auxiliary" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="understanding-dpcd-in-displayport-communication">Understanding
+DPCD in DisplayPort Communication</h1>
+<p>The DisplayPort Configuration Data (DPCD) register set serves as the
+standardized communication bridge between a DisplayPort source (such as
+a GPU) and a sink (such as a monitor). Located within the sink device
+and accessed via the bidirectional Auxiliary (AUX) Channel, the DPCD
+allows the source to read the display's native capabilities, negotiate
+link parameters through link training, continuously monitor connection
+integrity, and manage power states. This mechanism ensures that
+high-bandwidth video and audio streams over the main link are
+established reliably and dynamically adjusted to real-time operating
+conditions.</p>
+<h2 id="the-role-of-the-aux-channel">The Role of the AUX Channel</h2>
+<p>DPCD interaction relies on the DisplayPort AUX Channel, a dedicated,
+low-latency, half-duplex sideband connection. Unlike the main link,
+which transports unidirectional high-speed pixel data, the AUX Channel
+operates independently to carry control and management packets. The
+source acts as the master, issuing native read and write commands to
+specific memory-mapped 20-bit register addresses within the DPCD
+block.</p>
+<h2 id="capability-discovery">Capability Discovery</h2>
+<p>Before transmitting video data, the source must understand the
+hardware limits of the connected sink. During the initial connection
+handshake, triggered by the Hot Plug Detect (HPD) signal, the source
+reads the DPCD Receiver Capability field (register addresses
+<code>00000h</code> through <code>000FFh</code>).</p>
+<p>Key parameters retrieved during this phase include:</p>
+<ul>
+<li><strong>DPCD Revision:</strong> Indicates the DisplayPort standard
+supported by the sink (e.g., DP 1.4, DP 2.1).</li>
+<li><strong>Maximum Link Rate:</strong> Reports the highest transmission
+speed per lane supported (e.g., RBR, HBR, HBR2, HBR3, UHBR10).</li>
+<li><strong>Maximum Lane Count:</strong> Defines the maximum physical
+lanes (1, 2, or 4 lanes) the receiver can utilize.</li>
+<li><strong>Downstream Port Capabilities:</strong> Identifies if the
+device is a branch device (such as an MST hub or adapter) and describes
+attached downstream displays.</li>
+<li><strong>Enhanced Framing and Coding Support:</strong> Determines
+compatibility with specific encoding formats (such as 8b/10b or
+128b/132b) and Forward Error Correction (FEC).</li>
+</ul>
+<h2 id="link-training-and-dynamic-negotiation">Link Training and Dynamic
+Negotiation</h2>
+<p>Once capabilities are identified, the source and sink configure the
+high-speed main link via a closed-loop handshake known as link training.
+This process writes to the Link Configuration field (<code>00100h</code>
+through <code>001FFh</code>) and monitors the Link/Sink Status field
+(<code>00200h</code> through <code>002FFh</code>).</p>
+<ol type="1">
+<li><strong>Clock Recovery:</strong> The source selects an initial link
+rate and lane count, then streams a clock recovery training pattern over
+the main link. The sink attempts to lock onto the frequency and updates
+status bits in the DPCD. If lock fails, the sink updates DPCD registers
+requesting adjusted voltage swing and pre-emphasis levels. The source
+reads these adjustments via the AUX channel and modifies its transmitter
+settings accordingly.</li>
+<li><strong>Channel Equalization:</strong> Once clock recovery is
+achieved, the source transmits symbol-lock and equalization patterns.
+The sink analyzes inter-symbol interference and updates the DPCD to
+signal when symbol lock, lane alignment, and equalization are achieved
+across all active lanes.</li>
+</ol>
+<h2 id="runtime-status-and-error-monitoring">Runtime Status and Error
+Monitoring</h2>
+<p>The DPCD register set is not just an initialization tool; it
+maintains link integrity during active operation. If channel conditions
+degrade due to cable movement, electromagnetic interference, or
+temperature shifts, the sink detects errors such as symbol loss or loss
+of clock recovery.</p>
+<p>When a failure occurs:</p>
+<ol type="1">
+<li>The sink generates an interrupt by pulsing the HPD line low for a
+short duration (an IRQ_HPD pulse, typically 0.5 ms to 1 ms).</li>
+<li>The source detects this pulse and immediately reads the Link/Sink
+Status registers (<code>00202h</code>–<code>00207h</code>).</li>
+<li>The registers reveal specifically which lanes lost synchronization
+or suffered parity errors.</li>
+<li>The source initiates a targeted link retraining routine or falls
+back to a lower link rate to recover the connection without terminating
+the video session entirely.</li>
+</ol>
+<h2 id="power-management-and-device-control">Power Management and Device
+Control</h2>
+<p>The DPCD provides registers for low-power operation and device
+control (located primarily in the <code>00600h</code> range). The source
+writes to these registers to place the sink into specific power states,
+ranging from full operation (D0) to standby/sleep modes (D3). This
+enables advanced power-saving protocols such as Panel Self Refresh (PSR)
+in embedded DisplayPort (eDP) environments and VESA Adaptive-Sync
+control for variable refresh rate setups.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/understanding-dpcd-in-display-port-communication';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisplayPort Eye-Pattern Compliance Testing - dp</title>
+    <meta name="description" content="Eye-pattern compliance testing is a fundamental component of quality assurance for DisplayPort devices, ensuring that high-speed digital signals maintain electrical integrity and interoperability across cables and connectors. Standardized by the Video Ele">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/display-port-eye-pattern-compliance-testing">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DisplayPort Eye-Pattern Compliance Testing - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/display-port-eye-pattern-compliance-testing" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Eye-pattern compliance testing is a fundamental component of quality assurance for DisplayPort devices, ensuring that high-speed digital signals maintain electrical integrity and interoperability across cables and connectors. Standardized by the Video Ele" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="displayport-eye-pattern-compliance-testing">DisplayPort
+Eye-Pattern Compliance Testing</h1>
+<p>Eye-pattern compliance testing is a fundamental component of quality
+assurance for DisplayPort devices, ensuring that high-speed digital
+signals maintain electrical integrity and interoperability across cables
+and connectors. Standardized by the Video Electronics Standards
+Association (VESA), this testing methodology evaluates signal
+degradation caused by jitter, noise, and attenuation. DisplayPort
+addresses eye-pattern compliance by utilizing standardized test
+patterns, mathematically defined reference receiver equalizers, strict
+eye-mask boundaries, and automated test fixtures to verify that
+transmitters, receivers, and cables meet rigorous physical-layer
+performance criteria.</p>
+<h3 id="standardized-compliance-patterns">Standardized Compliance
+Patterns</h3>
+<p>To evaluate signal integrity under worst-case operating conditions,
+DisplayPort specifies dedicated test patterns generated directly by the
+transmitter hardware. Common patterns include the PRBS7 (Pseudo-Random
+Binary Sequence 7), high-frequency patterns (such as D10.2), and the
+Compliance Pattern (CP2520, also known as the TPS4 pattern for HBR3 and
+UHBR data rates). These patterns simulate heavy inter-symbol
+interference (ISI) and maximum data transitions, ensuring the eye
+diagram reflects real-world deterministic and random jitter
+components.</p>
+<h3 id="reference-receiver-equalization">Reference Receiver
+Equalization</h3>
+<p>As DisplayPort speeds increased from HBR (2.7 Gbps) to UHBR 20 (20
+Gbps per lane), physical transmission channels naturally cause
+significant high-frequency loss. Because an unconditioned signal at
+these speeds often presents a completely closed eye at the measurement
+point, VESA mandates the use of post-processing reference equalizer
+models.</p>
+<p>Oscilloscopes running compliance software apply standard-defined
+Continuous Time Linear Equalization (CTLE) and, for higher data rates,
+Decision Feedback Equalization (DFE) to the raw captured waveform. This
+software-based processing mimics the hardware equalization circuitry
+present in physical DisplayPort receivers, opening the closed eye to
+reflect the actual signal state processed by receiving silicon.</p>
+<h3 id="eye-mask-boundaries-and-jitter-decomposition">Eye-Mask
+Boundaries and Jitter Decomposition</h3>
+<p>Compliance is determined by overlaying the post-equalized eye diagram
+onto a standardized "eye mask." This mask defines a polygonal keep-out
+zone in the center of the transition period, characterized by two
+primary metrics:</p>
+<ul>
+<li><strong>Eye Height (EH):</strong> Measures the minimum vertical
+voltage opening, guaranteeing sufficient signal amplitude above noise
+thresholds.</li>
+<li><strong>Eye Width (EW):</strong> Measures the minimum horizontal
+timing opening, ensuring adequate setup and hold times relative to the
+recovered clock.</li>
+</ul>
+<p>Any intrusion of the signal trace into the mask constitutes a
+compliance failure. Concurrently, the standard mandates jitter
+decomposition to separate total jitter (TJ) into random jitter (RJ) and
+deterministic jitter (DJ), verifying that the bit error rate (BER)
+remains within acceptable limits—typically <span
+class="math inline">\(10^{-9}\)</span> for older generations and <span
+class="math inline">\(10^{-12}\)</span> for modern UHBR links.</p>
+<h3 id="physical-test-fixtures-and-de-embedding">Physical Test Fixtures
+and De-Embedding</h3>
+<p>Quality assurance teams use VESA-certified Test Point Access (TPA)
+fixtures to tap into the physical interface without introducing
+unacceptable parasitic capacitance or impedance discontinuities. Because
+test fixtures and cabling introduce their own insertion loss, compliance
+setups employ de-embedding techniques using S-parameter models.
+De-embedding mathematically removes the physical test setup’s impact,
+ensuring the resulting eye pattern reflects solely the performance of
+the Device Under Test (DUT). Automated compliance software suites then
+perform clock data recovery (CDR) and metric calculations, generating
+standardized pass/fail reports required for VESA logo certification.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/display-port-eye-pattern-compliance-testing';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

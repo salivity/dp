@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How DisplayPort HPD IRQ Signaling Works - dp</title>
+    <meta name="description" content="In the DisplayPort interface standard, the Hot Plug Detect (HPD) line serves a dual purpose: physical connection detection and real-time out-of-band communication. This article explains how a DisplayPort sink device (such as a monitor) asserts a dynamic i">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/how-display-port-hpd-irq-signaling-works">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How DisplayPort HPD IRQ Signaling Works - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/how-display-port-hpd-irq-signaling-works" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="In the DisplayPort interface standard, the Hot Plug Detect (HPD) line serves a dual purpose: physical connection detection and real-time out-of-band communication. This article explains how a DisplayPort sink device (such as a monitor) asserts a dynamic i" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-displayport-hpd-irq-signaling-works">How DisplayPort HPD IRQ
+Signaling Works</h1>
+<p>In the DisplayPort interface standard, the Hot Plug Detect (HPD) line
+serves a dual purpose: physical connection detection and real-time
+out-of-band communication. This article explains how a DisplayPort sink
+device (such as a monitor) asserts a dynamic interrupt request (HPD IRQ)
+by momentarily pulling the HPD line low, how the source distinguishes
+this pulse from a physical disconnection, and the subsequent DPCD
+handshaking procedure used to resolve the interrupt.</p>
+<h3 id="the-electrical-mechanism-of-hpd">The Electrical Mechanism of
+HPD</h3>
+<p>Under normal operating conditions, the DisplayPort sink asserts a
+steady high voltage level (nominally 3.3V) on the HPD line to indicate
+to the source (such as a GPU) that it is connected, powered, and ready
+to receive data. If a physical disconnect occurs, the HPD line drops to
+a low state (near 0V) indefinitely.</p>
+<p>To send an interrupt without triggering a full disconnect detection
+sequence, the sink actively pulls the HPD pin low for a brief, tightly
+defined duration before allowing it to return to its high state.</p>
+<h3 id="pulse-timing-specifications">Pulse Timing Specifications</h3>
+<p>The VESA DisplayPort standard distinguishes between a full cable
+disconnection and an interrupt request strictly through pulse width
+timing:</p>
+<ul>
+<li><strong>HPD IRQ Pulse (0.5 ms to 1.0 ms):</strong> To signal an
+interrupt, the sink pulls the HPD line low for a period between 0.5 ms
+and 1.0 ms.</li>
+<li><strong>Glitch Filter (&lt; 0.25 ms):</strong> Any low pulse shorter
+than 0.25 ms (or up to 0.5 ms depending on the receiver design) is
+discarded by the source's debouncing circuitry to prevent false triggers
+caused by electromagnetic interference.</li>
+<li><strong>Cable Disconnection (&gt; 2.0 ms):</strong> If the HPD line
+stays low for longer than 2.0 ms (with 100 ms as a standard threshold
+for complete tear-down), the source determines that the display has been
+disconnected and tears down the main link.</li>
+</ul>
+<p>By keeping the pulse width between 0.5 ms and 1.0 ms, the sink
+guarantees that the source's hardware registers an interrupt rather than
+an unplug event.</p>
+<h3 id="source-handling-and-the-aux-channel-handshake">Source Handling
+and the AUX Channel Handshake</h3>
+<p>Once the source detects a valid HPD IRQ low pulse, it initiates an
+out-of-band query via the DisplayPort Auxiliary (AUX) Channel to
+determine the cause of the interrupt:</p>
+<ol type="1">
+<li><strong>Detection:</strong> The source hardware detects the 0.5–1.0
+ms low pulse on its HPD GPIO or dedicated controller pin.</li>
+<li><strong>DPCD Read:</strong> The source reads the DisplayPort
+Configuration Data (DPCD) registers located on the sink via the
+bidirectional AUX channel. Specifically, it reads the status registers
+starting at DPCD address <code>00200h</code> through <code>00205h</code>
+(Link/Sink Status and Automated Test registers).</li>
+<li><strong>Interrupt Identification:</strong> Prior to pulling the HPD
+line low, the sink writes the event details into these DPCD registers.
+Common triggers include:
+<ul>
+<li>Loss of link synchronization (loss of Clock Recovery or Symbol
+Lock/Channel Equalization).</li>
+<li>Downstream port status changes in Multi-Stream Transport (MST)
+topologies.</li>
+<li>High-bandwidth Digital Content Protection (HDCP) state changes.</li>
+<li>Automated test requests from compliance equipment.</li>
+</ul></li>
+<li><strong>Resolution and Clearing:</strong> Depending on the status
+bits read, the source executes the necessary recovery actions, such as
+renegotiating the link (link retraining) or reading MST message buffers.
+The source clears the interrupt by writing back to specific DPCD
+registers or by concluding the required transaction sequence.</li>
+</ol></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/how-display-port-hpd-irq-signaling-works';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisplayPort Synchronous vs Asynchronous Clocking - dp</title>
+    <meta name="description" content="This article provides an overview of the differences between synchronous and asynchronous clocking modes in DisplayPort links. It explores how pixel clocks relate to the high-speed main link clock, the mechanics of clock recovery using time-stamp values (">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/display-port-synchronous-vs-asynchronous-clocking">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DisplayPort Synchronous vs Asynchronous Clocking - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/display-port-synchronous-vs-asynchronous-clocking" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article provides an overview of the differences between synchronous and asynchronous clocking modes in DisplayPort links. It explores how pixel clocks relate to the high-speed main link clock, the mechanics of clock recovery using time-stamp values (" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="displayport-synchronous-vs-asynchronous-clocking">DisplayPort
+Synchronous vs Asynchronous Clocking</h1>
+<p>This article provides an overview of the differences between
+synchronous and asynchronous clocking modes in DisplayPort links. It
+explores how pixel clocks relate to the high-speed main link clock, the
+mechanics of clock recovery using time-stamp values (<span
+class="math inline">\(M\)</span> and <span
+class="math inline">\(N\)</span>), and the practical engineering
+trade-offs regarding hardware design, flexibility, and signal integrity
+in modern display pipelines.</p>
+<hr />
+<h3 id="the-displayport-clocking-architecture">The DisplayPort Clocking
+Architecture</h3>
+<p>In a DisplayPort interface, digital audio/video data travels across
+high-speed differential lanes known as the Main Link. This transmission
+involves two distinct clock domains:</p>
+<ol type="1">
+<li><strong>Link Symbol Clock (<span
+class="math inline">\(LS\_CLK\)</span>):</strong> The physical serial
+data rate clock used to transmit 8b/10b- or 128b/132b-encoded symbols
+across the physical lanes (e.g., RBR, HBR, HBR2, HBR3, UHBR).</li>
+<li><strong>Stream Clock (<span
+class="math inline">\(Stream\_CLK\)</span> or Pixel Clock):</strong> The
+rate at which active pixel data is processed and rendered by the source
+(GPU) and reconstructed by the sink (display panel).</li>
+</ol>
+<p>Because the Main Link operates at fixed, standardized lane rates
+while video streams vary widely in resolution, color depth, and refresh
+rates, the receiver must reconstruct the original pixel clock from the
+link data. DisplayPort accommodates this via two distinct timing modes:
+Synchronous and Asynchronous.</p>
+<hr />
+<h3 id="synchronous-clocking-mode">Synchronous Clocking Mode</h3>
+<p>In synchronous clocking mode, the Stream Clock and the Link Symbol
+Clock are derived from the exact same master reference oscillator.
+Consequently, the two clocks maintain a fixed, mathematically locked
+phase and frequency relationship.</p>
+<ul>
+<li><strong>Fixed Frequency Ratio:</strong> The relationship between the
+pixel clock (<span class="math inline">\(f_{stream}\)</span>) and the
+link clock (<span class="math inline">\(f_{LS\_CLK}\)</span>) is
+expressed as: <span
+class="math display">\[\frac{f_{stream}}{f_{LS\_CLK}} =
+\frac{Mvid}{Nvid}\]</span> In synchronous mode, the values of <span
+class="math inline">\(Mvid\)</span> (Video Time Stamp <span
+class="math inline">\(M\)</span>) and <span
+class="math inline">\(Nvid\)</span> (Video Time Stamp <span
+class="math inline">\(N\)</span>) are constant integers negotiated
+during link configuration and do not drift over time.</li>
+<li><strong>Low Jitter and Simplified Recovery:</strong> Because both
+domains share a reference, there is no phase drift between the
+transmitter and receiver clocks. The sink device's Phase-Locked Loop
+(PLL) can regenerate the pixel clock with high stability and minimal
+tracking jitter.</li>
+<li><strong>Limitations:</strong> Synchronous clocking requires tight
+hardware coupling at the source. Both the GPU display engine and the
+DisplayPort transmitter PHY must share a common frequency generation
+tree, reducing architectural flexibility.</li>
+</ul>
+<hr />
+<h3 id="asynchronous-clocking-mode">Asynchronous Clocking Mode</h3>
+<p>In asynchronous clocking mode, the Stream Clock and the Link Symbol
+Clock originate from independent reference oscillators. There is no
+inherent phase alignment or fixed frequency relationship between the
+pixel generation pipeline and the high-speed serializer.</p>
+<ul>
+<li><strong>Dynamic Time-Stamp Tracking (<span
+class="math inline">\(Mvid\)</span> / <span
+class="math inline">\(Nvid\)</span>):</strong> Because independent
+oscillators inevitably experience frequency drift due to thermal and
+manufacturing variations, the ratio between <span
+class="math inline">\(f_{stream}\)</span> and <span
+class="math inline">\(f_{LS\_CLK}\)</span> constantly shifts. To allow
+the sink to accurately recover the stream clock, the source continuously
+measures this ratio and transmits updated <span
+class="math inline">\(Mvid\)</span> values within the Main Link framing
+overhead.</li>
+<li><strong>Sink-Side Regeneration:</strong> The sink receiver uses the
+incoming, varying <span class="math inline">\(Mvid\)</span> values
+alongside a static or fixed <span class="math inline">\(Nvid\)</span> to
+dynamically steer its local Voltage-Controlled Oscillator (VCO) or
+Fractional-N PLL, continuously adjusting the reconstructed pixel clock
+to match the source.</li>
+<li><strong>Higher Hardware Flexibility:</strong> Asynchronous mode
+allows system designers to decouple the display pipeline clock from the
+PHY interface clock entirely. This is essential for modern multi-source
+topologies, graphics cards with modular display controllers, and
+variable refresh rate architectures.</li>
+</ul>
+<hr />
+<h3 id="key-technical-differences">Key Technical Differences</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Feature</th>
+<th style="text-align: left;">Synchronous Mode</th>
+<th style="text-align: left;">Asynchronous Mode</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Clock Source</strong></td>
+<td style="text-align: left;">Shared master oscillator for link and
+stream</td>
+<td style="text-align: left;">Separate, independent oscillators</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><span
+class="math inline">\(Mvid\)</span> Behavior</strong></td>
+<td style="text-align: left;">Static / Fixed integer ratio</td>
+<td style="text-align: left;">Dynamic; periodically updated in link
+overhead</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Clock Drift</strong></td>
+<td style="text-align: left;">None; zero relative frequency drift</td>
+<td style="text-align: left;">Present; compensated continuously by sink
+PLL</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Sink PLL
+Requirements</strong></td>
+<td style="text-align: left;">Simpler tracking bandwidth; lower design
+overhead</td>
+<td style="text-align: left;">Requires robust tracking PLL to handle
+modulation and drift</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>System Flexibility</strong></td>
+<td style="text-align: left;">Lower; imposes strict hardware layout
+rules</td>
+<td style="text-align: left;">Higher; decoupled clock domains simplify
+system integration</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Standard Support</strong></td>
+<td style="text-align: left;">Optional legacy mode in modern
+specifications</td>
+<td style="text-align: left;">Default and standard mode across modern DP
+implementations</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="practical-implications-in-modern-hardware">Practical
+Implications in Modern Hardware</h3>
+<p>While early DisplayPort implementations provided synchronous clocking
+to reduce receiver bill-of-materials (BOM) costs and PLL complexity,
+modern hardware predominantly uses asynchronous clocking.</p>
+<p>Asynchronous mode provides the design freedom necessary to support
+features such as Variable Refresh Rate (Adaptive-Sync), Multi-Stream
+Transport (MST) carrying multiple asynchronous streams over one physical
+link, and dynamic power states where link rates and pixel timings
+fluctuate independently. Modern receiver PHYs feature integrated, highly
+adaptable clock-data recovery (CDR) and PLL blocks capable of tracking
+asynchronous <span class="math inline">\(Mvid/Nvid\)</span> streams with
+negligible jitter penalty.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/display-port-synchronous-vs-asynchronous-clocking';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>
