@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisplayPort PHY: Digital Logic to Electrical Signals - dp</title>
+    <meta name="description" content="The DisplayPort Physical Layer (PHY) functions as the hardware bridge that transforms parallel digital data from a system&#39;s graphics pipeline into high-speed, serial electrical signals capable of traveling across a physical cable. This process involves a">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/display-port-phy-digital-logic-to-electrical-signals">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DisplayPort PHY: Digital Logic to Electrical Signals - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/display-port-phy-digital-logic-to-electrical-signals" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The DisplayPort Physical Layer (PHY) functions as the hardware bridge that transforms parallel digital data from a system&#39;s graphics pipeline into high-speed, serial electrical signals capable of traveling across a physical cable. This process involves a" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="displayport-phy-digital-logic-to-electrical-signals">DisplayPort
+PHY: Digital Logic to Electrical Signals</h1>
+<p>The DisplayPort Physical Layer (PHY) functions as the hardware bridge
+that transforms parallel digital data from a system's graphics pipeline
+into high-speed, serial electrical signals capable of traveling across a
+physical cable. This process involves a structured transmission pipeline
+encompassing data scrambling, line coding, serialization via high-speed
+clocking, and transmission through differential line drivers. By
+employing techniques like pre-emphasis and adaptive link training, the
+PHY ensures that high-bandwidth data arrives at the display receiver
+intact and free of signal degradation.</p>
+<h3 id="1-data-scrambling">1. Data Scrambling</h3>
+<p>Before electrical transmission begins, the raw digital data
+stream—consisting of pixel data, audio, and control packets—is passed
+through a Linear Feedback Shift Register (LFSR) scrambler. This process
+randomizes repetitive data patterns (such as blocks of identical colors
+or blanking intervals). Scrambling prevents concentrated spectral
+energy, thereby reducing Electromagnetic Interference (EMI) and
+maintaining compliance with radio-frequency radiation standards without
+altering the underlying data payload.</p>
+<h3 id="2-line-encoding">2. Line Encoding</h3>
+<p>To ensure the receiver can properly decode the incoming data without
+a separate physical clock wire, the scrambled data undergoes line
+encoding. DisplayPort uses different encoding schemes depending on the
+standard's generation:</p>
+<ul>
+<li><strong>8b/10b Encoding (RBR, HBR, HBR2, HBR3):</strong> Maps 8-bit
+data bytes onto 10-bit symbols. This overhead guarantees frequent bit
+transitions to allow clock data recovery (CDR) at the sink device and
+maintains DC balance by avoiding long runs of continuous 1s or 0s.</li>
+<li><strong>128b/132b Encoding (UHBR 10, 13.5, 20):</strong> Used in
+DisplayPort 2.0/2.1, this more efficient scheme maps 128 bits of data to
+132-bit blocks, significantly reducing protocol overhead to roughly 3%
+while maintaining transition density and frame framing.</li>
+</ul>
+<h3 id="3-serialization-serdes">3. Serialization (SerDes)</h3>
+<p>Inside the graphics processing unit or display controller, data is
+processed in wide parallel buses (such as 32-bit or 64-bit words)
+operating at relatively low clock frequencies to conserve power and
+manage timing constraints. The Serializer/Deserializer (SerDes) block
+takes these wide, parallel encoded symbols and shifts them out
+sequentially, bit-by-bit, onto a single serial channel. A high-frequency
+Phase-Locked Loop (PLL) generates the multi-gigahertz bit clocks
+required to drive this serialization, matching link rates that range
+from 1.62 Gbps (RBR) up to 20 Gbps (UHBR 20) per physical lane.</p>
+<h3 id="4-differential-signaling-and-output-drivers">4. Differential
+Signaling and Output Drivers</h3>
+<p>The serialized digital bitstream is fed into output drivers that
+convert the binary states into analog electrical levels using
+differential signaling, typically implemented via Current Mode Logic
+(CML).</p>
+<p>Instead of referencing a single wire to ground, DisplayPort transmits
+data over a twisted pair carrying complementary signals (<span
+class="math inline">\(D+\)</span> and <span
+class="math inline">\(D-\)</span>):</p>
+<ul>
+<li>When a logical '1' is transmitted, current is steered to make <span
+class="math inline">\(D+\)</span> positive relative to <span
+class="math inline">\(D-\)</span>.</li>
+<li>When a logical '0' is transmitted, current is steered in reverse,
+making <span class="math inline">\(D-\)</span> positive relative to
+<span class="math inline">\(D+\)</span>.</li>
+</ul>
+<p>This differential approach rejects common-mode noise, allows for
+smaller voltage swings (typically between 200 mV and 1200 mV
+peak-to-peak), and minimizes power consumption while enabling transition
+speeds measured in picoseconds.</p>
+<h3 id="5-equalization-and-pre-emphasis">5. Equalization and
+Pre-Emphasis</h3>
+<p>High-frequency signals encounter severe attenuation, dielectric
+losses, and skin-effect losses as they traverse circuit board traces and
+cables. To combat this high-frequency loss and reduce Inter-Symbol
+Interference (ISI), the transmitter PHY applies pre-emphasis and
+de-emphasis filtering. The driver boosts the high-frequency transitions
+(when a bit toggles state) relative to sustained bits (repeated 1s or
+0s). This intentional distortion ensures that after passing through a
+lossy transmission line, the received signal at the sink device displays
+an open "eye diagram" with clear timing margins.</p>
+<h3 id="6-dynamic-link-training-via-the-aux-channel">6. Dynamic Link
+Training via the AUX Channel</h3>
+<p>The transformation of digital logic into electrical waveforms is not
+static; it is negotiated dynamically through Link Training. Using the
+dedicated, lower-speed Auxiliary (AUX) channel, the transmitter and
+receiver communicate prior to active video transmission. The receiver
+analyzes test patterns generated by the PHY transmitter and requests
+specific adjustments to the drive current (voltage swing levels) and
+high-frequency boost (pre-emphasis levels). This closed-loop calibration
+ensures the PHY drives electrical signals at the exact strength required
+for the specific cable length and transmission medium in use.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/display-port-phy-digital-logic-to-electrical-signals';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

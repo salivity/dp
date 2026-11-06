@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fix DisplayPort Disconnects with EDID Caching - dp</title>
+    <meta name="description" content="DisplayPort connections are notorious for causing &quot;phantom disconnections,&quot; where turning off a monitor or letting it enter sleep mode causes the operating system to act as if the display has been physically unplugged. This results in rearranged desktop i">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/fix-display-port-disconnects-with-edid-caching">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Fix DisplayPort Disconnects with EDID Caching - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/fix-display-port-disconnects-with-edid-caching" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="DisplayPort connections are notorious for causing &quot;phantom disconnections,&quot; where turning off a monitor or letting it enter sleep mode causes the operating system to act as if the display has been physically unplugged. This results in rearranged desktop i" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="fix-displayport-disconnects-with-edid-caching">Fix DisplayPort
+Disconnects with EDID Caching</h1>
+<p>DisplayPort connections are notorious for causing "phantom
+disconnections," where turning off a monitor or letting it enter sleep
+mode causes the operating system to act as if the display has been
+physically unplugged. This results in rearranged desktop icons, resized
+application windows, and relocated workspaces onto other active screens.
+Operating systems solve this persistent issue by implementing Extended
+Display Identification Data (EDID) caching, which stores display
+profiles in persistent software memory to maintain the virtual desktop
+layout even when the physical hardware link goes dormant.</p>
+<h3 id="the-cause-of-displayport-phantom-disconnections">The Cause of
+DisplayPort Phantom Disconnections</h3>
+<p>The root of this problem lies in the DisplayPort standard's design,
+specifically its Hot Plug Detect (HPD) pin mechanism. Unlike older
+interfaces such as DVI or VGA, DisplayPort relies on active digital
+signaling:</p>
+<ul>
+<li><strong>Pin Low-State:</strong> When a DisplayPort monitor goes to
+sleep or is powered down, it drops the voltage on the HPD line to a low
+state.</li>
+<li><strong>Driver Reaction:</strong> The operating system interprets
+this voltage drop as a complete physical detachment of the cable.</li>
+<li><strong>Desktop Reconfiguration:</strong> To prevent applications
+from being lost on an "inaccessible" screen, the graphics subsystem
+immediately destroys the monitor's display node and migrates all active
+windows, panels, and desktop icons to the remaining active screen or a
+hidden fallback resolution.</li>
+</ul>
+<p>When the monitor wakes up, the HPD line goes high again, forcing the
+graphics driver to re-query the display, negotiate the link, and
+reinitialize the desktop—usually failing to restore the original window
+placement.</p>
+<h3 id="what-edid-is-and-why-it-matters">What EDID Is and Why It
+Matters</h3>
+<p>Extended Display Identification Data (EDID) is a standardized
+metadata format transmitted from the monitor to the graphics processing
+unit (GPU). It informs the operating system about the monitor's
+manufacturer, model, serial number, native resolution, supported refresh
+rates, color space capabilities, and audio formats.</p>
+<p>Under normal circumstances, the operating system reads the EDID
+during the initial display handshake to establish the correct display
+pipeline. If the HPD line drops and the OS flushes the EDID from memory,
+the computer essentially "forgets" that the monitor ever existed.</p>
+<h3 id="how-edid-caching-resolves-the-issue">How EDID Caching Resolves
+the Issue</h3>
+<p>EDID caching introduces a software abstraction layer between the
+physical hardware state and the operating system's window manager.
+Instead of treating an HPD low signal as an immediate physical
+disconnection, modern operating systems maintain a cached copy of the
+monitor's EDID in system memory or the registry.</p>
+<ol type="1">
+<li><strong>State Preservation:</strong> When the monitor enters standby
+and drops the HPD signal, the graphics driver references the cached EDID
+rather than destroying the display device handle.</li>
+<li><strong>Virtual Persistence:</strong> The operating system maintains
+the monitor's virtual frame buffer and workspace layout. As far as the
+desktop window manager is concerned, the display is still present,
+configured, and running at its designated resolution and refresh
+rate.</li>
+<li><strong>Rapid Re-enumeration:</strong> When the monitor wakes up and
+pulls the HPD signal back to high, the operating system bypasses full
+link negotiation and EDID re-reading. It verifies the cached identity
+against the waking device and restores the video output stream instantly
+without shifting windows or rebuilding the desktop layout.</li>
+</ol>
+<h3 id="operating-system-implementations">Operating System
+Implementations</h3>
+<p>Different operating systems handle EDID caching through various
+subsystem architectures:</p>
+<ul>
+<li><strong>Windows:</strong> Modern versions of Windows use Rapid Hot
+Plug Detect (Rapid HPD) enhancements within the Windows Display Driver
+Model (WDDM). When an HPD drop occurs on an internal or external
+DisplayPort screen, the OS marks the screen as temporarily sleeping
+rather than disconnected, retaining the window coordinate matrix.</li>
+<li><strong>Linux:</strong> The Linux Direct Rendering Manager (DRM) and
+Kernel Mode Setting (KMS) subsystems allow administrators to force an
+EDID profile directly through kernel parameters (such as
+<code>drm.edid_firmware</code>) or X11/Wayland display server
+configurations, keeping virtual outputs alive regardless of physical HPD
+pin states.</li>
+<li><strong>macOS:</strong> macOS retains display layout property lists
+(plists) mapped to specific display UUIDs derived from the EDID. Even
+when the display drops from the active bus, the WindowServer holds the
+desktop space in an inactive state until the device signals ready,
+preserving the designated workspace arrangements.</li>
+</ul>
+<p>By decoupling the logical desktop configuration from the physical
+state of the display hardware through EDID caching, operating systems
+prevent the disruptive window rearrangements traditionally associated
+with DisplayPort power management.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/fix-display-port-disconnects-with-edid-caching';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

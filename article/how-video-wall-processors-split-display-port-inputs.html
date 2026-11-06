@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Video Wall Processors Split DisplayPort Inputs - dp</title>
+    <meta name="description" content="A video wall processor splits a single ultra-high-resolution DisplayPort input across multiple display outputs through high-bandwidth signal ingestion, hardware-level frame buffering, FPGA-based pixel slicing, and synchronized distribution. By capturing t">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/how-video-wall-processors-split-display-port-inputs">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Video Wall Processors Split DisplayPort Inputs - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/how-video-wall-processors-split-display-port-inputs" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="A video wall processor splits a single ultra-high-resolution DisplayPort input across multiple display outputs through high-bandwidth signal ingestion, hardware-level frame buffering, FPGA-based pixel slicing, and synchronized distribution. By capturing t" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-video-wall-processors-split-displayport-inputs">How Video
+Wall Processors Split DisplayPort Inputs</h1>
+<p>A video wall processor splits a single ultra-high-resolution
+DisplayPort input across multiple display outputs through high-bandwidth
+signal ingestion, hardware-level frame buffering, FPGA-based pixel
+slicing, and synchronized distribution. By capturing the complete canvas
+from a single source, the processor maps specific coordinate grids to
+individual display outputs while maintaining frame synchronization and
+accounting for physical monitor bezels.</p>
+<h3 id="signal-ingestion-and-edid-emulation">Signal Ingestion and EDID
+Emulation</h3>
+<p>The process begins at the physical receiver. DisplayPort utilizes
+high-speed packetized data transmission (such as DisplayPort 1.4 or 2.1)
+across multiple differential lanes. To enable a single output from a PC
+or media server to transmit an expansive, non-standard canvas (such as
+an ultra-wide 7680x1080 or an 8K 7680x4320 canvas), the video wall
+processor presents a custom Extended Display Identification Data (EDID)
+profile to the source. The source GPU reads this custom EDID and renders
+the combined visual space as a single contiguous desktop or video
+stream.</p>
+<h3 id="pixel-capture-and-frame-buffering">Pixel Capture and Frame
+Buffering</h3>
+<p>Once the DisplayPort receiver PHY (physical layer) deserializes the
+incoming data stream, the raw pixel data is written directly into
+ultra-fast onboard memory, typically high-speed DDR4 or HBM (High
+Bandwidth Memory). At this stage, the processor treats the entire image
+not as separate monitors, but as a unified pixel matrix defined by an
+<span class="math inline">\((X, Y)\)</span> coordinate plane.
+High-bandwidth memory ensures the hardware can read and write millions
+of pixels per second without dropping frames or introducing latency.</p>
+<h3 id="fpga-based-coordinate-slicing-and-scaling">FPGA-Based Coordinate
+Slicing and Scaling</h3>
+<p>The core processing is typically executed by an FPGA
+(Field-Programmable Gate Array) or a specialized ASIC. The hardware
+applies a geometric grid to the buffered canvas based on the user's
+display layout:</p>
+<ul>
+<li><strong>Pixel Extraction:</strong> The processor samples specific
+coordinate subsets. For a 2x2 1080p grid created from a native 4K
+canvas, the top-left output extracts coordinates <span
+class="math inline">\((0,0)\)</span> to <span
+class="math inline">\((1920, 1080)\)</span>, the top-right takes <span
+class="math inline">\((1921, 0)\)</span> to <span
+class="math inline">\((3840, 1080)\)</span>, and so on.</li>
+<li><strong>Bezel Compensation:</strong> To prevent the visual
+distortion caused by monitor frames, the processor masks (drops) a
+calibrated number of pixel rows and columns where the physical bezels
+sit, ensuring linear continuity across the array.</li>
+<li><strong>Scaling and Color Space Conversion:</strong> Internal
+polyphase scaler engines upscale or downscale extracted zones to match
+the native resolution and refresh rate of each connected monitor, while
+adjusting color space (RGB to YUV) if required.</li>
+</ul>
+<h3 id="genlocked-multi-channel-output">Genlocked Multi-Channel
+Output</h3>
+<p>To maintain a seamless image across the entire array, the processor
+synchronizes all display outputs using internal frame-locking (Genlock).
+Each output transmitter (typically HDMI or DisplayPort) is clocked to
+the same vertical blanking interval (VBLANK). When the signals leave the
+processor, the pixel clocks of all output ports fire simultaneously.
+This synchronous delivery eliminates vertical tearing and temporal
+misalignment between adjacent display panels.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/how-video-wall-processors-split-display-port-inputs';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why DisplayPort DSC Requires Forward Error Correction - dp</title>
+    <meta name="description" content="When utilizing Display Stream Compression (DSC) over a DisplayPort connection, the VESA standard strictly mandates the activation of Forward Error Correction (FEC). This requirement exists because DSC relies on predictive coding, making compressed data st">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/why-display-port-dsc-requires-forward-error-correction">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Why DisplayPort DSC Requires Forward Error Correction - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/why-display-port-dsc-requires-forward-error-correction" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="When utilizing Display Stream Compression (DSC) over a DisplayPort connection, the VESA standard strictly mandates the activation of Forward Error Correction (FEC). This requirement exists because DSC relies on predictive coding, making compressed data st" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="why-displayport-dsc-requires-forward-error-correction">Why
+DisplayPort DSC Requires Forward Error Correction</h1>
+<p>When utilizing Display Stream Compression (DSC) over a DisplayPort
+connection, the VESA standard strictly mandates the activation of
+Forward Error Correction (FEC). This requirement exists because DSC
+relies on predictive coding, making compressed data streams
+exceptionally fragile compared to raw video. This article explains the
+technical relationship between DSC and transmission errors, how
+uncorrected bit flips lead to severe visual artifacts, and why FEC is an
+absolute prerequisite for stable, high-bandwidth display output.</p>
+<h2 id="the-vulnerability-of-compressed-video-streams">The Vulnerability
+of Compressed Video Streams</h2>
+<p>In an uncompressed video stream, pixel data is mapped directly across
+the DisplayPort link. If electrical noise or signal degradation causes a
+single bit flip, the damage is localized. At most, a single subpixel
+renders an incorrect color for a fraction of a second before the next
+refresh cycle overwrites it—an anomaly that is virtually invisible to
+the human eye.</p>
+<p>Display Stream Compression changes this paradigm entirely. DSC is a
+low-latency, visually lossless compression algorithm that compresses
+video data into slices using predictive coding and indexed color tables.
+In this architecture, the accurate decompression of any given pixel
+heavily relies on the decoded values of preceding pixels and shared
+syntax elements.</p>
+<p>Because of this interdependency, compressed data cannot tolerate
+transport errors:</p>
+<ul>
+<li><strong>Error Propagation:</strong> A single flipped bit does not
+corrupt just one pixel. It invalidates the decoding state, causing the
+error to cascade across an entire slice or horizontal line.</li>
+<li><strong>Loss of Synchronization:</strong> A corrupted control bit
+can cause the display's hardware decoder to lose alignment within the
+data stream, leading to shifted lines, split screens, or complete
+decompression failure.</li>
+<li><strong>Catastrophic Artifacts:</strong> While an uncompressed bit
+error manifests as imperceptible visual noise, an uncompressed DSC error
+results in screen tearing, black frames, flashing bands, or total signal
+dropout.</li>
+</ul>
+<h2 id="how-forward-error-correction-prevents-decoder-failure">How
+Forward Error Correction Prevents Decoder Failure</h2>
+<p>DisplayPort operates at exceptionally high physical-layer frequencies
+(such as 8.1 Gbps per lane in HBR3 and up to 20 Gbps in UHBR20). At
+these speeds, physical trace impedance, cable length, and
+electromagnetic interference guarantee that occasional bit errors will
+occur.</p>
+<p>Because video transmission requires real-time display, the interface
+cannot use traditional retransmission protocols (like TCP-style ACK/NACK
+handshakes), as requesting and resending lost packets would introduce
+unacceptable latency and buffer bloat.</p>
+<p>Forward Error Correction resolves this limitation by embedding
+redundant parity data directly into the DisplayPort transport packets.
+When the receiving hardware (the monitor or scalar) detects an error,
+the FEC decoder uses these mathematical parity checks to identify and
+correct bit errors instantaneously at the physical link layer before the
+payload reaches the DSC decompression engine.</p>
+<p>By neutralizing bit flips in real time, FEC ensures that the incoming
+bitstream fed to the DSC decoder is effectively error-free.</p>
+<h2 id="the-vesa-displayport-mandate">The VESA DisplayPort Mandate</h2>
+<p>Beginning with the DisplayPort 1.4 specification and carried forward
+into DisplayPort 2.1, the Video Electronics Standards Association (VESA)
+made FEC mandatory whenever DSC is engaged.</p>
+<p>During the initial link training and capability discovery
+sequence:</p>
+<ol type="1">
+<li>The source (GPU) and sink (display) read DisplayPort Configuration
+Data (DPCD) registers.</li>
+<li>The devices confirm support for both DSC and FEC.</li>
+<li>If FEC cannot be initialized or maintained across the physical link,
+the GPU driver will disallow the use of DSC.</li>
+</ol>
+<p>By coupling the two technologies at the specification level, VESA
+guarantees that compressed transmission remains resilient against
+standard transmission line noise, preventing visual instability on
+ultra-high-resolution and high-refresh-rate displays.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/why-display-port-dsc-requires-forward-error-correction';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

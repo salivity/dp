@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How OS Detects DisplayPort Monitor Power Off - dp</title>
+    <meta name="description" content="When a user switches off a DisplayPort monitor using its physical power button, the operating system detects this event almost instantaneously through a dedicated hardware signal known as Hot Plug Detect (HPD). Unlike older display standards that often ma">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/how-os-detects-display-port-monitor-power-off">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How OS Detects DisplayPort Monitor Power Off - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/how-os-detects-display-port-monitor-power-off" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="When a user switches off a DisplayPort monitor using its physical power button, the operating system detects this event almost instantaneously through a dedicated hardware signal known as Hot Plug Detect (HPD). Unlike older display standards that often ma" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-os-detects-displayport-monitor-power-off">How OS Detects
+DisplayPort Monitor Power Off</h1>
+<p>When a user switches off a DisplayPort monitor using its physical
+power button, the operating system detects this event almost
+instantaneously through a dedicated hardware signal known as Hot Plug
+Detect (HPD). Unlike older display standards that often maintain a
+passive presence, DisplayPort treats a physical power-off as a full
+disconnection. Dropping the electrical signal on the HPD line prompts
+the graphics processing unit (GPU) to alert the display driver, which
+then triggers the operating system to unregister the monitor and
+reconfigure the desktop layout.</p>
+<h3 id="the-role-of-hot-plug-detect-hpd">The Role of Hot Plug Detect
+(HPD)</h3>
+<p>DisplayPort cables contain a dedicated physical wire connected to Pin
+18, designated as the Hot Plug Detect (HPD) line. When a monitor is
+powered on and connected, it supplies a continuous voltage (typically
+3.3 volts) across this line back to the GPU. This voltage tells the
+graphics hardware that a display is connected, awake, and ready to
+communicate.</p>
+<p>When the physical power switch on the monitor is toggled to "off,"
+the display's internal controller ceases to supply this voltage, pulling
+the HPD line down to 0 volts (ground). In the DisplayPort standard, a
+low signal lasting longer than 2 milliseconds is defined as a disconnect
+event, ensuring that the GPU does not confuse brief signaling pulses
+with an actual disconnection.</p>
+<h3 id="the-displayport-configuration-data-dpcd-link">The DisplayPort
+Configuration Data (DPCD) Link</h3>
+<p>DisplayPort communication relies on a bidirectional sideband channel
+called the Auxiliary (AUX) Channel. Alongside the HPD drop, the monitor
+shuts down its DisplayPort Configuration Data (DPCD) receiver. The DPCD
+holds crucial link status parameters, such as clock recovery and channel
+equalization states. When the physical power is terminated, the link
+status collapses entirely, preventing any further AUX channel handshake
+between the GPU and the monitor's internal scaler.</p>
+<h3 id="from-gpu-interrupt-to-the-operating-system">From GPU Interrupt
+to the Operating System</h3>
+<p>Once the GPU detects that the voltage on the HPD pin has fallen, the
+process moves up the software stack:</p>
+<ol type="1">
+<li><strong>Hardware Interrupt:</strong> The GPU generates a hardware
+interrupt signaling that a physical display connection has been
+severed.</li>
+<li><strong>Graphics Driver Notification:</strong> The graphics driver
+catches this interrupt, checks the internal registers, and confirms the
+loss of the HPD line on that specific port.</li>
+<li><strong>OS Display Subsystem Alert:</strong> The driver reports the
+removal to the operating system's display subsystem (such as the Desktop
+Window Manager in Windows, the Display Server in Linux, or WindowServer
+in macOS).</li>
+<li><strong>Desktop Reconfiguration:</strong> The operating system
+unloads the Extended Display Identification Data (EDID) associated with
+that port. It removes the monitor from its active display list,
+redistributes open windows and application icons to any remaining active
+screens, and recalculates the virtual desktop bounds.</li>
+</ol>
+<p>Because the DisplayPort specification defines power removal as a
+hardware-level disconnection, turning off the physical power button
+behaves identically to unplugging the DisplayPort cable from the
+graphics card.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/how-os-detects-display-port-monitor-power-off';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

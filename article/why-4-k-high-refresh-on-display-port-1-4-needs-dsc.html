@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why 4K High Refresh on DisplayPort 1.4 Needs DSC - dp</title>
+    <meta name="description" content="Achieving high refresh rates like 120Hz or 144Hz at 4K resolution pushes the boundaries of older display standards, frequently exceeding the physical bandwidth limit of DisplayPort 1.4. Because raw, uncompressed 4K video at these speeds demands more throu">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/why-4-k-high-refresh-on-display-port-1-4-needs-dsc">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Why 4K High Refresh on DisplayPort 1.4 Needs DSC - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/why-4-k-high-refresh-on-display-port-1-4-needs-dsc" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Achieving high refresh rates like 120Hz or 144Hz at 4K resolution pushes the boundaries of older display standards, frequently exceeding the physical bandwidth limit of DisplayPort 1.4. Because raw, uncompressed 4K video at these speeds demands more throu" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="why-4k-high-refresh-on-displayport-14-needs-dsc">Why 4K High
+Refresh on DisplayPort 1.4 Needs DSC</h1>
+<p>Achieving high refresh rates like 120Hz or 144Hz at 4K resolution
+pushes the boundaries of older display standards, frequently exceeding
+the physical bandwidth limit of DisplayPort 1.4. Because raw,
+uncompressed 4K video at these speeds demands more throughput than the
+cable can physically transport, display hardware must compress the data
+stream. Manufacturers solve this throughput bottleneck using either
+Display Stream Compression (DSC) to preserve visual fidelity or chroma
+subsampling (such as 4:2:0) to reduce the amount of color information
+sent per frame.</p>
+<h3 id="the-displayport-14-bandwidth-bottleneck">The DisplayPort 1.4
+Bandwidth Bottleneck</h3>
+<p>DisplayPort 1.4 features a total physical bandwidth of 32.4 Gbps
+across four transmission lanes. However, it utilizes standard 8b/10b
+signal encoding, where 2 bits of transmission overhead are added for
+every 8 bits of actual payload data. This reduces the maximum usable
+data rate to 25.92 Gbps.</p>
+<p>Every digital frame requires a specific amount of data calculated by
+multiplying horizontal resolution, vertical resolution, color depth,
+frame rate, and blanking overhead (the brief intervals between scanlines
+and frames).</p>
+<ul>
+<li><strong>4K at 60Hz (8-bit, 4:4:4):</strong> Requires approximately
+12.54 Gbps, easily fitting within DP 1.4’s 25.92 Gbps limit.</li>
+<li><strong>4K at 120Hz (8-bit, 4:4:4):</strong> Requires roughly 25.8
+Gbps, reaching the absolute edge of uncompressed capability using
+reduced blanking intervals.</li>
+<li><strong>4K at 144Hz (8-bit, 4:4:4):</strong> Requires approximately
+31.35 Gbps, exceeding DP 1.4 bandwidth by more than 20%.</li>
+<li><strong>4K at 144Hz (10-bit HDR, 4:4:4):</strong> Requires roughly
+39.19 Gbps, exceeding DP 1.4 bandwidth by more than 50%.</li>
+</ul>
+<p>Because standard 4K high-refresh-rate setups—particularly those using
+10-bit color for HDR—outstrip the 25.92 Gbps capacity, the video
+pipeline must reduce the data footprint before transmission.</p>
+<h3 id="method-1-chroma-subsampling-420">Method 1: Chroma Subsampling
+(4:2:0)</h3>
+<p>Chroma subsampling reduces payload size by sacrificing color
+resolution in favor of luminance (brightness) resolution. Human vision
+is far more sensitive to variations in brightness than to fine shifts in
+color.</p>
+<ul>
+<li><strong>4:4:4 (No Subsampling):</strong> Luminance and chrominance
+are sampled fully for every pixel.</li>
+<li><strong>4:2:0 Subsampling:</strong> Luminance is fully preserved,
+but color is sampled only once for every 2x2 grid of four pixels.</li>
+</ul>
+<p>Switching from 4:4:4 to 4:2:0 cuts the uncompressed bandwidth
+requirement by 50%. This reduction drops an uncompressed 4K 144Hz 8-bit
+stream down to roughly 15.68 Gbps, allowing it to easily pass through
+DisplayPort 1.4. The downside is noticeable degradation in sharpness,
+most visible as color fringing around text and fine lines in
+productivity or desktop environments.</p>
+<h3 id="method-2-display-stream-compression-dsc">Method 2: Display
+Stream Compression (DSC)</h3>
+<p>VESA introduced Display Stream Compression (DSC) version 1.2
+alongside the DisplayPort 1.4 standard to resolve the limitations of
+chroma subsampling.</p>
+<p>DSC is an ultra-low-latency, visually lossless compression algorithm.
+Operating in real time with less than a microsecond of delay, DSC can
+compress a video stream by up to a 3:1 ratio.</p>
+<ul>
+<li>It preserves full 4:4:4 chroma sampling and 10-bit HDR color
+accuracy.</li>
+<li>It fits high-bandwidth signals—such as 4K at 144Hz or even
+240Hz—comfortably within the 25.92 Gbps threshold.</li>
+<li>The graphics card (GPU) encodes the frames using dedicated hardware,
+and the monitor's scaler decodes them instantly before rendering.</li>
+</ul>
+<p>If a monitor or GPU lacks DSC support, the system must fall back to
+4:2:0 subsampling, reduce the refresh rate, or lower the resolution to
+deliver a working display signal over DisplayPort 1.4.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/why-4-k-high-refresh-on-display-port-1-4-needs-dsc';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

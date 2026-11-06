@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How DisplayPort Adjusts Refresh Rates on Battery - dp</title>
+    <meta name="description" content="Modern laptops rely on dynamic display adjustments to significantly extend battery life, utilizing specific protocols built directly into the DisplayPort standard. This article examines how DisplayPort—particularly through its Embedded DisplayPort (eDP) i">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/how-display-port-adjusts-refresh-rates-on-battery">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How DisplayPort Adjusts Refresh Rates on Battery - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/how-display-port-adjusts-refresh-rates-on-battery" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Modern laptops rely on dynamic display adjustments to significantly extend battery life, utilizing specific protocols built directly into the DisplayPort standard. This article examines how DisplayPort—particularly through its Embedded DisplayPort (eDP) i" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-displayport-adjusts-refresh-rates-on-battery">How
+DisplayPort Adjusts Refresh Rates on Battery</h1>
+<p>Modern laptops rely on dynamic display adjustments to significantly
+extend battery life, utilizing specific protocols built directly into
+the DisplayPort standard. This article examines how
+DisplayPort—particularly through its Embedded DisplayPort (eDP)
+implementation and Adaptive-Sync architecture—coordinates with the
+laptop's operating system and graphics processing unit (GPU) to
+dynamically scale down the screen's refresh rate when the device
+transitions to battery power.</p>
+<h3 id="embedded-displayport-and-seamless-rate-switching">Embedded
+DisplayPort and Seamless Rate Switching</h3>
+<p>Internal laptop displays do not use standard external DisplayPort
+cables; instead, they utilize Embedded DisplayPort (eDP). Within the eDP
+specification, VESA (Video Electronics Standards Association) introduced
+features like Dynamic Refresh Rate Switching (DRRS) and
+Adaptive-Sync.</p>
+<p>Unlike traditional display configurations where changing a refresh
+rate (such as shifting from 144Hz to 60Hz) requires a full display mode
+reset that results in a temporary black screen, DisplayPort handles
+these transitions seamlessly. It modifies the vertical blanking interval
+(VBLANK)—the period between the end of one frame and the beginning of
+the next. By extending the duration of the vertical blanking period on a
+frame-by-frame basis, DisplayPort effectively lowers the refresh rate
+without interrupting the active video stream or renegotiating the
+link.</p>
+<h3 id="the-role-of-the-aux-channel-and-power-states">The Role of the
+AUX Channel and Power States</h3>
+<p>The communication required for these adjustments occurs over the
+DisplayPort Auxiliary (AUX) channel. The AUX channel is a dedicated,
+bidirectional data link used for link configuration, status monitoring,
+and panel management.</p>
+<p>When the laptop detects a change in power source via the Advanced
+Configuration and Power Interface (ACPI)—such as switching from an AC
+adapter to DC battery power, or passing below a critical battery
+threshold—the operating system notifies the display driver. The GPU then
+uses the DisplayPort AUX channel to query the panel’s DisplayID or
+Extended Display Identification Data (EDID) to confirm supported target
+frequencies. Once validated, the graphics hardware adapts the timing
+signals over the main link to match the lowered target rate.</p>
+<h3 id="dynamic-interaction-with-operating-systems">Dynamic Interaction
+with Operating Systems</h3>
+<p>Operating systems like Windows employ features such as Dynamic
+Refresh Rate (DRR) that work in tandem with DisplayPort's variable
+timing. When on battery:</p>
+<ol type="1">
+<li><strong>Idle and Static Content:</strong> If a user is reading a
+document or viewing a static web page, the operating system drops the
+refresh rate to a baseline, typically 60Hz or lower.</li>
+<li><strong>Interactive Tasks:</strong> When the user initiates a
+high-motion action, such as scrolling or moving a cursor, DisplayPort
+allows the refresh rate to instantaneously spike back up to maintain
+fluid motion, dropping back down immediately upon completion.</li>
+<li><strong>Severe Battery Conservation:</strong> When the device enters
+a low-battery state, the driver can lock the panel strictly to a lower
+refresh rate (e.g., 40Hz, 48Hz, or 60Hz), overriding any dynamic boosts
+to preserve the remaining charge.</li>
+</ol>
+<h3 id="integration-with-panel-self-refresh-psr">Integration with Panel
+Self Refresh (PSR)</h3>
+<p>DisplayPort further reduces battery drain through Panel Self Refresh
+(PSR and PSR2). When the screen displays a completely static image, the
+GPU instructs the display panel’s internal timing controller (TCON) to
+store the current frame in local frame buffer memory and display it
+repeatedly.</p>
+<p>This allows the main DisplayPort high-speed lanes, memory
+controllers, and sections of the GPU to enter an ultra-low-power sleep
+state. The moment the user provides input or the battery drops to a
+state requiring more aggressive conservation, the link wakes up via the
+AUX channel, seamlessly blending refresh rate scaling and power gating
+to maximize battery efficiency.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/how-display-port-adjusts-refresh-rates-on-battery';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

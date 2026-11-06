@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why DisplayPort Deep Sleep Rearranges Windows Desktop - dp</title>
+    <meta name="description" content="Many users face a frustrating issue where waking a computer from sleep causes open application windows to shrink, stack, or move to the top-left corner of the primary monitor. This phenomenon occurs because DisplayPort utilizes an aggressive power-saving">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/why-display-port-deep-sleep-rearranges-windows-desktop">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Why DisplayPort Deep Sleep Rearranges Windows Desktop - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/why-display-port-deep-sleep-rearranges-windows-desktop" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Many users face a frustrating issue where waking a computer from sleep causes open application windows to shrink, stack, or move to the top-left corner of the primary monitor. This phenomenon occurs because DisplayPort utilizes an aggressive power-saving" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="why-displayport-deep-sleep-rearranges-windows-desktop">Why
+DisplayPort Deep Sleep Rearranges Windows Desktop</h1>
+<p>Many users face a frustrating issue where waking a computer from
+sleep causes open application windows to shrink, stack, or move to the
+top-left corner of the primary monitor. This phenomenon occurs because
+DisplayPort utilizes an aggressive power-saving mechanism known as deep
+sleep, which severs communication with the computer. Consequently, the
+operating system treats the monitor as physically disconnected, forcing
+Windows to reorganize open applications to adapt to the sudden loss of
+display area.</p>
+<h2 id="understanding-displayport-deep-sleep">Understanding DisplayPort
+Deep Sleep</h2>
+<p>DisplayPort includes an advanced power-saving state designed to
+comply with modern energy efficiency standards. When the computer
+signals the monitor to sleep—or when a predetermined inactivity timer
+runs out—the monitor shuts down most of its internal circuitry,
+including the scaler and logic boards.</p>
+<p>Unlike legacy connection types like VGA or DVI, and unlike most
+standard implementations of HDMI, DisplayPort actively cuts the
+electrical current to its communication pins during deep sleep.</p>
+<h2 id="the-role-of-hotplug-detect-hpd">The Role of Hotplug Detect
+(HPD)</h2>
+<p>DisplayPort uses a dedicated line called the Hotplug Detect (HPD)
+pin. When the monitor is powered on and connected, the HPD pin maintains
+a steady voltage signal (usually around 3.3 volts) to tell the graphics
+processing unit (GPU) that a display is present and ready to receive
+data via its Extended Display Identification Data (EDID) handshake.</p>
+<p>When a DisplayPort monitor enters deep sleep, it drops the voltage on
+the HPD pin to zero. Because the signal drops completely, the GPU and
+Windows have no way to distinguish a sleeping monitor from one that has
+been physically unplugged from the computer.</p>
+<h2 id="why-windows-rearranges-desktop-windows">Why Windows Rearranges
+Desktop Windows</h2>
+<p>Windows is designed to provide a continuous, accessible user
+experience. When it receives the signal that a monitor has been
+disconnected via the dropped HPD line, the operating system immediately
+reconfigures the display layout:</p>
+<ol type="1">
+<li><strong>In multi-monitor setups:</strong> Windows detects that a
+screen is missing and migrates all active applications and desktop icons
+from the "disconnected" monitor to the remaining active displays so the
+user does not lose access to them.</li>
+<li><strong>In single-monitor setups:</strong> Windows drops the active
+resolution to a default internal fallback resolution (typically
+1024x768). Because open applications cannot reside outside the active
+display bounds, Windows resizes and moves every open window into this
+restricted area.</li>
+</ol>
+<p>When the monitor wakes up, the HPD pin receives voltage again,
+triggering a re-detection event. Windows restores the native resolution
+and recognizes the screen as a "new" display. However, older versions of
+Windows do not cache the exact pre-sleep coordinates of applications,
+leaving the windows clumped, resized, and repositioned in the upper-left
+corner of the screen.</p>
+<h2 id="how-to-prevent-the-issue">How to Prevent the Issue</h2>
+<p>There are several methods to stop DisplayPort deep sleep from
+rearranging your workspace:</p>
+<ul>
+<li><strong>Upgrade to Windows 11:</strong> Microsoft introduced a
+native fix called "Rapid HPD" in Windows 11. In display settings,
+enabling "Remember window locations based on monitor connection" ensures
+that windows return to their original locations when the monitor wakes
+up.</li>
+<li><strong>Disable Deep Sleep in the Monitor OSD:</strong> Many
+monitors allow you to disable "DisplayPort Deep Sleep," "Auto-Power
+Down," or "Auto-Source Detection" through their built-in On-Screen
+Display (OSD) menus. This forces the monitor to maintain an active HPD
+connection even when in standby.</li>
+<li><strong>Use an EDID Passthrough Adapter:</strong> Hardware EDID
+emulators sit between the graphics card and the DisplayPort cable,
+continuously broadcasting the monitor’s presence and resolution to the
+GPU even when the monitor is fully powered down.</li>
+</ul></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/why-display-port-deep-sleep-rearranges-windows-desktop';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

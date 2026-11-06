@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisplayPort ESD Protection Diodes in Monitors - dp</title>
+    <meta name="description" content="Electrostatic discharge (ESD) protection diodes installed behind DisplayPort (DP) input circuits on monitors safeguard sensitive receiver silicon against high-voltage transients while preserving multi-gigabit signal integrity. Because modern DisplayPort s">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/display-port-esd-protection-diodes-in-monitors">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DisplayPort ESD Protection Diodes in Monitors - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/display-port-esd-protection-diodes-in-monitors" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Electrostatic discharge (ESD) protection diodes installed behind DisplayPort (DP) input circuits on monitors safeguard sensitive receiver silicon against high-voltage transients while preserving multi-gigabit signal integrity. Because modern DisplayPort s" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="displayport-esd-protection-diodes-in-monitors">DisplayPort ESD
+Protection Diodes in Monitors</h1>
+<p>Electrostatic discharge (ESD) protection diodes installed behind
+DisplayPort (DP) input circuits on monitors safeguard sensitive receiver
+silicon against high-voltage transients while preserving multi-gigabit
+signal integrity. Because modern DisplayPort standards (DisplayPort 1.4
+and 2.1) handle data rates from 8.1 Gbps (HBR3) up to 20 Gbps (UHBR20)
+per lane, the diodes used are specialized, ultra-low-capacitance
+transient voltage suppression (TVS) arrays. This article outlines the
+specific types, electrical requirements, and common commercial TVS diode
+models deployed behind monitor DisplayPort receptacles.</p>
+<h2 id="requirements-for-displayport-esd-protection">Requirements for
+DisplayPort ESD Protection</h2>
+<p>Monitors face harsh ESD events during the hot-plugging of cables. A
+viable TVS diode on a DisplayPort input must meet stringent electrical
+specifications to avoid corrupting high-frequency video signals:</p>
+<ul>
+<li><strong>Ultra-Low Parasitic Capacitance (<span
+class="math inline">\(C_{d}\)</span>):</strong> High-speed Main Link
+lines require line-to-ground capacitance below <span
+class="math inline">\(0.3\text{ pF}\)</span>, with newer UHBR links
+requiring <span class="math inline">\(0.15\text{ pF}\)</span> to <span
+class="math inline">\(0.1\text{ pF}\)</span> or lower to keep the
+high-speed eye diagram open.</li>
+<li><strong>Low Dynamic Resistance (<span
+class="math inline">\(R_{dyn}\)</span>):</strong> Typically between
+<span class="math inline">\(0.2\ \Omega\)</span> and <span
+class="math inline">\(0.5\ \Omega\)</span> to ensure minimal voltage
+drop across the diode during a discharge event.</li>
+<li><strong>Low Clamping Voltage (<span
+class="math inline">\(V_{clamp}\)</span>):</strong> Must clamp transient
+spikes well below the breakdown threshold of the monitor's
+scaler/receiver PHY (typically under <span
+class="math inline">\(10\text{V}\)</span> to <span
+class="math inline">\(15\text{V}\)</span> during a peak discharge).</li>
+<li><strong>Standard Compliance:</strong> Rated to IEC 61000-4-2 Level 4
+(minimum <span class="math inline">\(\pm 8\text{ kV}\)</span> contact
+discharge and <span class="math inline">\(\pm 15\text{ kV}\)</span> air
+discharge).</li>
+<li><strong>Flow-Through Packaging:</strong> DFN and QFN surface-mount
+packages designed for straight trace routing under the IC pads to
+eliminate impedance mismatches caused by trace stubs.</li>
+</ul>
+<h2 id="circuit-architecture-and-line-assignment">Circuit Architecture
+and Line Assignment</h2>
+<p>A DisplayPort connector contains several distinct line types, each
+protected by targeted ESD solutions:</p>
+<h3 id="1-main-link-differential-pairs-lanes-0-to-3">1. Main Link
+Differential Pairs (Lanes 0 to 3)</h3>
+<p>The Main Link consists of four differential pairs (8 high-speed
+lines). These lines interface directly with ultra-low-capacitance,
+4-channel or 2-channel TVS diode arrays. Monitor designers typically use
+rail-to-rail steering diodes with integrated Zener or silicon-controlled
+rectifier (SCR) deep-snapback clamps. Deep-snapback designs trigger at
+high voltage but quickly drop to a lower holding voltage, maximizing
+protection for sub-micron receiver ICs.</p>
+<h3 id="2-auxiliary-aux-channel">2. Auxiliary (AUX) Channel</h3>
+<p>The AUX channel is a half-duplex, bidirectional differential pair
+running at 1 Mbps (or up to 720 Mbps in fast AUX modes). While its
+bandwidth requirements are less critical than the Main Link, monitor
+boards frequently route the AUX lines through the same
+ultra-low-capacitance TVS array model as the Main Link to simplify the
+bill of materials (BOM).</p>
+<h3 id="3-hot-plug-detect-hpd-and-config-lines">3. Hot Plug Detect (HPD)
+and Config Lines</h3>
+<p>The HPD line is a 3.3V single-ended DC control signal, and the Config
+lines operate at low speeds. These pins do not have ultra-low
+capacitance constraints, so they are typically protected by standard,
+low-cost TVS diodes with capacitances between <span
+class="math inline">\(5\text{ pF}\)</span> and <span
+class="math inline">\(30\text{ pF}\)</span>, or integrated into standard
+secondary multi-channel clamps.</p>
+<h2 id="commonly-installed-commercial-tvs-diode-models">Commonly
+Installed Commercial TVS Diode Models</h2>
+<p>Tier-1 monitor manufacturers (such as Dell, LG, ASUS, and Samsung)
+typically source DisplayPort ESD arrays from leading analog
+semiconductor manufacturers:</p>
+<ul>
+<li><strong>Texas Instruments TPD4E05U06 / TPD4E02B04:</strong>
+4-channel ultra-low capacitance TVS arrays (<span
+class="math inline">\(0.25\text{ pF}\)</span> to <span
+class="math inline">\(0.5\text{ pF}\)</span>) packaged in ultra-thin
+USON packages, widely found on DP 1.2 and DP 1.4 input ports.</li>
+<li><strong>Nexperia PUSB3FR4 / PESD4USBx Series:</strong> Dedicated
+4-channel ESD protection arrays featuring deep snapback, dynamic
+resistances as low as <span class="math inline">\(0.27\ \Omega\)</span>,
+and typical diode capacitances down to <span
+class="math inline">\(0.15\text{ pF}\)</span>, making them standard
+choices for DP 1.4 (HBR3) and DP 2.1 (UHBR10) interfaces.</li>
+<li><strong>Semtech RClamp0524P / RClamp0584T:</strong>
+Industry-standard 4-line flow-through TVS arrays featuring a maximum
+capacitance of <span class="math inline">\(0.3\text{ pF}\)</span> across
+wide operational frequencies.</li>
+<li><strong>Infineon ESD105-B1-02ELS / ESD233 Series:</strong>
+Bi-directional and uni-directional protection diodes targeted at
+high-speed lanes, offering line capacitances below <span
+class="math inline">\(0.2\text{ pF}\)</span> and high surge
+tolerance.</li>
+<li><strong>STMicroelectronics ESDAVLC8-4Bx / HSP051 Series:</strong>
+Ultra-high-speed TVS arrays with deep-clamping capability and
+sub-picofarad characteristics suited for monitor video inputs.</li>
+</ul>
+<h2 id="board-layout-implementation">Board Layout Implementation</h2>
+<p>Monitor mainboards place these TVS arrays physically as close to the
+DisplayPort receptacle pins as possible, upstream of the AC-coupling
+capacitors (for high-speed lanes) and any termination resistors. The
+ground pins of the TVS arrays tie directly to the monitor's main
+chassis/ground plane using multiple low-inductance ground vias, ensuring
+high-frequency ESD energy dissipates harmlessly before reaching the
+monitor's processing core.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/display-port-esd-protection-diodes-in-monitors';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisplayPort Intra-Pair Skew and Length Matching - dp</title>
+    <meta name="description" content="High-speed digital interfaces like DisplayPort rely on differential signaling to transmit massive amounts of video data with minimal noise. Intra-pair skew occurs when the two complementary signals in a differential pair arrive at the receiver at slightly">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/display-port-intra-pair-skew-and-length-matching">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DisplayPort Intra-Pair Skew and Length Matching - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/display-port-intra-pair-skew-and-length-matching" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="High-speed digital interfaces like DisplayPort rely on differential signaling to transmit massive amounts of video data with minimal noise. Intra-pair skew occurs when the two complementary signals in a differential pair arrive at the receiver at slightly" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="displayport-intra-pair-skew-and-length-matching">DisplayPort
+Intra-Pair Skew and Length Matching</h1>
+<p>High-speed digital interfaces like DisplayPort rely on differential
+signaling to transmit massive amounts of video data with minimal noise.
+Intra-pair skew occurs when the two complementary signals in a
+differential pair arrive at the receiver at slightly different times due
+to physical propagation delays. To maintain signal integrity, minimize
+electromagnetic interference, and prevent data corruption at
+multi-gigabit speeds, printed circuit board (PCB) designers must
+strictly match the lengths of the traces within each DisplayPort
+lane.</p>
+<h3 id="understanding-intra-pair-skew">Understanding Intra-Pair
+Skew</h3>
+<p>DisplayPort uses differential signaling, where data is transmitted
+over a pair of closely coupled conductors carrying equal and opposite
+voltage swings (positive and negative polarities). The receiver decodes
+the data by measuring the voltage difference between the two traces
+rather than measuring a single trace against a ground reference.</p>
+<p>Intra-pair skew is the time difference (or phase offset) between the
+true and complementary signals of that single differential pair. While
+inter-pair skew refers to timing differences between distinct lanes,
+intra-pair skew refers specifically to the delay between the two lines
+that make up one single lane. This skew is typically measured in
+picoseconds (ps) or millimeters/mils of trace length mismatch.</p>
+<h3 id="causes-of-intra-pair-skew">Causes of Intra-Pair Skew</h3>
+<p>Intra-pair skew is primarily caused by geometric and material
+asymmetries in the PCB layout:</p>
+<ul>
+<li><strong>Trace Length Differences:</strong> Unequal routing paths,
+especially around corners, bends, or obstacles like vias and component
+pads, cause one trace to be physically longer than the other.</li>
+<li><strong>The Fiber Weave Effect:</strong> The dielectric core of a
+PCB is woven fiberglass encased in resin. Glass and resin have different
+dielectric constants (<span class="math inline">\(\epsilon_r\)</span>).
+If one trace runs primarily over fiberglass bundles while the other runs
+over resin-rich gaps, signals travel at different speeds even if the
+traces are geometrically identical in length.</li>
+</ul>
+<h3 id="why-displayport-demands-precise-length-matching">Why DisplayPort
+Demands Precise Length Matching</h3>
+<p>DisplayPort standards—ranging from HBR (2.7 Gbps) to UHBR 20 (20 Gbps
+per lane in DisplayPort 2.0/2.1)—operate at extremely high frequencies
+with picosecond-level unit intervals (UI). At these data rates, even a
+minute difference in trace length causes significant signal
+degradation.</p>
+<h4 id="1-preventing-eye-diagram-closure">1. Preventing Eye Diagram
+Closure</h4>
+<p>As data rates increase, the time window in which a bit can be
+reliably sampled (the eye opening) shrinks. When intra-pair skew occurs,
+the rising and falling edges of the differential signals misalign. This
+phase difference reduces the differential amplitude, slows the effective
+edge rate, and increases jitter. The resulting degradation closes the
+eye diagram at the receiver, causing bit errors, link-training failures,
+or complete loss of video output.</p>
+<h4 id="2-minimizing-common-mode-noise-and-emi">2. Minimizing
+Common-Mode Noise and EMI</h4>
+<p>In an ideal differential pair, the equal and opposite currents cancel
+out radiation, and the sum of the voltages equals zero. When intra-pair
+skew is present, this cancellation breaks down. The phase mismatch
+converts a portion of the differential-mode signal into common-mode
+noise. Common-mode voltage radiates efficiently off the PCB, cables, and
+connectors, often causing the system to fail regulatory electromagnetic
+compatibility (EMC) and EMI tests.</p>
+<h4 id="3-ensuring-accurate-receiver-threshold-crossing">3. Ensuring
+Accurate Receiver Threshold Crossing</h4>
+<p>A differential receiver detects transitions at the exact moment the
+positive and negative signals cross each other. If one signal is
+delayed, the zero-crossing point shifts in time, directly translating
+into duty-cycle distortion and deterministic jitter that downstream
+clock and data recovery (CDR) circuits may fail to compensate for.</p>
+<h3 id="implementation-guidelines-for-pcb-designers">Implementation
+Guidelines for PCB Designers</h3>
+<p>To prevent intra-pair skew from compromising DisplayPort performance,
+designers adhere to strict layout constraints:</p>
+<ul>
+<li><strong>Tight Length Tolerances:</strong> For modern DisplayPort
+rates (such as HBR3 or UHBR), intra-pair trace lengths are typically
+matched within 0.1 mm (approximately 4 to 5 mils), corresponding to less
+than 1 to 2 picoseconds of skew.</li>
+<li><strong>Compensate Close to the Source:</strong> Length tuning (such
+as serpentine or trombone routing) should be applied immediately
+adjacent to the point where the mismatch occurs, such as right after a
+bend or a breakout area. Delaying compensation allows common-mode noise
+to propagate along the mismatched segment.</li>
+<li><strong>Fiber Weave Mitigation:</strong> Routing traces at an angle
+relative to the PCB weave (e.g., a 10° to 45° zigzag or bias) or using
+tightly woven glass fabrics (like 1067 or 1078 glass styles) ensures
+both traces in a pair encounter uniform dielectric properties.</li>
+</ul></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/display-port-intra-pair-skew-and-length-matching';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

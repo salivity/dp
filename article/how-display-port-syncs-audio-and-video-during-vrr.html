@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How DisplayPort Syncs Audio and Video During VRR - dp</title>
+    <meta name="description" content="DisplayPort maintains precise audio and video synchronization during Variable Refresh Rate (VRR) shifts by decoupling the audio data stream from the video frame timing. Rather than tying audio delivery directly to the active pixel clock, DisplayPort trans">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/how-display-port-syncs-audio-and-video-during-vrr">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How DisplayPort Syncs Audio and Video During VRR - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/how-display-port-syncs-audio-and-video-during-vrr" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="DisplayPort maintains precise audio and video synchronization during Variable Refresh Rate (VRR) shifts by decoupling the audio data stream from the video frame timing. Rather than tying audio delivery directly to the active pixel clock, DisplayPort trans" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-displayport-syncs-audio-and-video-during-vrr">How
+DisplayPort Syncs Audio and Video During VRR</h1>
+<p>DisplayPort maintains precise audio and video synchronization during
+Variable Refresh Rate (VRR) shifts by decoupling the audio data stream
+from the video frame timing. Rather than tying audio delivery directly
+to the active pixel clock, DisplayPort transmits audio within discrete
+micro-packets over the Main Link, relying on independent clock
+regeneration parameters and buffering. When VRR dynamically alters frame
+times by extending vertical blanking intervals, the underlying audio
+stream continues to be transmitted, buffered, and decoded at a constant
+rate, preventing pitch shifts, audio stutter, or desynchronization.</p>
+<h3 id="packetized-architecture-and-decoupled-clocks">Packetized
+Architecture and Decoupled Clocks</h3>
+<p>Traditional analog and early digital video standards tied audio
+clocks directly to the pixel transmission clock. DisplayPort, however,
+operates on a packetized protocol similar to Ethernet or USB.</p>
+<p>The physical Main Link operates at fixed transmission rates (such as
+RBR, HBR, HBR2, HBR3, or UHBR) regardless of the content's frame rate or
+resolution. Both video and audio are packetized:</p>
+<ul>
+<li><strong>Video Streams:</strong> Encapsulated into data packets and
+mapped across the active lanes.</li>
+<li><strong>Audio Streams:</strong> Encapsulated into Secondary Data
+Packets (SDPs) and multiplexed alongside video data.</li>
+</ul>
+<p>Because the physical link rate is constant, the transmission of audio
+packets is not directly dependent on how quickly or slowly frames are
+rendered.</p>
+<h3 id="audio-clock-regeneration-acr">Audio Clock Regeneration
+(ACR)</h3>
+<p>To play audio back accurately without drift, the display or audio
+receiver must reconstruct the original audio sampling frequency (such as
+44.1 kHz, 48 kHz, or 96 kHz). DisplayPort achieves this via Audio Clock
+Regeneration (ACR) architecture using two integer values:
+<strong>M-value (Audio Stream Clock Multiplier)</strong> and
+<strong>N-value (Link Clock Divider)</strong>.</p>
+<p>The source device transmits these time-stamp parameters inside the
+audio packets:</p>
+<ol type="1">
+<li>The source measures the audio clock relative to the constant link
+symbol clock to determine <span class="math inline">\(M_{aud}\)</span>
+and <span class="math inline">\(N_{aud}\)</span>.</li>
+<li>The sink uses a phase-locked loop (PLL) along with these parameters
+to reconstruct the master audio clock locally.</li>
+<li>Because <span class="math inline">\(M_{aud}\)</span> and <span
+class="math inline">\(N_{aud}\)</span> are calculated against the
+invariant link clock—and not the variable pixel render rate—the sink's
+local audio clock remains completely stable.</li>
+</ol>
+<h3 id="managing-vrr-via-extended-vertical-blanking">Managing VRR via
+Extended Vertical Blanking</h3>
+<p>Variable Refresh Rate (standardized in DisplayPort as Adaptive-Sync)
+synchronizes the display’s refresh cycle to the GPU's dynamic rendering
+speed.</p>
+<p>When a GPU takes longer to render a frame:</p>
+<ol type="1">
+<li>The active video scanout lines are sent at a constant line
+rate.</li>
+<li>The GPU dynamically extends the <strong>Vertical Blanking Interval
+(VBLANK)</strong>—the pause between the bottom of one frame and the
+start of the next—until the next frame is ready.</li>
+</ol>
+<p>During this extended VBLANK period, the DisplayPort Main Link does
+not shut down. The link remains active, transmitting blanking packets
+and Secondary Data Packets. The GPU continues to insert audio SDPs into
+the stream at the required intervals, ensuring the audio receiver never
+experiences data starvation even when the frame rate drops
+substantially.</p>
+<h3 id="buffer-management-and-latency-compensation">Buffer Management
+and Latency Compensation</h3>
+<p>To smooth out minor variations in packet delivery caused by dynamic
+frame transitions, DisplayPort audio receivers employ an internal
+First-In, First-Out (FIFO) buffer:</p>
+<ul>
+<li><strong>Sustained Decoding:</strong> Audio data extracted from SDPs
+fills the FIFO buffer, which feeds the Digital-to-Analog Converter (DAC)
+at the precise, reconstructed sample rate.</li>
+<li><strong>Jitter Absorption:</strong> Fluctuations in packet
+transmission timing caused by bursty video data are absorbed by this
+buffer.</li>
+<li><strong>Lip-Sync Alignment:</strong> Modern DisplayPort
+specifications allow devices to report processing latency over the
+DisplayPort Configuration Data (DPCD) via the AUX channel. This allows
+the host operating system or GPU driver to adjust the audio presentation
+offset relative to dynamic display processing times, keeping dialogue
+and sound effects synchronized with on-screen action.</li>
+</ul></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/how-display-port-syncs-audio-and-video-during-vrr';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

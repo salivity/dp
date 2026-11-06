@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisplayPort Daisy Chain HDCP Repeater Rules - dp</title>
+    <meta name="description" content="When broadcasting protected digital media across a DisplayPort daisy chain using Multi-Stream Transport (MST), intermediate displays act as High-bandwidth Digital Content Protection (HDCP) repeaters. Under HDCP compliance standards, these repeaters must e">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/display-port-daisy-chain-hdcp-repeater-rules">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DisplayPort Daisy Chain HDCP Repeater Rules - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/display-port-daisy-chain-hdcp-repeater-rules" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="When broadcasting protected digital media across a DisplayPort daisy chain using Multi-Stream Transport (MST), intermediate displays act as High-bandwidth Digital Content Protection (HDCP) repeaters. Under HDCP compliance standards, these repeaters must e" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="displayport-daisy-chain-hdcp-repeater-rules">DisplayPort Daisy
+Chain HDCP Repeater Rules</h1>
+<p>When broadcasting protected digital media across a DisplayPort daisy
+chain using Multi-Stream Transport (MST), intermediate displays act as
+High-bandwidth Digital Content Protection (HDCP) repeaters. Under HDCP
+compliance standards, these repeaters must enforce strict downstream
+topology, authentication, and content-stream management rules to prevent
+unauthorized interception of encrypted video streams.</p>
+<h3 id="the-role-of-an-hdcp-repeater">The Role of an HDCP Repeater</h3>
+<p>In a DisplayPort daisy chain, only the final monitor functions purely
+as a standard HDCP receiver (sink). Any intermediate monitor that
+receives an encrypted DisplayPort stream and passes it along to another
+display via DisplayPort Out is classified as an HDCP repeater. The
+primary rule governing an HDCP repeater is that it must decrypt the
+upstream content, manage the streams, and immediately re-encrypt the
+data before forwarding it to downstream devices.</p>
+<h3 id="downstream-topology-and-device-limits">Downstream Topology and
+Device Limits</h3>
+<p>An HDCP repeater must discover and report the physical structure of
+all downstream devices back to the primary transmitter (the host PC or
+media player):</p>
+<ul>
+<li><strong>Depth Limit:</strong> The repeater checks the tree depth of
+the chain. HDCP standards limit topology depth to a maximum of 7
+levels.</li>
+<li><strong>Device Count:</strong> The repeater compiles a list of all
+downstream receiver IDs (RxIDs in HDCP 2.x) or Key Selection Vectors
+(KSVs in HDCP 1.x). The total number of connected devices across the
+entire topology cannot exceed the standard limit (typically up to 31
+devices for HDCP 1.x or up to 127 devices for HDCP 2.x).</li>
+<li><strong>Topology Exceeded Handling:</strong> If the downstream chain
+exceeds either the depth or device count limit, the repeater must report
+a topology error to the upstream transmitter, which will block or
+terminate the transmission of protected content.</li>
+</ul>
+<h3 id="downstream-authentication-and-stream-propagation">Downstream
+Authentication and Stream Propagation</h3>
+<p>A repeater cannot transmit encrypted media to a downstream branch
+until that specific downstream link has successfully completed the HDCP
+handshake:</p>
+<ol type="1">
+<li><strong>Downstream Authentication:</strong> The repeater initiates
+an independent HDCP authentication handshake with each attached
+downstream receiver.</li>
+<li><strong>Upstream Reporting:</strong> Once downstream devices are
+authenticated, the repeater transmits their IDs to the upstream
+transmitter for validation against system revocation lists (SRLs).</li>
+<li><strong>Independent Re-Encryption:</strong> After upstream
+authorization, the repeater decrypts incoming MST packets and
+re-encrypts the designated stream specifically for the target downstream
+device.</li>
+</ol>
+<h3 id="content-stream-management-and-version-compatibility">Content
+Stream Management and Version Compatibility</h3>
+<p>HDCP repeaters must enforce content-type restrictions (HDCP Type 0
+vs. Type 1):</p>
+<ul>
+<li><strong>Type 0 Content:</strong> Can be transmitted to downstream
+devices supporting either HDCP 2.x or legacy HDCP 1.x, provided the
+repeater converts the encryption scheme appropriately.</li>
+<li><strong>Type 1 Content:</strong> Strict premium content (such as 4K
+UHD HDR media) requires end-to-end HDCP 2.2 or higher. An HDCP repeater
+is strictly prohibited from transmitting Type 1 content across any
+downstream link that negotiates down to HDCP 1.x.</li>
+</ul>
+<p>If any downstream device in the chain fails to authenticate, is
+revoked, or lacks the necessary HDCP version required for the content
+stream, the repeater must block the transmission of that stream to the
+non-compliant link while maintaining authorized streams to other
+compliant displays in the chain.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/display-port-daisy-chain-hdcp-repeater-rules';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

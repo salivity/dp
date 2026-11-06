@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisplayPort Micro-Packet Stuffing Explained - dp</title>
+    <meta name="description" content="DisplayPort decouples the native video pixel clock from the physical link rate by converting continuous raster data into packetized streams. Because DisplayPort operates at fixed transmission speeds—such as 1.62, 2.7, 5.4, or 8.1 Gbps per lane—the bandwid">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/display-port-micro-packet-stuffing-explained">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DisplayPort Micro-Packet Stuffing Explained - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/display-port-micro-packet-stuffing-explained" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="DisplayPort decouples the native video pixel clock from the physical link rate by converting continuous raster data into packetized streams. Because DisplayPort operates at fixed transmission speeds—such as 1.62, 2.7, 5.4, or 8.1 Gbps per lane—the bandwid" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="displayport-micro-packet-stuffing-explained">DisplayPort
+Micro-Packet Stuffing Explained</h1>
+<p>DisplayPort decouples the native video pixel clock from the physical
+link rate by converting continuous raster data into packetized streams.
+Because DisplayPort operates at fixed transmission speeds—such as 1.62,
+2.7, 5.4, or 8.1 Gbps per lane—the bandwidth provided by the link rarely
+matches the exact data rate dictated by a display's unique resolution,
+refresh rate, and blanking intervals. Micro-packet stuffing resolves
+this mismatch by dynamically injecting dummy symbols into structured
+micro-packets, known as Transfer Units, padding the data stream to fill
+the high-speed link without altering the underlying video timing.</p>
+<h3 id="the-mismatch-between-video-clocks-and-link-rates">The Mismatch
+Between Video Clocks and Link Rates</h3>
+<p>Traditional display interfaces like VGA, DVI, and early versions of
+HDMI scaled their physical transmission frequency to match the exact
+pixel clock of the incoming video signal. If a display mode required a
+148.5 MHz pixel clock, the physical serializer ran at a frequency
+directly derived from that 148.5 MHz clock.</p>
+<p>DisplayPort functions more like a data network. It relies on fixed
+physical link rates, independent of the video format being carried.
+Transmitting an arbitrary pixel clock (for instance, a custom 73.4 MHz
+clock) over a rigid 2.7 Gbps physical link creates an inherent bandwidth
+discrepancy: the link provides significantly more capacity than the
+video stream consumes.</p>
+<h3 id="the-role-of-transfer-units-tus">The Role of Transfer Units
+(TUs)</h3>
+<p>To transmit continuous raster video across a fixed-rate link,
+DisplayPort organizes active video data into discrete framing blocks
+called Transfer Units (TUs).</p>
+<ul>
+<li>A Transfer Unit is a fixed-size container, typically configured to
+32 to 64 link symbols per lane.</li>
+<li>Active pixel components are serialized and packed sequentially into
+these TUs.</li>
+<li>Because the link rate is higher than the pixel data rate, valid
+pixel data arrives from the rendering pipeline slower than the rate at
+which the link can emit symbols.</li>
+</ul>
+<h3 id="how-micro-packet-stuffing-works">How Micro-Packet Stuffing
+Works</h3>
+<p>Micro-packet stuffing is the mechanism that maintains physical link
+continuity when valid pixel data is not immediately available to fill a
+Transfer Unit.</p>
+<ol type="1">
+<li><strong>Active Data Allocation:</strong> The DisplayPort transmitter
+fills a Transfer Unit with incoming valid pixel data until no more
+current pixel data is ready in the source buffer.</li>
+<li><strong>Stuffing Injection:</strong> To complete the Transfer Unit
+without stalling the high-speed physical layer, the transmitter injects
+special non-data symbols—known as Stuffing Symbols (FS)—into the
+remaining slots of the TU.</li>
+<li><strong>Framing Demarcation:</strong> Control symbols, such as
+Framing End (FE) or Fill Start, mark the boundary between real pixel
+data and the padding symbols.</li>
+<li><strong>Sink Discard:</strong> When the receiving display (sink)
+decodes the Transfer Unit, its link layer automatically strips out the
+stuffing symbols, directing only the valid pixel data into its internal
+elastic buffer.</li>
+</ol>
+<p>By varying the ratio of valid pixel data to stuffing symbols inside
+each Transfer Unit, the transmitter dynamically matches the variable
+pixel data rate to the static link rate.</p>
+<h3 id="clock-recovery-using-m-and-n-values">Clock Recovery Using M and
+N Values</h3>
+<p>Stuffing fills the bandwidth gap, but the receiving monitor still
+needs to know the exact original pixel clock frequency to drive its
+internal panel timing. DisplayPort achieves this without dedicated clock
+lanes by using dynamic frequency multipliers known as <span
+class="math inline">\(M\)</span> and <span
+class="math inline">\(N\)</span> values.</p>
+<p>The source continuously measures its internal video pixel clock
+(<span class="math inline">\(f_{vid}\)</span>) against the fixed link
+clock (<span class="math inline">\(f_{link}\)</span>) and transmits two
+integers:</p>
+<ul>
+<li><strong><span class="math inline">\(M_{vid}\)</span></strong>: A
+dynamically calculated numerator.</li>
+<li><strong><span class="math inline">\(N_{vid}\)</span></strong>: A
+fixed or pre-negotiated denominator (typically 32,768).</li>
+</ul>
+<p>The relationship is governed by the formula:</p>
+<p><span class="math display">\[f_{vid} = f_{link} \times
+\left(\frac{M_{vid}}{N_{vid}}\right)\]</span></p>
+<p>The display's receiver uses a Phase-Locked Loop (PLL) combined with
+the <span class="math inline">\(M_{vid}\)</span> and <span
+class="math inline">\(N_{vid}\)</span> parameters embedded within the
+Main Stream Attribute (MSA) packets. This allows the display to
+mathematically regenerate the original pixel clock down to fractional
+Hertz accuracy, while the elastic buffer prevents underruns or overflows
+caused by the bursty arrival of packetized data.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/display-port-micro-packet-stuffing-explained';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

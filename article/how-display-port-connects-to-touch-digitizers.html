@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How DisplayPort Connects to Touch Digitizers - dp</title>
+    <meta name="description" content="Interactive digital whiteboards require two-way interaction: delivering high-resolution video from a computer to the screen, and sending real-time touch coordinates back to the operating system. While DisplayPort is fundamentally designed to transmit high">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/how-display-port-connects-to-touch-digitizers">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How DisplayPort Connects to Touch Digitizers - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/how-display-port-connects-to-touch-digitizers" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Interactive digital whiteboards require two-way interaction: delivering high-resolution video from a computer to the screen, and sending real-time touch coordinates back to the operating system. While DisplayPort is fundamentally designed to transmit high" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-displayport-connects-to-touch-digitizers">How DisplayPort
+Connects to Touch Digitizers</h1>
+<p>Interactive digital whiteboards require two-way interaction:
+delivering high-resolution video from a computer to the screen, and
+sending real-time touch coordinates back to the operating system. While
+DisplayPort is fundamentally designed to transmit high-bandwidth
+audiovisual data rather than peripheral input, it enables touch
+functionality either by pairing with a parallel USB data path or by
+operating through modern DisplayPort Alternate Mode over USB-C.
+Understanding how these protocols divide and route data is essential to
+understanding how interactive touch displays function.</p>
+<h3 id="native-displayport-architecture-and-data-flow">Native
+DisplayPort Architecture and Data Flow</h3>
+<p>A standard DisplayPort cable utilizes a main link consisting of one,
+two, or four high-speed lanes to transmit uncompressed video and audio
+signals from the host computer to the whiteboard display. It also
+includes a bidirectional Auxiliary (AUX) channel.</p>
+<p>The AUX channel handles device management tasks, such as Extended
+Display Identification Data (EDID), Display Data Channel (DDC), and
+High-bandwidth Digital Content Protection (HDCP) handshakes. However,
+native DisplayPort protocols do not include native transport for Human
+Interface Device (HID) data, which is the protocol required by touch
+digitizers.</p>
+<p>Because of this limitation, a standalone DisplayPort cable cannot
+transmit touch information on its own.</p>
+<h3 id="the-touch-digitizer-layer">The Touch Digitizer Layer</h3>
+<p>The touch digitizer—whether utilizing infrared (IR) grids, projected
+capacitive (PCAP) glass, or optical sensors—acts independently of the
+liquid crystal display (LCD) or OLED panel.</p>
+<ol type="1">
+<li><strong>Detection:</strong> When a user touches the glass or uses a
+stylus, the digitizer's controller registers changes in electrical
+capacitance or interrupted light beams.</li>
+<li><strong>Coordinate Calculation:</strong> The onboard controller
+calculates the exact <span class="math inline">\(X\)</span> and <span
+class="math inline">\(Y\)</span> coordinates (and pressure levels, if
+supported).</li>
+<li><strong>Packet Formatting:</strong> The controller formats these
+coordinates into standard USB HID packets, mirroring how a standard
+mouse or drawing tablet functions.</li>
+</ol>
+<h3 id="how-displayport-integrates-with-touch-digitizers">How
+DisplayPort Integrates with Touch Digitizers</h3>
+<p>To achieve full interactivity, display systems bridge the gap between
+video delivery and touch return using one of two primary methods:</p>
+<h4 id="1-dual-cable-configuration-standard-displayport--usb">1.
+Dual-Cable Configuration (Standard DisplayPort + USB)</h4>
+<p>In traditional setups, the whiteboard separates video and input
+across physical connections:</p>
+<ul>
+<li><strong>DisplayPort Cable:</strong> Transmits the video output from
+the host GPU to the whiteboard's scaler board to render the
+desktop.</li>
+<li><strong>USB Cable (Type-A to Type-B or Type-C):</strong> Connects
+the digitizer’s controller directly to the computer’s USB host
+controller.</li>
+</ul>
+<p>The operating system treats the DisplayPort connection as a monitor
+and the USB connection as a pointing device. Software mapping inside the
+operating system matches the touch coordinates from the USB HID device
+to the pixel grid established by the DisplayPort connection.</p>
+<h4 id="2-displayport-alt-mode-over-usb-type-c">2. DisplayPort Alt Mode
+over USB Type-C</h4>
+<p>Modern interactive whiteboards frequently use USB-C, which natively
+integrates DisplayPort transmission alongside data channels:</p>
+<ul>
+<li><strong>Physical Layer:</strong> The USB Type-C connector
+reconfigures its high-speed lanes. Typically, two or four lanes are
+dedicated to carrying native DisplayPort video (DP Alt Mode) to the
+display processor.</li>
+<li><strong>Data Layer:</strong> Simultaneously, dedicated physical
+lines within the same cable (the USB 2.0 D+/D- pins or remaining
+SuperSpeed lanes) carry the USB HID touch data from the digitizer
+controller back to the host computer.</li>
+</ul>
+<p>In this setup, DisplayPort and the touch digitizer share a single
+physical cable sheath, but their logical communication remains separate:
+the GPU drives the DisplayPort protocol, while the USB controller
+processes the digitizer data.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/how-display-port-connects-to-touch-digitizers';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

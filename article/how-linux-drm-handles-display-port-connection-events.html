@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Linux DRM Handles DisplayPort Connection Events - dp</title>
+    <meta name="description" content="This article provides an overview of how the Linux kernel&#39;s Direct Rendering Manager (DRM) detects, processes, and responds to DisplayPort (DP) connection events. It details the journey from the initial physical connection and hardware interrupt to driver">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/how-linux-drm-handles-display-port-connection-events">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Linux DRM Handles DisplayPort Connection Events - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/how-linux-drm-handles-display-port-connection-events" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article provides an overview of how the Linux kernel&#39;s Direct Rendering Manager (DRM) detects, processes, and responds to DisplayPort (DP) connection events. It details the journey from the initial physical connection and hardware interrupt to driver" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-linux-drm-handles-displayport-connection-events">How Linux
+DRM Handles DisplayPort Connection Events</h1>
+<p>This article provides an overview of how the Linux kernel's Direct
+Rendering Manager (DRM) detects, processes, and responds to DisplayPort
+(DP) connection events. It details the journey from the initial physical
+connection and hardware interrupt to driver-level auxiliary channel
+communication, state updates within the Kernel Mode Setting (KMS)
+subsystem, and eventual notification dispatch to userspace display
+servers.</p>
+<h3 id="1-hardware-detection-and-hot-plug-detect-hpd">1. Hardware
+Detection and Hot Plug Detect (HPD)</h3>
+<p>The process begins at the physical layer when a DisplayPort cable is
+plugged into or unplugged from a display output. The monitor asserts the
+Hot Plug Detect (HPD) pin by driving the signal line high (typically
+3.3V).</p>
+<p>The Graphics Processing Unit (GPU) senses this voltage transition via
+dedicated HPD hardware pins and fires a hardware interrupt (IRQ) to the
+CPU. DisplayPort defines two primary types of HPD signals based on pulse
+duration:</p>
+<ul>
+<li><strong>Long Pulse (typically &gt; 100ms):</strong> Signifies a
+genuine connection or disconnection event.</li>
+<li><strong>Short Pulse (typically 0.5ms – 1.0ms, or "HPD
+IRQ"):</strong> Indicates an attention request from an already connected
+sink, such as a loss of link synchronization, an HDCP event, or a
+Multi-Stream Transport (MST) topology change.</li>
+</ul>
+<h3 id="2-driver-level-interrupt-handling">2. Driver-Level Interrupt
+Handling</h3>
+<p>When the CPU receives the HPD interrupt, the GPU vendor's DRM driver
+(such as <code>i915</code>, <code>amdgpu</code>, or
+<code>nouveau</code>) executes its Interrupt Service Routine (ISR).</p>
+<p>Because reading display metadata involves latency-heavy input/output,
+the ISR does not process the event directly. Instead, it schedules an
+asynchronous work item on a kernel workqueue (often utilizing DRM helper
+libraries like <code>drm_kms_helper</code>) to handle the event outside
+the critical interrupt context.</p>
+<h3 id="3-dpcd-probing-via-the-aux-channel">3. DPCD Probing via the AUX
+Channel</h3>
+<p>The scheduled worker analyzes the event by communicating with the
+sink device over the DisplayPort Auxiliary (AUX) channel. The driver
+reads the DisplayPort Configuration Data (DPCD) registers located on the
+monitor:</p>
+<ul>
+<li>For a <strong>short pulse</strong>, the driver inspects specific
+DPCD interrupt status registers (such as <code>DPCD 0x0200</code> to
+<code>0x0205</code>) to determine if link training must be renegotiated
+or if an MST message is pending.</li>
+<li>For a <strong>long pulse</strong>, the driver verifies whether a
+sink is present. If detected, it reads the DPCD receiver capabilities to
+establish supported link rates, lane counts, and whether the device
+supports DisplayPort Multi-Stream Transport (DP-MST).</li>
+</ul>
+<h3 id="4-edid-read-and-drm-connector-state-updates">4. EDID Read and
+DRM Connector State Updates</h3>
+<p>If a valid connection is confirmed, the driver retrieves the Extended
+Display Identification Data (EDID) from the display using
+I2C-over-AUX.</p>
+<p>The driver passes the raw EDID to the DRM core. DRM validates the
+checksum and parses the EDID to construct a list of supported display
+modes (resolutions, refresh rates, and color formats). The DRM subsystem
+then updates the internal state of the corresponding
+<code>drm_connector</code> object, toggling its status to
+<code>DRM_MODE_CONNECTED</code> or
+<code>DRM_MODE_DISCONNECTED</code>.</p>
+<p>If the device supports MST, the kernel’s DP-MST helper library takes
+over branch and port management, dynamically creating or destroying
+virtual <code>drm_connector</code> instances for daisy-chained or
+hub-connected displays.</p>
+<h3 id="5-userspace-notification">5. Userspace Notification</h3>
+<p>Once the DRM core updates its internal connector states and mode
+lists, it informs userspace compositors of the hardware change. The
+driver calls <code>drm_kms_helper_hotplug_event()</code>, which sends a
+<code>uevent</code> across the Netlink socket with the
+<code>HOTPLUG=1</code> environment variable.</p>
+<p>Display servers and compositors (such as Wayland compositors or Xorg)
+listen for these uevents via <code>udev</code>. Upon receipt, the
+compositor queries the DRM subsystem via <code>ioctl</code> interfaces
+(such as <code>DRM_IOCTL_MODE_GETCONNECTOR</code>) to read the updated
+topology and execute Atomic KMS requests to configure the new
+displays.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/how-linux-drm-handles-display-port-connection-events';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>
