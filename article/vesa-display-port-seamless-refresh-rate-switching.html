@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VESA DisplayPort Seamless Refresh Rate Switching - dp</title>
+    <meta name="description" content="This article provides an overview of the VESA DisplayPort Seamless Refresh Rate Switching standard, explaining what the technology is, how it operates, and why it is significant for modern displays. You will learn about the user-experience problems it add">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/vesa-display-port-seamless-refresh-rate-switching">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="VESA DisplayPort Seamless Refresh Rate Switching - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/vesa-display-port-seamless-refresh-rate-switching" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article provides an overview of the VESA DisplayPort Seamless Refresh Rate Switching standard, explaining what the technology is, how it operates, and why it is significant for modern displays. You will learn about the user-experience problems it add" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="vesa-displayport-seamless-refresh-rate-switching">VESA
+DisplayPort Seamless Refresh Rate Switching</h1>
+<p>This article provides an overview of the VESA DisplayPort Seamless
+Refresh Rate Switching standard, explaining what the technology is, how
+it operates, and why it is significant for modern displays. You will
+learn about the user-experience problems it addresses, how it differs
+from traditional display mode changes and variable refresh rate
+technologies, its primary benefits for power efficiency and media
+playback, and the hardware requirements necessary to use it.</p>
+<h2 id="what-is-seamless-refresh-rate-switching">What Is Seamless
+Refresh Rate Switching?</h2>
+<p>VESA DisplayPort Seamless Refresh Rate Switching is an extension of
+the DisplayPort standard that enables a connected display to dynamically
+change its base operating refresh rate without causing the screen to
+flicker, drop signal, or go black. Developed by the Video Electronics
+Standards Association (VESA), this feature allows the graphics
+processing unit (GPU) and the display panel to transition smoothly
+between different refresh rates on the fly.</p>
+<h2 id="the-problem-with-traditional-refresh-rate-switching">The Problem
+With Traditional Refresh Rate Switching</h2>
+<p>On standard displays, changing the refresh rate—such as switching
+from 60 Hz to 144 Hz or 240 Hz—requires a complete display mode reset
+(modeset). During this reset:</p>
+<ul>
+<li>The GPU and monitor renegotiate the video link timing and
+parameters.</li>
+<li>The display temporarily loses synchronization with the video
+stream.</li>
+<li>The user experiences a black screen, visual stutter, or audio
+dropout lasting between one and three seconds.</li>
+</ul>
+<p>This interruption frequently occurs when launching a full-screen
+game, switching between desktop applications and media players, or
+changing display settings in the operating system.</p>
+<h2 id="how-the-technology-works">How the Technology Works</h2>
+<p>Unlike conventional mode switching, Seamless Refresh Rate Switching
+adjusts video timing parameters dynamically within the active video
+stream:</p>
+<ol type="1">
+<li><strong>Continuous Link Maintenance:</strong> The physical
+DisplayPort link remains fully active and synchronized, avoiding a full
+link retraining sequence.</li>
+<li><strong>Timing Adjustments:</strong> The graphics hardware alters
+parameters such as the vertical front porch and vertical blanking
+intervals without interrupting the pixel clock.</li>
+<li><strong>Instantaneous Transition:</strong> The display timing
+controller (TCON) interprets these adjustments seamlessly, shifting to
+the new target refresh rate in a single frame cycle without losing
+synchronization.</li>
+</ol>
+<p>While similar in concept to Adaptive-Sync or Variable Refresh Rate
+(VRR)—which fluctuates refresh rates frame-by-frame during 3D
+rendering—Seamless Refresh Rate Switching is designed for static mode
+transitions. It establishes a new fixed baseline refresh rate for
+sustained usage scenarios without the overhead or artifacts of
+traditional mode switches.</p>
+<h2 id="key-benefits">Key Benefits</h2>
+<h3 id="1-zero-screen-interruption">1. Zero Screen Interruption</h3>
+<p>Users no longer experience blank screens when opening games,
+alternating between windows, or moving between applications with
+differing frame rate targets.</p>
+<h3 id="2-enhanced-power-efficiency">2. Enhanced Power Efficiency</h3>
+<p>Display panels consume significantly more power when running at high
+refresh rates. Seamless switching allows operating systems and mobile
+devices (like laptops) to drop to 60 Hz or lower during static tasks
+(such as document editing or browsing), and instantaneously jump to 120
+Hz, 144 Hz, or higher the moment smooth motion or gaming is
+required.</p>
+<h3 id="3-jitter-free-media-playback">3. Jitter-Free Media Playback</h3>
+<p>Standard video content is often mastered at 24, 25, 30, or 50 frames
+per second. Seamless switching enables the display to match native film
+cadences (such as dropping to 24 Hz, 48 Hz, or 120 Hz to eliminate 3:2
+pulldown judder) as soon as video playback begins, and immediately
+return to the desktop refresh rate when playback stops.</p>
+<h2 id="requirements-and-compatibility">Requirements and
+Compatibility</h2>
+<p>To use VESA Seamless Refresh Rate Switching, support is required
+across the entire display pipeline:</p>
+<ul>
+<li><strong>GPU &amp; Drivers:</strong> A modern GPU and operating
+system graphics stack that support dynamic refresh rate handshakes.</li>
+<li><strong>Display Connection:</strong> A compliant DisplayPort
+interface (commonly integrated into DisplayPort 2.1 implementations and
+supported USB-C DisplayPort Alt Mode profiles).</li>
+<li><strong>Display Hardware:</strong> A monitor or laptop panel
+equipped with a compatible timing controller designed to support
+seamless mode transitions.</li>
+</ul></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/vesa-display-port-seamless-refresh-rate-switching';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

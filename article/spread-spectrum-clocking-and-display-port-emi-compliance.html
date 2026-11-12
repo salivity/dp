@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spread-Spectrum Clocking and DisplayPort EMI Compliance - dp</title>
+    <meta name="description" content="High-speed digital interfaces like DisplayPort transmit data at multi-gigabit rates, creating significant electromagnetic radiation that can breach international regulatory limits if left unmanaged. Spread-spectrum clocking (SSC) provides a cost-effective">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/spread-spectrum-clocking-and-display-port-emi-compliance">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Spread-Spectrum Clocking and DisplayPort EMI Compliance - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/spread-spectrum-clocking-and-display-port-emi-compliance" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="High-speed digital interfaces like DisplayPort transmit data at multi-gigabit rates, creating significant electromagnetic radiation that can breach international regulatory limits if left unmanaged. Spread-spectrum clocking (SSC) provides a cost-effective" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1
+id="spread-spectrum-clocking-and-displayport-emi-compliance">Spread-Spectrum
+Clocking and DisplayPort EMI Compliance</h1>
+<p>High-speed digital interfaces like DisplayPort transmit data at
+multi-gigabit rates, creating significant electromagnetic radiation that
+can breach international regulatory limits if left unmanaged.
+Spread-spectrum clocking (SSC) provides a cost-effective, hardware-level
+solution by modulating the clock frequency over a narrow band instead of
+running at a fixed frequency. This article explains the mechanics of
+SSC, how it redistributes electromagnetic energy, and why it is
+essential for DisplayPort devices to pass electromagnetic compatibility
+testing.</p>
+<h3 id="the-electromagnetic-interference-challenge-in-displayport">The
+Electromagnetic Interference Challenge in DisplayPort</h3>
+<p>DisplayPort technology uses high-speed serial links to transmit
+video, audio, and auxiliary data. As transmission speeds climb—reaching
+up to 20 Gbps per lane in newer specifications—the rapid signal
+transitions generate sharp electrical pulses.</p>
+<p>When a standard, fixed-frequency reference clock governs these
+transitions, the radiated electromagnetic energy concentrates into
+extremely narrow, high-amplitude spikes. These spikes appear at the
+fundamental clock frequency and its harmonic multiples. Regulatory
+bodies, such as the Federal Communications Commission (FCC) and the
+International Special Committee on Radio Interference (CISPR), set
+strict upper limits on radiated peak emissions. If a single harmonic
+spike exceeds these thresholds, the device fails compliance
+certification, barring it from commercial distribution.</p>
+<h3 id="how-spread-spectrum-clocking-works">How Spread-Spectrum Clocking
+Works</h3>
+<p>Spread-spectrum clocking modifies the reference clock by continuously
+modulating its frequency over time. In DisplayPort implementations, this
+is typically done using "down-spread" modulation, meaning the clock
+frequency fluctuates between its nominal value and a slightly lower
+value (typically between 0% and -0.5%).</p>
+<p>This frequency variation is modulated at a lower rate, usually
+between 30 kHz and 33 kHz, often utilizing a triangular modulation
+profile (known as the Hershey or Lexmark profile). Because the clock
+frequency constantly changes, the radiated electromagnetic energy does
+not stay at any single frequency long enough to accumulate into a tall
+energy spike. Instead, the total spectral energy remains constant but is
+distributed across a wider frequency band.</p>
+<h3 id="mitigating-emi-at-the-measurement-level">Mitigating EMI at the
+Measurement Level</h3>
+<p>Regulatory compliance testing instruments evaluate electromagnetic
+emissions using a designated resolution bandwidth (RBW), which scans
+across frequency ranges to measure the highest peak of radiated power
+within defined slices of the spectrum.</p>
+<p>By flattening the peak and spreading the energy across the wider
+band, SSC lowers the measured amplitude that falls within the receiver’s
+resolution window. Implementing SSC generally reduces peak radiated
+emissions by 5 dB to 15 dB. This reduction often provides the critical
+margin needed to comply with EMI standards without requiring heavy
+chassis redesigns, conductive gaskets, bulky ferrite beads, or expensive
+metal shielding around the DisplayPort connectors and cables.</p>
+<h3 id="integration-within-the-displayport-standard">Integration within
+the DisplayPort Standard</h3>
+<p>The Video Electronics Standards Association (VESA) standardizes SSC
+support within the DisplayPort specification to guarantee
+interoperability between sources (such as graphics cards) and sinks
+(such as monitors).</p>
+<p>Because the clock frequency fluctuates, the receiver's Clock and Data
+Recovery (CDR) circuitry must track this modulation without losing
+synchronization. DisplayPort receivers are engineered with phase-locked
+loops (PLLs) specifically tuned to follow the 30–33 kHz modulation rate.
+This coordination ensures that the link maintains bit-error-rate
+integrity and stable signal transmission while significantly lowering
+the device's radiated electromagnetic footprint.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/spread-spectrum-clocking-and-display-port-emi-compliance';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

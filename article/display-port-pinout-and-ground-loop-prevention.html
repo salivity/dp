@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisplayPort Pinout and Ground Loop Prevention - dp</title>
+    <meta name="description" content="This article explores how the DisplayPort connector pinout and physical architecture mitigate ground loops in interconnected audiovisual systems. By employing dedicated differential pair returns, structural isolation between chassis shielding and logic gr">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/display-port-pinout-and-ground-loop-prevention">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DisplayPort Pinout and Ground Loop Prevention - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/display-port-pinout-and-ground-loop-prevention" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explores how the DisplayPort connector pinout and physical architecture mitigate ground loops in interconnected audiovisual systems. By employing dedicated differential pair returns, structural isolation between chassis shielding and logic gr" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="displayport-pinout-and-ground-loop-prevention">DisplayPort
+Pinout and Ground Loop Prevention</h1>
+<p>This article explores how the DisplayPort connector pinout and
+physical architecture mitigate ground loops in interconnected
+audiovisual systems. By employing dedicated differential pair returns,
+structural isolation between chassis shielding and logic ground,
+mandatory AC-coupling capacitors, and strict power pin configurations,
+DisplayPort stops stray direct current (DC) and common-mode noise from
+circulating through AV equipment.</p>
+<h3 id="understanding-ground-loops-in-av-systems">Understanding Ground
+Loops in AV Systems</h3>
+<p>A ground loop occurs when two or more interconnected electronic
+devices share multiple paths to ground with slightly different
+electrical potentials. This potential difference causes stray current to
+flow along the cable shielding and signal return paths. In analog and
+early digital systems, this current manifests as audible hum, video
+rolling, or communication dropouts. DisplayPort prevents these issues
+through a combination of physical pin assignments and transmission
+standards.</p>
+<h3 id="dedicated-signal-return-pins">Dedicated Signal Return Pins</h3>
+<p>The standard 20-pin DisplayPort interface transmits high-speed
+digital audio and video across four main differential pairs (ML_Lane 0
+through ML_Lane 3). The pinout alternates high-speed differential pins
+with dedicated ground return pins:</p>
+<ul>
+<li><strong>Pin 1 &amp; 3:</strong> Lane 0 (Positive/Negative) |
+<strong>Pin 2:</strong> Ground</li>
+<li><strong>Pin 4 &amp; 6:</strong> Lane 1 (Positive/Negative) |
+<strong>Pin 5:</strong> Ground</li>
+<li><strong>Pin 7 &amp; 9:</strong> Lane 2 (Positive/Negative) |
+<strong>Pin 8:</strong> Ground</li>
+<li><strong>Pin 10 &amp; 12:</strong> Lane 3 (Positive/Negative) |
+<strong>Pin 11:</strong> Ground</li>
+<li><strong>Pin 15 &amp; 17:</strong> AUX Channel (Positive/Negative) |
+<strong>Pin 16:</strong> Ground</li>
+</ul>
+<p>By providing an isolated ground reference for each individual
+differential pair, high-frequency return currents stay tightly bound to
+their respective signal traces. This layout minimizes loop area, reduces
+electromagnetic radiation, and prevents common-mode return currents from
+spreading across the entire chassis ground system.</p>
+<h3 id="mandatory-ac-coupling-capacitive-isolation">Mandatory AC
+Coupling (Capacitive Isolation)</h3>
+<p>While not solely a feature of the external pins, DisplayPort
+specification dictates that all Main Link lanes must be AC-coupled.
+Capacitors are placed in series along the differential lines (either
+embedded near the transmitter or integrated into the connector
+assembly).</p>
+<p>These capacitors allow high-frequency alternating current (AC) data
+signals to pass freely while completely blocking direct current (DC).
+Because ground loop noise relies on DC or low-frequency AC potential
+differences between devices, capacitive isolation inherently breaks the
+conductive loop on all primary data lines.</p>
+<h3 id="separation-of-cable-shielding-and-signal-ground">Separation of
+Cable Shielding and Signal Ground</h3>
+<p>DisplayPort separates signal logic ground from the outer mechanical
+chassis ground (the connector shell). The cable's braided outer shield
+attaches directly to the connector shell, draining external
+electromagnetic interference (EMI) and electrostatic discharges (ESD)
+safely to the device's chassis.</p>
+<p>Because the signal ground pins (Pins 2, 5, 8, 11, and 16) are
+electrically separated within the connector interface, current traveling
+along the shield due to chassis ground potential differences does not
+contaminate the digital audio or video reference planes.</p>
+<h3 id="pin-20-power-isolation">Pin 20 Power Isolation</h3>
+<p>Pin 20 (<code>DP_PWR</code>) provides 3.3V DC power at up to 500mA,
+primarily designed to power adapters, active cables, or signal boosters.
+In standard passive DisplayPort-to-DisplayPort cables, the VESA standard
+specifies that Pin 20 must remain unpopulated (not connected
+wire-to-wire).</p>
+<p>Disconnecting Pin 20 between source and sink devices prevents the
+power delivery network of one device from conflicting with another. This
+elimination of cross-device power connections removes a significant
+pathway for power-rail-induced ground loops and power supply hum.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/display-port-pinout-and-ground-loop-prevention';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

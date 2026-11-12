@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Max DisplayPort Pixel Clock Rates on Modern GPUs - dp</title>
+    <meta name="description" content="This article examines the pixel clock rates supported by the DisplayPort Main Link when powered by modern GPU display engines from NVIDIA, AMD, and Intel. It covers the architectural decoupling of pixel clocks from physical link rates, the maximum uncompr">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/max-display-port-pixel-clock-rates-on-modern-gp-us">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Max DisplayPort Pixel Clock Rates on Modern GPUs - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/max-display-port-pixel-clock-rates-on-modern-gp-us" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article examines the pixel clock rates supported by the DisplayPort Main Link when powered by modern GPU display engines from NVIDIA, AMD, and Intel. It covers the architectural decoupling of pixel clocks from physical link rates, the maximum uncompr" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="max-displayport-pixel-clock-rates-on-modern-gpus">Max
+DisplayPort Pixel Clock Rates on Modern GPUs</h1>
+<p>This article examines the pixel clock rates supported by the
+DisplayPort Main Link when powered by modern GPU display engines from
+NVIDIA, AMD, and Intel. It covers the architectural decoupling of pixel
+clocks from physical link rates, the maximum uncompressed pixel
+frequencies possible across DisplayPort standards up to DP 2.1, the
+internal hardware limitations of modern display pipelines, and the
+multiplying effect of Display Stream Compression (DSC).</p>
+<h3 id="decoupling-the-pixel-clock-from-the-main-link">Decoupling the
+Pixel Clock from the Main Link</h3>
+<p>Unlike legacy interfaces such as DVI or standard HDMI (TMDS) where
+the transmission clock directly matches or tracks the pixel clock,
+DisplayPort uses a packetized architecture. The DisplayPort Main Link
+operates at fixed symbol rates across 1, 2, or 4 lanes regardless of the
+display resolution or refresh rate.</p>
+<p>Pixel data is transmitted as micro-packets. To reconstruct the
+original pixel clock at the display sink, DisplayPort uses fractional
+<span class="math inline">\(M_{vid}\)</span> and <span
+class="math inline">\(N_{vid}\)</span> values, allowing the video
+stream's pixel clock (<span class="math inline">\(f_{pixel}\)</span>) to
+be synthesized independently of the link symbol rate (<span
+class="math inline">\(f_{link}\)</span>):</p>
+<p><span class="math display">\[f_{pixel} = f_{link} \times
+\left(\frac{M_{vid}}{N_{vid}}\right)\]</span></p>
+<p>As a result, modern GPU display engines are not constrained to a
+discrete set of physical clock frequencies on the wire. Instead, the
+maximum pixel clock that the Main Link can deliver is governed by total
+net data throughput, color depth, and the GPU's internal pixel-pipeline
+rate.</p>
+<hr />
+<h3 id="uncompressed-pixel-clock-capacities-by-generation">Uncompressed
+Pixel Clock Capacities by Generation</h3>
+<p>The pixel clock capacity represents how many pixels can be
+transferred per second. At standard 24-bit color (8 bits per channel,
+RGB/YCbCr 4:4:4), every pixel requires 24 bits of payload data.</p>
+<p>When driven by modern display engines, standard 4-lane DisplayPort
+links achieve the following theoretical maximum uncompressed pixel clock
+rates:</p>
+<ul>
+<li><strong>DisplayPort 1.4a (HBR3):</strong>
+<ul>
+<li><em>Raw Bitrate:</em> 32.40 Gbps (8b/10b encoding)</li>
+<li><em>Net Data Bandwidth:</em> 25.92 Gbps</li>
+<li><em>Max 24-bpp Pixel Clock:</em> ~1,080 MHz (1.08 GHz)</li>
+<li><em>Max 30-bpp (10-bit) Pixel Clock:</em> ~864 MHz</li>
+</ul></li>
+<li><strong>DisplayPort 2.1 (UHBR 10):</strong>
+<ul>
+<li><em>Raw Bitrate:</em> 40.00 Gbps (128b/132b encoding)</li>
+<li><em>Net Data Bandwidth:</em> 38.69 Gbps</li>
+<li><em>Max 24-bpp Pixel Clock:</em> ~1,612 MHz (1.61 GHz)</li>
+<li><em>Max 30-bpp (10-bit) Pixel Clock:</em> ~1,289 MHz</li>
+</ul></li>
+<li><strong>DisplayPort 2.1 (UHBR 13.5):</strong>
+<ul>
+<li><em>Raw Bitrate:</em> 54.00 Gbps (128b/132b encoding)</li>
+<li><em>Net Data Bandwidth:</em> 52.22 Gbps</li>
+<li><em>Max 24-bpp Pixel Clock:</em> ~2,175 MHz (2.17 GHz)</li>
+<li><em>Max 30-bpp (10-bit) Pixel Clock:</em> ~1,740 MHz</li>
+</ul></li>
+<li><strong>DisplayPort 2.1 (UHBR 20):</strong>
+<ul>
+<li><em>Raw Bitrate:</em> 80.00 Gbps (128b/132b encoding)</li>
+<li><em>Net Data Bandwidth:</em> 77.37 Gbps</li>
+<li><em>Max 24-bpp Pixel Clock:</em> ~3,223 MHz (3.22 GHz)</li>
+<li><em>Max 30-bpp (10-bit) Pixel Clock:</em> ~2,579 MHz</li>
+</ul></li>
+</ul>
+<hr />
+<h3 id="gpu-display-engine-internal-limits">GPU Display Engine Internal
+Limits</h3>
+<p>While the physical link may support upwards of 3.2 GHz uncompressed,
+the GPU’s internal display engine heads impose their own processing
+bottlenecks.</p>
+<ol type="1">
+<li><strong>Single-Head Pixel Clock Caps:</strong> A single display pipe
+inside a GPU display engine (such as NVIDIA Ada Lovelace/Blackwell, AMD
+RDNA 2/3/4, or Intel Xe/Xe2) typically runs at an internal clock
+frequency limit between <strong>1,200 MHz and 1,500 MHz</strong>. To
+produce an uncompressed timing that exceeds this rate, modern display
+engines must employ dual-pipe or multi-segment compositing, where two
+internal display pipes combine to drive a single DisplayPort Main
+Link.</li>
+<li><strong>AMD RDNA 3 / RDNA 4 (Radiance Display Engine):</strong> AMD
+display engines support native UHBR 13.5 on consumer models (up to 54
+Gbps) and UHBR 20 on workstation cards. Internally, the engine can
+sustain pixel throughput capable of driving 4K at 480 Hz or 8K at 165 Hz
+when utilizing compression or multi-head joining.</li>
+<li><strong>NVIDIA Ada Lovelace (RTX 40-Series):</strong> Limited to DP
+1.4a physical transceivers (HBR3), capping native uncompressed
+single-stream transmission at approximately 1.08 GHz (24-bpp), with
+internal hardware limits around 1.4 GHz.</li>
+<li><strong>Intel Arc (Alchemist / Battlemage):</strong> Alchemist
+supports DP 2.0 UHBR 10 (up to ~1.61 GHz uncompressed equivalent), while
+newer architectures extend this to higher UHBR tiers.</li>
+</ol>
+<hr />
+<h3 id="effective-pixel-clock-extension-via-dsc">Effective Pixel Clock
+Extension via DSC</h3>
+<p>Display Stream Compression (VESA DSC 1.2a) fundamentally alters pixel
+clock constraints. DSC compresses the video data in real time at ratios
+up to 3:1 (or 3.75:1 under certain formats) without perceptual visual
+loss.</p>
+<p>Because the data transmitted over the Main Link is compressed down to
+as low as 8 bits per pixel (or fewer), the <em>effective</em> pixel
+clock rate handled across the link increases proportionally:</p>
+<ul>
+<li><strong>DP 1.4a with DSC:</strong> Can convey effective pixel clock
+rates of <strong>2.5 GHz to 3.2 GHz</strong>, enabling 4K 144Hz–240Hz
+10-bit HDR streams over an HBR3 link.</li>
+<li><strong>DP 2.1 (UHBR 20) with DSC:</strong> Can handle effective
+pixel clock rates exceeding <strong>8.0 GHz to 9.6 GHz</strong>,
+providing sufficient headroom for dual-4K 240Hz, 8K 120Hz/165Hz HDR, or
+extreme ultrawide resolutions without color subsampling.</li>
+</ul>
+<p>In these DSC configurations, the bottleneck shifts entirely from the
+physical DisplayPort Main Link bandwidth to the GPU display engine's
+maximum DSC slice encoding rate and internal clock frequency
+boundaries.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/max-display-port-pixel-clock-rates-on-modern-gp-us';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Can DisplayPort Transmit YCbCr 4:4:4 Natively? - dp</title>
+    <meta name="description" content="DisplayPort natively supports the transmission of the uncompressed YCbCr 4:4:4 color space, making it a viable and robust interface for professional video editing and color-grading workflows. Established by VESA specifications, the interface can carry ful">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/can-display-port-transmit-y-cb-cr-4-4-4-natively">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Can DisplayPort Transmit YCbCr 4:4:4 Natively? - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/can-display-port-transmit-y-cb-cr-4-4-4-natively" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="DisplayPort natively supports the transmission of the uncompressed YCbCr 4:4:4 color space, making it a viable and robust interface for professional video editing and color-grading workflows. Established by VESA specifications, the interface can carry ful" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="can-displayport-transmit-ycbcr-444-natively">Can DisplayPort
+Transmit YCbCr 4:4:4 Natively?</h1>
+<p>DisplayPort natively supports the transmission of the uncompressed
+YCbCr 4:4:4 color space, making it a viable and robust interface for
+professional video editing and color-grading workflows. Established by
+VESA specifications, the interface can carry full-bandwidth chroma
+components alongside luma without forced downsampling or mandatory
+conversion to RGB. This article details the technical mechanics of
+native YCbCr 4:4:4 transmission over DisplayPort, its bandwidth
+requirements across different standard versions, and its practical
+application in professional post-production environments.</p>
+<h3 id="vesa-specifications-and-color-space-support">VESA Specifications
+and Color Space Support</h3>
+<p>The DisplayPort standard has supported YCbCr color spaces since its
+early revisions. While standard computer graphics primarily operate in
+RGB, VESA included native support for YCbCr 4:4:4 and YCbCr 4:2:2
+starting with DisplayPort 1.1, expanding capabilities significantly in
+DisplayPort 1.2, 1.4, and 2.1.</p>
+<p>DisplayPort transmits data using packetized Main Link lanes. Pixel
+data is mapped directly into stream packets (Mini-Packets and Main
+Stream Attributes). When configured for YCbCr 4:4:4, the interface
+transmits the luminance channel (<span class="math inline">\(Y\)</span>)
+and both chrominance channels (<span class="math inline">\(Cb\)</span>
+and <span class="math inline">\(Cr\)</span>) at full horizontal and
+vertical resolution. The protocol does not mandate an intermediate
+conversion to RGB, allowing the native video signal to pass directly
+from the graphics processor or playback card to the display
+hardware.</p>
+<h3 id="bit-depth-and-dynamic-range-capabilities">Bit Depth and Dynamic
+Range Capabilities</h3>
+<p>Professional video editing demands high bit depths to prevent banding
+and ensure color accuracy, particularly when mastering in Rec. 709,
+DCI-P3, or Rec. 2020 color spaces. DisplayPort handles deep color in
+YCbCr 4:4:4 across multiple standard tiers:</p>
+<ul>
+<li><strong>DisplayPort 1.2:</strong> Provides up to 21.6 Gbps of raw
+bandwidth (17.28 Gbps data rate), supporting 4K resolution at 60 Hz in
+8-bit or 10-bit YCbCr 4:4:4.</li>
+<li><strong>DisplayPort 1.4:</strong> Delivers up to 32.4 Gbps of raw
+bandwidth (25.92 Gbps data rate) and adds Display Stream Compression
+(DSC 1.2). It natively handles 4K at 60 Hz in 10-bit and 12-bit YCbCr
+4:4:4 uncompressed, and higher resolutions/refresh rates with visually
+lossless DSC.</li>
+<li><strong>DisplayPort 2.1:</strong> Increases maximum transmission
+capability to 80 Gbps (UHBR 20), accommodating uncompressed 8K at 60 Hz
+in 10-bit and 12-bit YCbCr 4:4:4 without requiring compression.</li>
+</ul>
+<p>Because YCbCr 4:4:4 retains identical pixel and chroma payload sizing
+as standard uncompressed RGB at matching bit depths, bandwidth
+consumption between the two formats is identical.</p>
+<h3 id="integration-in-professional-video-workflows">Integration in
+Professional Video Workflows</h3>
+<p>In high-end video mastering and broadcast workflows, content is
+predominantly captured, edited, and delivered in YCbCr formats.
+DisplayPort supports these pipelines under specific operational
+configurations:</p>
+<ol type="1">
+<li><strong>Hardware Handshaking and EDID:</strong> Native transmission
+relies on Extended Display Identification Data (EDID). The receiving
+reference monitor must advertise YCbCr 4:4:4 capability over its
+DisplayPort receiver, signaling the host GPU or dedicated output card to
+output the stream without internal color-matrix conversion.</li>
+<li><strong>Bypassing OS Color Management:</strong> Standard desktop
+operating systems typically render the desktop GUI in RGB. For accurate
+YCbCr 4:4:4 monitoring, editing suites often use clean-feed video
+outputs or dedicated I/O hardware that directly maps native video frames
+to the DisplayPort pipeline, circumventing OS-level gamma and matrix
+manipulations.</li>
+<li><strong>Reference Monitor Processing:</strong> High-end mastering
+monitors equipped with DisplayPort inputs process incoming YCbCr 4:4:4
+signals directly through internal hardware look-up tables (LUTs),
+maintaining native chroma separation through the final panel driver
+stage.</li>
+</ol>
+<p>DisplayPort reliably serves as an uncompressed, high-fidelity
+pipeline capable of preserving YCbCr 4:4:4 signal integrity for
+mission-critical video mastering.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/can-display-port-transmit-y-cb-cr-4-4-4-natively';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

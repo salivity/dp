@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisplayPort MDCV Metadata Support for HDR - dp</title>
+    <meta name="description" content="DisplayPort is fully capable of conveying Mastering Display Color Volume (MDCV) metadata required for HDR calibration, starting with the DisplayPort 1.4 standard. By encapsulating Consumer Technology Association (CTA) InfoFrames within its transmission st">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/display-port-mdcv-metadata-support-for-hdr">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DisplayPort MDCV Metadata Support for HDR - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/display-port-mdcv-metadata-support-for-hdr" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="DisplayPort is fully capable of conveying Mastering Display Color Volume (MDCV) metadata required for HDR calibration, starting with the DisplayPort 1.4 standard. By encapsulating Consumer Technology Association (CTA) InfoFrames within its transmission st" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="displayport-mdcv-metadata-support-for-hdr">DisplayPort MDCV
+Metadata Support for HDR</h1>
+<p>DisplayPort is fully capable of conveying Mastering Display Color
+Volume (MDCV) metadata required for HDR calibration, starting with the
+DisplayPort 1.4 standard. By encapsulating Consumer Technology
+Association (CTA) InfoFrames within its transmission stream, DisplayPort
+allows source devices to send critical SMPTE ST 2086 static metadata
+directly to monitors and reference displays. This metadata provides the
+display with the reference monitor's color primaries, white point, and
+peak and minimum luminance boundaries, enabling accurate tone mapping
+and color management.</p>
+<h3 id="how-displayport-transmits-mdcv-metadata">How DisplayPort
+Transmits MDCV Metadata</h3>
+<p>DisplayPort carries HDR metadata through Secondary Data Packets
+(SDPs) embedded in the blanking intervals of the video stream. Beginning
+with DisplayPort 1.4, VESA adopted support for the CTA-861.3 protocol,
+which standardizes the transmission of static HDR metadata.</p>
+<p>Within this framework, the source device transmits the Dynamic Range
+and Mastering InfoFrame. This frame contains the SMPTE ST 2086
+specification parameters that constitute the MDCV, including:</p>
+<ul>
+<li><strong>Display Primaries:</strong> The x and y chromaticity
+coordinates for red, green, and blue used by the mastering monitor.</li>
+<li><strong>White Point:</strong> The x and y chromaticity coordinates
+of the mastering display's white point (typically D65).</li>
+<li><strong>Luminance Range:</strong> The maximum and minimum mastering
+display luminance values, defined down to 0.0001 nits.</li>
+<li><strong>Content Light Levels:</strong> Maximum Content Light Level
+(MaxCLL) and Maximum Frame-Average Light Level (MaxFALL).</li>
+</ul>
+<h3 id="relevance-to-hdr-calibration">Relevance to HDR Calibration</h3>
+<p>For professional color grading and HDR calibration workflows,
+transmitting accurate MDCV metadata is crucial. Reference monitors rely
+on this data to determine whether they need to tone map incoming signals
+or if the signal fits entirely within the panel’s native color gamut and
+dynamic range.</p>
+<p>If a display receives a signal without MDCV metadata, it often falls
+back to default assumptions (such as clipping bright highlights or
+applying generic tone curves), which degrades color accuracy. Because
+DisplayPort accurately conveys the mastering volume parameters,
+calibration hardware and software can profile the display based on the
+intended creative reference rather than unstandardized estimations.</p>
+<h3 id="specification-versions-and-limitations">Specification Versions
+and Limitations</h3>
+<ul>
+<li><strong>DisplayPort 1.2 and Earlier:</strong> Lacks native packet
+architecture for CTA InfoFrames and cannot convey HDR or MDCV
+metadata.</li>
+<li><strong>DisplayPort 1.4:</strong> Standardizes static HDR metadata
+delivery (SMPTE ST 2086) via CTA-861.3, providing complete MDCV
+support.</li>
+<li><strong>DisplayPort 2.0 / 2.1:</strong> Maintains static MDCV
+transmission while expanding bandwidth and adding native support for
+dynamic metadata protocols (such as SMPTE ST 2094 for HDR10+), where
+color volume parameters adjust on a scene-by-scene or frame-by-frame
+basis.</li>
+</ul>
+<p>Successful MDCV transmission also requires the operating system,
+graphics drivers, and output application to pass the metadata untouched
+via the graphics pipeline to the DisplayPort transmitter.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/display-port-mdcv-metadata-support-for-hdr';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

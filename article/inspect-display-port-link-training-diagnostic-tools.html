@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inspect DisplayPort Link Training Diagnostic Tools - dp</title>
+    <meta name="description" content="DisplayPort link training is an automated negotiation process between a video source (such as a GPU) and a display sink to establish a reliable, synchronized connection across physical data lanes. When signal integrity degrades or displays fail to wake, i">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/inspect-display-port-link-training-diagnostic-tools">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Inspect DisplayPort Link Training Diagnostic Tools - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/inspect-display-port-link-training-diagnostic-tools" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="DisplayPort link training is an automated negotiation process between a video source (such as a GPU) and a display sink to establish a reliable, synchronized connection across physical data lanes. When signal integrity degrades or displays fail to wake, i" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="inspect-displayport-link-training-diagnostic-tools">Inspect
+DisplayPort Link Training Diagnostic Tools</h1>
+<p>DisplayPort link training is an automated negotiation process between
+a video source (such as a GPU) and a display sink to establish a
+reliable, synchronized connection across physical data lanes. When
+signal integrity degrades or displays fail to wake, inspecting the
+underlying link training phases—such as Clock Recovery and Channel
+Equalization—is essential for diagnosis. This article covers the primary
+software tools, operating system interfaces, and protocol analyzer
+utilities used to inspect and troubleshoot DisplayPort link training
+states.</p>
+<h3 id="linux-drm-subsystem-and-debugfs">Linux DRM Subsystem and
+DebugFS</h3>
+<p>The Linux Direct Rendering Manager (DRM) provides the most
+transparent, built-in mechanism for viewing real-time DisplayPort
+Configuration Data (DPCD) registers and link training logs without
+proprietary hardware.</p>
+<ul>
+<li><strong>DebugFS (<code>/sys/kernel/debug/dri/</code>)</strong>: The
+Linux kernel exposes GPU-specific display state information via debugfs.
+Depending on the GPU driver:
+<ul>
+<li><strong>Intel (<code>i915</code>)</strong>: Examining
+<code>/sys/kernel/debug/dri/0/i915_display_info</code> provides
+real-time link status, active lane count, link rate (e.g., RBR, HBR,
+HBR2, HBR3, UHBR), and drive settings (voltage swing and pre-emphasis
+levels).</li>
+<li><strong>AMD (<code>amdgpu</code>)</strong>: The path
+<code>/sys/kernel/debug/dri/0/amdgpu_dm_dce_debug</code> or
+connector-specific debug directories reveal the link training status,
+whether fallback routines occurred, and current DPCD register
+values.</li>
+</ul></li>
+<li><strong>drm_info</strong>: A lightweight CLI utility that decodes
+atomic KMS properties and DPCD states into human-readable JSON or plain
+text. It allows engineers to quickly verify negotiated lane counts and
+link bandwidth without manual register parsing.</li>
+</ul>
+<h3 id="hardware-assisted-protocol-analyzer-suites">Hardware-Assisted
+Protocol Analyzer Suites</h3>
+<p>For full packet-level inspection of the bidirectional Auxiliary (AUX)
+channel—where link training negotiation actually takes place—specialized
+software paired with capture hardware is the industry standard.</p>
+<ul>
+<li><strong>Unigraf UCD Console</strong>: Used in conjunction with
+Unigraf capture cards (such as the UCD-300 or UCD-400 series), UCD
+Console logs every step of the link training handshake. It explicitly
+tracks the progression through Clock Recovery (CR) and Channel
+Equalization (EQ), monitors DPCD addresses <code>0x00202</code> through
+<code>0x00207</code> (Lane Status and Symbol Lock registers), and flags
+errors such as loss of interlane alignment or link training
+timeouts.</li>
+<li><strong>Teledyne LeCroy quantumdata Auxiliary Channel
+Analyzers</strong>: Operating with instruments like the 980 or 780
+series, this software captures raw AUX transactions. It decodes the
+exact timing of sink requests for voltage swing and pre-emphasis
+adjustments, enabling developers to identify whether link failure stems
+from cable attenuation, connector defects, or firmware handshake
+incompatibility.</li>
+</ul>
+<h3 id="gpu-vendor-developer-utilities-and-apis">GPU Vendor Developer
+Utilities and APIs</h3>
+<p>Mainstream graphics vendors provide developer kits and diagnostic
+tools capable of reading negotiated DisplayPort link states directly
+from their drivers.</p>
+<ul>
+<li><strong>NVIDIA NVAPI</strong>: NVIDIA’s low-level API allows
+developers to query DPCD addresses directly. Sample applications within
+the NVAPI SDK, as well as developer utilities like NVIDIA Nsight, can
+extract current link parameters, lane degradation events, and display
+engine errors.</li>
+<li><strong>AMD Display Library (ADL) / AMD Developer Tools</strong>:
+ADL exposes interfaces to read the active link rate and lane
+configuration. If a link fails to train at maximum capability (e.g.,
+falling back from HBR3 to HBR2), ADL reports the fallback state to
+assist in identifying signal degradation.</li>
+<li><strong>Intel Graphics Command Center / Driver Diagnostics</strong>:
+While primarily consumer-facing, the diagnostic reporting feature
+generates system logs detailing the negotiated link rate, lane count,
+and DisplayPort specification revision reported by the sink's DPCD
+receiver capability field (<code>0x00000</code> to
+<code>0x0000F</code>).</li>
+</ul>
+<h3 id="third-party-windows-diagnostics">Third-Party Windows
+Diagnostics</h3>
+<p>For quick, non-intrusive verification on Windows systems without
+dedicated development kits:</p>
+<ul>
+<li><strong>HWiNFO</strong>: Under the "Display" tree, HWiNFO decodes
+current connection parameters for connected monitors, showing the
+maximum supported link rate alongside the currently negotiated link rate
+and active lane count. A mismatch indicates that link training failed at
+the higher rate and executed a fallback routine.</li>
+<li><strong>EnTech Monitor Asset Manager (MonInfo)</strong>: While
+primarily focused on EDID analysis, this utility reads real-time
+capabilities and helps correlate link training failures with incorrect
+or corrupted capability advertisements in the display’s metadata.</li>
+</ul></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/inspect-display-port-link-training-diagnostic-tools';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisplayPort SDP Structure in Framing Architecture - dp</title>
+    <meta name="description" content="This article provides a technical overview of the Secondary Data Packet (SDP) structure within the DisplayPort framing architecture. It covers the placement of SDPs within the Main Link framing, the structural composition of SDP headers and payloads, erro">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/display-port-sdp-structure-in-framing-architecture">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DisplayPort SDP Structure in Framing Architecture - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/display-port-sdp-structure-in-framing-architecture" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article provides a technical overview of the Secondary Data Packet (SDP) structure within the DisplayPort framing architecture. It covers the placement of SDPs within the Main Link framing, the structural composition of SDP headers and payloads, erro" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="displayport-sdp-structure-in-framing-architecture">DisplayPort
+SDP Structure in Framing Architecture</h1>
+<p>This article provides a technical overview of the Secondary Data
+Packet (SDP) structure within the DisplayPort framing architecture. It
+covers the placement of SDPs within the Main Link framing, the
+structural composition of SDP headers and payloads, error correction
+mechanisms, and the distribution of packet data across physical
+lanes.</p>
+<hr />
+<h3 id="role-of-secondary-data-packets-in-displayport">Role of Secondary
+Data Packets in DisplayPort</h3>
+<p>In the DisplayPort protocol, the Main Link transports primary video
+streams alongside non-video data. Non-video information—including
+multi-channel audio, audio clock regeneration timestamps, CEA/CTA
+InfoFrames, Dynamic Range and Mastering metadata (HDR), and Visual
+Stream Configuration (VSC) packets—is encapsulated into Secondary Data
+Packets (SDPs).</p>
+<p>SDPs are transmitted during the horizontal and vertical blanking
+intervals of the video stream. When no active video is being
+transmitted, or when utilizing stream multiplexing architectures like
+Multi-Stream Transport (MST), SDPs utilize the available link bandwidth
+efficiently without disrupting video pixel delivery.</p>
+<h3 id="sdp-framing-and-delimiters">SDP Framing and Delimiters</h3>
+<p>Within the 8b/10b physical layer framing, SDPs are framed using
+specific special control characters (K-codes):</p>
+<ul>
+<li><strong>Secondary-data Start (SS):</strong> Represented by the
+<code>K28.2</code> control symbol. It signals the beginning of an SDP
+transmission to the sink device.</li>
+<li><strong>Secondary-data End (SE):</strong> Represented by the
+<code>K28.5</code> control symbol. It marks the termination of the
+SDP.</li>
+</ul>
+<p>In DisplayPort 2.0/2.1 utilizing 128b/132b channel coding, framing
+tokens integrated into the packet framing protocol replace raw K-codes,
+but the logical sequence of start, payload, and end indicators remains
+conceptually identical.</p>
+<h3 id="structural-components-of-an-sdp">Structural Components of an
+SDP</h3>
+<p>A standard DisplayPort SDP consists of two primary sections: the
+<strong>Header</strong> and the <strong>Payload</strong>. The payload is
+further divided into up to four <strong>Sub-packets</strong>.</p>
+<h4 id="1-header-architecture">1. Header Architecture</h4>
+<p>The SDP header is four bytes wide (HB0 to HB3) and defines the packet
+type, structure, and operational characteristics:</p>
+<ul>
+<li><strong>HB0 (Packet Type):</strong> Defines the SDP category. Common
+types include:
+<ul>
+<li><code>02h</code>: Audio Stream Packet (ASP)</li>
+<li><code>04h</code>: Audio Timestamp Packet (ATP)</li>
+<li><code>07h</code>: Visual Stream Configuration (VSC) Packet</li>
+<li><code>8Xh</code>: InfoFrames (e.g., Auxiliary Video Information,
+Dynamic HDR)</li>
+</ul></li>
+<li><strong>HB1 (Packet Specific / Sub-Type):</strong> Provides context
+specific to the packet type identified in HB0.</li>
+<li><strong>HB2 (Least Significant Byte of Payload Details):</strong>
+Indicates payload attributes, such as payload data length or specific
+sequence counters.</li>
+<li><strong>HB3 (Most Significant Byte of Payload Details):</strong>
+Carries additional parameter definitions, versioning, or reserved
+bits.</li>
+</ul>
+<h4 id="2-header-error-correction-header-parity">2. Header Error
+Correction (Header Parity)</h4>
+<p>Following the four header bytes, four Parity/ECC bytes (PB0 to PB3)
+are appended. The DisplayPort specification applies error-correcting
+code algorithms—typically BCH(15, 11) or simple parity generation
+depending on standard generation and link rates—enabling the receiver to
+detect multiple bit errors and correct single-bit errors in the packet
+header.</p>
+<h4 id="3-payload-and-sub-packets">3. Payload and Sub-Packets</h4>
+<p>The SDP data payload generally accommodates up to 64 bytes of raw
+user data, organized into four distinct 16-byte sub-packets:</p>
+<ul>
+<li><strong>Sub-packet 0:</strong> Bytes 0–15</li>
+<li><strong>Sub-packet 1:</strong> Bytes 16–31</li>
+<li><strong>Sub-packet 2:</strong> Bytes 32–47</li>
+<li><strong>Sub-packet 3:</strong> Bytes 48–63</li>
+</ul>
+<p>Each 16-byte sub-packet is paired with its own set of Parity/ECC
+bytes (typically 4 bytes of parity per sub-packet), ensuring localized
+data integrity verification. If an SDP requires fewer than 64 bytes of
+data, the unused sub-packets are marked invalid or filled with
+designated padding patterns.</p>
+<h3 id="lane-mapping-and-data-transmission">Lane Mapping and Data
+Transmission</h3>
+<p>DisplayPort distributes data across 1, 2, or 4 physical Main Link
+lanes. SDP bytes are interleaved across all operational lanes
+immediately following the <code>SS</code> control symbol:</p>
+<ul>
+<li><strong>Single-Lane Configuration:</strong> Header bytes, parity
+bytes, sub-packets, and the trailing <code>SE</code> symbol are
+transmitted sequentially over Lane 0.</li>
+<li><strong>Two-Lane Configuration:</strong> Header and payload bytes
+alternate between Lane 0 and Lane 1 on a byte-by-byte basis.</li>
+<li><strong>Four-Lane Configuration:</strong> HB0 through HB3 are
+transmitted across Lanes 0 through 3 simultaneously in the first clock
+cycle. Subsequent clock cycles transmit the header parity, followed by
+the sub-packet data and ECC bytes across the 4-lane link.</li>
+</ul>
+<p>Once the payload transmission and its associated error detection
+codes are fully dispatched, the source sends the <code>SE</code>
+delimiter across all active lanes to return the link to an idle or
+blanking state.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/display-port-sdp-structure-in-framing-architecture';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

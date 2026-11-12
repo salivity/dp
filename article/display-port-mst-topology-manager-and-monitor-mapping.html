@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisplayPort MST Topology Manager and Monitor Mapping - dp</title>
+    <meta name="description" content="This article explains the core functions of the Topology Manager within a DisplayPort Multi-Stream Transport (MST) architecture. It covers the discovery mechanisms, sideband messaging protocols, and virtual channel allocations that allow a single DisplayP">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/display-port-mst-topology-manager-and-monitor-mapping">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DisplayPort MST Topology Manager and Monitor Mapping - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/display-port-mst-topology-manager-and-monitor-mapping" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explains the core functions of the Topology Manager within a DisplayPort Multi-Stream Transport (MST) architecture. It covers the discovery mechanisms, sideband messaging protocols, and virtual channel allocations that allow a single DisplayP" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1
+id="displayport-mst-topology-manager-and-monitor-mapping">DisplayPort
+MST Topology Manager and Monitor Mapping</h1>
+<p>This article explains the core functions of the Topology Manager
+within a DisplayPort Multi-Stream Transport (MST) architecture. It
+covers the discovery mechanisms, sideband messaging protocols, and
+virtual channel allocations that allow a single DisplayPort source to
+identify, map, and manage multiple downstream monitors across a
+daisy-chain or hub setup.</p>
+<h3 id="what-is-a-topology-manager">What is a Topology Manager?</h3>
+<p>The Topology Manager is a core component within the DisplayPort
+source device—typically integrated into the GPU's display driver or
+graphics firmware. In standard DisplayPort Single-Stream Transport
+(SST), a source simply connects to a single display endpoint. In
+contrast, DisplayPort MST allows a single physical port to route
+independent video and audio streams to multiple displays. The Topology
+Manager is the governing system responsible for discovering the physical
+network structure, tracking connection changes, parsing device
+capabilities, and allocating link bandwidth across that shared
+interface.</p>
+<h3 id="the-displayport-configuration-data-dpcd-handshake">The
+DisplayPort Configuration Data (DPCD) Handshake</h3>
+<p>When a device connects to a DisplayPort port, the Topology Manager
+initiates a handshake using the bidirectional Auxiliary (AUX) Channel.
+It first reads the DisplayPort Configuration Data (DPCD) registers of
+the directly connected downstream device. By checking specific registers
+(notably <code>MSTM_CAP</code>), the Topology Manager determines whether
+the connected hardware is an MST-capable "Branch Device" (such as a
+multi-port hub or a monitor with an MST out port) or an SST "Sink
+Device" (a standard display).</p>
+<p>Once MST support is confirmed, the Topology Manager enables MST mode
+on the link and prepares to map the broader network.</p>
+<h3 id="device-discovery-via-sideband-messaging">Device Discovery via
+Sideband Messaging</h3>
+<p>Because downstream monitors might be connected several hops away
+through multiple hubs or daisy-chained screens, the Topology Manager
+cannot communicate with them purely through direct pin-to-pin signals.
+Instead, it relies on the MST Sideband Messaging Protocol carried over
+the AUX channel.</p>
+<p>The mapping process unfolds through specific steps:</p>
+<ol type="1">
+<li><strong>Link Address Queries:</strong> The Topology Manager
+transmits a <code>LINK_ADDRESS</code> message to the primary branch
+device. The device responds with a list of its input and output ports,
+the status of each port (connected, disconnected, or non-functional),
+and whether each port leads to another branch device or a terminal sink
+device (a monitor).</li>
+<li><strong>Recursive Traversal:</strong> If a connected port leads to
+another branch device, the Topology Manager issues another
+<code>LINK_ADDRESS</code> command targeting that specific downstream
+branch. This recursive query continues through every branch until every
+active endpoint in the chain is accounted for.</li>
+<li><strong>Assigning Relative Addresses (RAD):</strong> To route
+messages accurately, the Topology Manager uses Relative Addressing
+(RAD). A device's RAD acts as a navigational path through the tree. For
+instance, a monitor plugged into Port 2 of a hub that is connected to
+Port 1 of the primary hub receives an address indicating that exact
+sequence of port hops.</li>
+</ol>
+<h3 id="querying-monitor-capabilities-edid">Querying Monitor
+Capabilities (EDID)</h3>
+<p>Once the network tree is drawn, the Topology Manager queries each
+mapped endpoint using <code>REMOTE_I2C_READ</code> messages. This allows
+the host to read the Extended Display Identification Data (EDID) from
+every individual monitor across the sideband link. Through the EDID, the
+Topology Manager discovers each monitor’s manufacturer, supported
+resolutions, refresh rates, and color formats.</p>
+<h3 id="bandwidth-allocation-and-virtual-channels">Bandwidth Allocation
+and Virtual Channels</h3>
+<p>The physical DisplayPort link between the GPU and the first branch
+device has a finite bandwidth limit dictated by the link rate (e.g.,
+HBR2, HBR3, UHBR) and lane count. The total bandwidth of this physical
+link is divided into 64 time slots, quantified using Payload Bandwidth
+Numbers (PBN).</p>
+<p>Using the EDID information and user settings, the Topology Manager
+performs the following:</p>
+<ol type="1">
+<li><strong>Bandwidth Calculation:</strong> It calculates the required
+PBN for each monitor's requested resolution and refresh rate.</li>
+<li><strong>Payload Allocation:</strong> It verifies that the sum of all
+requested PBNs does not exceed the link capacity.</li>
+<li><strong>Virtual Channel Payload ID Table (VCPID):</strong> The
+Topology Manager transmits an <code>ALLOCATE_PAYLOAD</code> sideband
+message to program each branch device along the path. This assigns
+specific time-slot ranges to Virtual Channel IDs.</li>
+<li><strong>Stream Transmission:</strong> The GPU transmits the
+multiplexed data across the main link. As the data passes through each
+branch device, the hardware reads the time-slot tags established by the
+Topology Manager and directs the designated video stream to the correct
+physical output port.</li>
+</ol>
+<h3 id="dynamic-topology-management">Dynamic Topology Management</h3>
+<p>The Topology Manager continuously monitors the network state. If a
+user disconnects or adds a display, the nearest branch device generates
+a Hot Plug Detect (HPD) interrupt via an <code>HPD_IRQ</code> signal
+over the AUX channel. The Topology Manager receives this signal, queries
+the network to identify what changed, updates its internal topological
+map, deallocates or reallocates PBN time slots, and reconfigures the
+active video streams without interrupting unaffected displays.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/display-port-mst-topology-manager-and-monitor-mapping';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

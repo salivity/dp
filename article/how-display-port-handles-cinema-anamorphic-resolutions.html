@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How DisplayPort Handles Cinema Anamorphic Resolutions - dp</title>
+    <meta name="description" content="This article examines how the VESA DisplayPort standard accommodates anamorphic resolutions and non-standard aspect ratios within professional digital cinema mastering environments. By leveraging a packetized data architecture, flexible VESA timing standa">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/how-display-port-handles-cinema-anamorphic-resolutions">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How DisplayPort Handles Cinema Anamorphic Resolutions - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/how-display-port-handles-cinema-anamorphic-resolutions" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article examines how the VESA DisplayPort standard accommodates anamorphic resolutions and non-standard aspect ratios within professional digital cinema mastering environments. By leveraging a packetized data architecture, flexible VESA timing standa" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-displayport-handles-cinema-anamorphic-resolutions">How
+DisplayPort Handles Cinema Anamorphic Resolutions</h1>
+<p>This article examines how the VESA DisplayPort standard accommodates
+anamorphic resolutions and non-standard aspect ratios within
+professional digital cinema mastering environments. By leveraging a
+packetized data architecture, flexible VESA timing standards,
+comprehensive DisplayID metadata, and support for high-bit-depth color
+spaces, DisplayPort allows mastering workstations to output native,
+squeezed, or desqueezed cinema formats to reference monitors without
+scaling artifacts or frame rate conversion issues.</p>
+<h3 id="packetized-micro-architecture-and-arbitrary-timings">Packetized
+Micro-Architecture and Arbitrary Timings</h3>
+<p>Unlike legacy display interfaces bound to rigid television broadcast
+rasters, DisplayPort utilizes a packetized micro-packet architecture
+over its Main Link. Video data is encapsulated into Main Stream
+Attribute (MSA) packets that define the stream’s parameters, including
+horizontal active pixels, vertical active lines, and blanking
+intervals.</p>
+<p>Because the physical link rate is decoupled from the pixel clock,
+DisplayPort does not require standard 16:9 or 17:9 timing profiles.
+Cinema mastering suites working with anamorphic formats—such as 4:3
+(e.g., 2880×2160) or 6:5 sensor crops designed for 2x or 1.8x optical
+squeeze factors—can transmit these non-standard active raster sizes
+directly. The interface natively transports the exact pixel count of the
+camera raw capture or intermediate master without forcing an artificial
+upscale or letterbox padding at the GPU level.</p>
+<h3 id="vesa-coordinated-video-timings-cvt-and-reduced-blanking">VESA
+Coordinated Video Timings (CVT) and Reduced Blanking</h3>
+<p>DisplayPort implements the VESA Coordinated Video Timing (CVT)
+standard, specifically CVT-RB (Reduced Blanking) and CVT-RBv2. Digital
+cinema mastering displays rely on these standards to accept custom
+resolutions with minimized horizontal and vertical blanking
+intervals.</p>
+<p>Anamorphic workflows often operate at non-standard cinema frame
+rates, such as 23.976, 24.0, or 48.0 frames per second. CVT-RB reduces
+the transmission overhead normally wasted on blanking intervals, freeing
+link bandwidth for actual pixel data and accommodating unconventional
+horizontal-to-vertical pixel ratios while maintaining precise
+synchronization with cinema playback clocks.</p>
+<h3 id="extended-display-identification-data-and-displayid">Extended
+Display Identification Data and DisplayID</h3>
+<p>Communication between the mastering workstation GPU and the cinema
+reference monitor relies on EDID and VESA DisplayID extension
+structures. DisplayPort natively supports DisplayID 1.3 and 2.0, which
+provide enhanced descriptors:</p>
+<ul>
+<li><strong>Detailed Timing Descriptors (DTDs):</strong> Allow the
+reference display to declare exact anamorphic raster support to the host
+operating system.</li>
+<li><strong>Pixel Aspect Ratio (PAR) Signaling:</strong> Facilitates the
+identification of non-square pixels directly in the video pipeline.</li>
+<li><strong>Native Container Declarations:</strong> Allows displays to
+accept arbitrary cinema formats, such as 5120×2160 (21:9 ultrawide) or
+custom DCI container sub-regions, establishing one-to-one pixel
+mapping.</li>
+</ul>
+<h3 id="metadata-delivery-and-in-monitor-desqueezing">Metadata Delivery
+and In-Monitor Desqueezing</h3>
+<p>Professional mastering displays frequently feature hardware-based
+desqueeze engines (e.g., 1.33x, 1.5x, 1.8x, and 2.0x stretch
+algorithms). DisplayPort facilitates this through the transmission of
+Secondary Data Packets (SDP).</p>
+<p>SDPs carry real-time frame metadata alongside the video stream,
+including InfoFrames that denote aspect ratio, colorimetry, and
+electro-optical transfer functions (such as SMPTE ST 2084 / PQ and HLG).
+This ensures the monitor correctly maps the anamorphic container across
+its target color space (DCI-P3 or Rec. 2020) and triggers internal
+hardware processing to preview the desqueezed final framing without
+introducing software preview latency on the workstation.</p>
+<h3 id="bandwidth-allocation-and-high-fidelity-color">Bandwidth
+Allocation and High-Fidelity Color</h3>
+<p>Anamorphic digital cinema mastering requires uncompressed,
+high-bit-depth color fidelity to evaluate gradings accurately.
+DisplayPort accommodates these requirements across varying
+revisions:</p>
+<ul>
+<li><strong>DisplayPort 1.4 and 2.1 Bandwidth:</strong> With HBR3 (32.4
+Gbps) and UHBR modes (up to 80 Gbps via UHBR20), DisplayPort supports
+full 10-bit and 12-bit 4:4:4 RGB/YCbCr formats at native cinema
+resolutions without chroma subsampling.</li>
+<li><strong>Display Stream Compression (DSC):</strong> For extremely
+high raster sizes (such as 8K anamorphic plates), DisplayPort uses
+visually lossless DSC 1.2a. DSC operates on a slice-based architecture
+that dynamically scales to arbitrary horizontal resolutions, preserving
+critical edge detail and grain structure essential for theatrical
+mastering.</li>
+</ul></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/how-display-port-handles-cinema-anamorphic-resolutions';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

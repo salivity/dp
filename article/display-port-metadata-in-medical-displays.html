@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisplayPort Metadata in Medical Displays - dp</title>
+    <meta name="description" content="This article examines how the DisplayPort interface manages broadcast metadata packets to meet the stringent performance and regulatory demands of specialized medical diagnostic displays. DisplayPort utilizes Secondary Data Packets (SDP) injected into the">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/display-port-metadata-in-medical-displays">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DisplayPort Metadata in Medical Displays - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/display-port-metadata-in-medical-displays" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article examines how the DisplayPort interface manages broadcast metadata packets to meet the stringent performance and regulatory demands of specialized medical diagnostic displays. DisplayPort utilizes Secondary Data Packets (SDP) injected into the" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="displayport-metadata-in-medical-displays">DisplayPort Metadata
+in Medical Displays</h1>
+<p>This article examines how the DisplayPort interface manages broadcast
+metadata packets to meet the stringent performance and regulatory
+demands of specialized medical diagnostic displays. DisplayPort utilizes
+Secondary Data Packets (SDP) injected into the blanking intervals of the
+video stream to broadcast non-video data, including DICOM calibration
+parameters, luminance targets, and dynamic color profiles. This
+architecture allows medical-grade graphics controllers and diagnostic
+monitors to maintain real-time image consistency, deterministic
+rendering, and diagnostic compliance without interrupting high-bandwidth
+clinical pixel data.</p>
+<h3 id="secondary-data-packet-sdp-framing">Secondary Data Packet (SDP)
+Framing</h3>
+<p>DisplayPort transmits non-pixel payloads using the Secondary Data
+Packet (SDP) mechanism within the Main Link. During Horizontal and
+Vertical Blanking Intervals (HBlank and VBlank), the physical layer
+switches from carrying active pixel data to transmitting framing symbols
+that denote secondary packet headers.</p>
+<p>Each SDP comprises a 4-byte header and a payload of up to 1024 bytes,
+protected by parity bits and Cyclic Redundancy Checks (CRC). Specialized
+medical displays use custom vendor-specific InfoFrames or standardized
+metadata SDPs within these windows to deliver continuous calibration
+parameters directly to the monitor's internal Look-Up Tables (LUTs).</p>
+<h3 id="dicom-and-luminance-control-transmission">DICOM and Luminance
+Control Transmission</h3>
+<p>Diagnostic reading demands strict adherence to the DICOM Part 14
+Grayscale Standard Display Function (GSDF). Broadcast metadata packets
+over DisplayPort automate and preserve this compliance through dedicated
+data fields:</p>
+<ul>
+<li><strong>Target Luminance:</strong> Packets transmit absolute
+luminance targets (measured in cd/m²), instructing the monitor’s
+integrated front sensors to regulate backlight output dynamically.</li>
+<li><strong>Per-Frame Calibration LUTs:</strong> High-bandwidth metadata
+streams carry updated grayscale mapping tables to compensate for ambient
+lighting variations and panel aging in real time.</li>
+<li><strong>Pixel Depth Signatures:</strong> Metadata explicitly defines
+high-depth pixel formats (e.g., 10-bit, 12-bit, or 16-bit grayscale
+architectures), ensuring that medical workstation GPUs do not truncate
+subtle diagnostic details during transmission.</li>
+</ul>
+<h3 id="multistream-transport-mst-and-broadcast-addressing">Multistream
+Transport (MST) and Broadcast Addressing</h3>
+<p>In complex radiology workstations featuring multi-monitor arrays,
+DisplayPort’s Multi-Stream Transport (MST) protocol routes metadata
+using virtual channel arbitration.</p>
+<p>Broadcast packets can be addressed globally to synchronize multiple
+diagnostic panels simultaneously, or encapsulated with specific Sink
+Device IDs to isolate dedicated displays—such as a 12-megapixel
+mammography unit operating alongside a standard clinical interface. The
+MST branch device (splitter or daisy-chain controller) decodes the
+packet header and replicates or routes the metadata packet to the
+downstream sink device without introducing frame latency.</p>
+<h3 id="data-integrity-and-failsafe-architecture">Data Integrity and
+Failsafe Architecture</h3>
+<p>Medical visualization mandates zero transmission corruption, as
+bit-level errors could simulate or mask pathological findings.
+DisplayPort enforces reliability for broadcast metadata packets
+through:</p>
+<ul>
+<li><strong>CRC Validation:</strong> Sinks evaluate packet CRCs
+instantly upon receipt during the blanking phase. If an SDP fails
+validation, the sink discards the packet and falls back to its last
+known validated hardware state.</li>
+<li><strong>AUX Channel Telemetry:</strong> Sinks use the bidirectional
+Auxiliary (AUX) channel to send handshake confirmations, error
+reporting, and internal photometer readings back to the diagnostic
+workstation, closing the hardware control loop.</li>
+</ul>
+<p>By embedding continuous, error-checked control data within native
+blanking intervals, DisplayPort enables medical diagnostic displays to
+execute dynamic hardware calibration and maintain rigorous DICOM GSDF
+conformance without compromising full-frame, uncompressed diagnostic
+video delivery.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/display-port-metadata-in-medical-displays';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

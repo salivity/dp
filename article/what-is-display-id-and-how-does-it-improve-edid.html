@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Is DisplayID and How Does It Improve EDID? - dp</title>
+    <meta name="description" content="DisplayID is a modern display metadata standard developed by VESA to succeed legacy Extended Display Identification Data (EDID), providing the structural flexibility required by modern display technologies. While standard EDID has reliably communicated a">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/what-is-display-id-and-how-does-it-improve-edid">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What Is DisplayID and How Does It Improve EDID? - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/what-is-display-id-and-how-does-it-improve-edid" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="DisplayID is a modern display metadata standard developed by VESA to succeed legacy Extended Display Identification Data (EDID), providing the structural flexibility required by modern display technologies. While standard EDID has reliably communicated a" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="what-is-displayid-and-how-does-it-improve-edid">What Is
+DisplayID and How Does It Improve EDID?</h1>
+<p>DisplayID is a modern display metadata standard developed by VESA to
+succeed legacy Extended Display Identification Data (EDID), providing
+the structural flexibility required by modern display technologies.
+While standard EDID has reliably communicated a monitor’s basic
+capabilities—such as supported resolutions and refresh rates—to a host
+graphics card for decades, its rigid architecture struggles with modern
+advancements. This article explores what DisplayID is, how it functions,
+and the specific ways it improves upon standard EDID over DisplayPort
+connections.</p>
+<h3 id="understanding-legacy-edid-and-its-bottlenecks">Understanding
+Legacy EDID and Its Bottlenecks</h3>
+<p>Extended Display Identification Data (EDID) was introduced in 1994 to
+automate monitor setup through a handshake process. An EDID payload
+consists of a baseline 128-byte data structure outlining vendor details,
+basic timing parameters, and supported resolutions.</p>
+<p>As displays evolved to incorporate digital interfaces, HDMI, and
+DisplayPort, VESA introduced CEA/CTA-861 Extension Blocks. However,
+these extensions were chained together in rigid 128-byte segments. This
+legacy layout suffers from strict space constraints, fragmented data
+storage, and inefficient parsing. Modern demands—such as 8K resolution,
+high dynamic range (HDR), variable refresh rates (VRR), and
+high-bandwidth color spaces—routinely exhaust the capacity of standard
+EDID structures.</p>
+<h3 id="what-is-displayid">What Is DisplayID?</h3>
+<p>DisplayID is an extensible, modular metadata format established by
+VESA to replace or augment legacy EDID. Unlike the fixed architecture of
+its predecessor, DisplayID uses variable-length data blocks encapsulated
+in flexible sections.</p>
+<p>DisplayID can exist as an extension block within a standard EDID
+payload (DisplayID v1.3/v2.0) or operate as a standalone, modern data
+structure (DisplayID v2.10). By adopting a modular architecture,
+DisplayID enables display manufacturers to declare complex feature sets
+cleanly without relying on legacy compatibility workarounds.</p>
+<h3 id="key-improvements-of-displayid-over-edid-on-displayport">Key
+Improvements of DisplayID Over EDID on DisplayPort</h3>
+<p>When deployed over DisplayPort, DisplayID unlocks several critical
+capabilities that allow modern source devices (GPUs) and displays to
+communicate seamlessly.</p>
+<h4 id="1-dynamic-modular-structure">1. Dynamic, Modular Structure</h4>
+<p>Standard EDID relies on fixed 128-byte blocks, requiring awkward
+multi-block chaining when metadata exceeds the initial limit. DisplayID
+utilizes a type-length-value (TLV) data block architecture. Each
+descriptor block specifies its exact payload size, meaning the format
+can expand or contract based on the monitor's specific feature set. This
+reduces overhead, prevents data bloat, and allows VESA to introduce new
+capabilities without breaking backwards compatibility.</p>
+<h4 id="2-native-support-for-tiled-displays">2. Native Support for Tiled
+Displays</h4>
+<p>One of DisplayID's most significant contributions over DisplayPort is
+its native handling of Display Tiling. Ultra-high-resolution monitors
+(such as 5K and 8K panels) or ultrawide displays often process video
+internally across two or more scaler engines, or receive data via
+multiple DisplayPort streams. DisplayID features a dedicated Tiled
+Display Topology Data Block that accurately communicates panel
+orientation, tile order, total resolution, bezel offsets, and
+synchronization parameters. This removes the need for proprietary driver
+hacks to present split-panel monitors as a unified desktop.</p>
+<h4 id="3-higher-resolutions-and-ultra-high-refresh-rates">3. Higher
+Resolutions and Ultra-High Refresh Rates</h4>
+<p>EDID timing descriptors rely on legacy formats that struggle to
+represent pixel clocks exceeding the bandwidth boundaries of modern
+standards. DisplayID introduces Type VII and Type VIII Timing
+Descriptors, which easily accommodate arbitrary refresh rates (240Hz,
+360Hz, 500Hz+) and extreme pixel resolutions (8K, 16K, and beyond)
+enabled by DisplayPort 1.4 and DisplayPort 2.1 UHBR (Ultra-High Bit
+Rate) modes.</p>
+<h4 id="4-expanded-hdr-and-colorimetry-descriptors">4. Expanded HDR and
+Colorimetry Descriptors</h4>
+<p>While EDID uses basic CEA extension blocks to convey HDR
+capabilities, DisplayID provides comprehensive parameters for modern
+color science. It accurately defines wide color gamuts (such as DCI-P3
+and BT.2020), static and dynamic HDR metadata, peak luminance targets,
+black levels, and electro-optical transfer functions (EOTF) with higher
+numerical precision.</p>
+<h4 id="5-adaptive-sync-and-variable-refresh-rate-precision">5.
+Adaptive-Sync and Variable Refresh Rate Precision</h4>
+<p>DisplayPort's native Adaptive-Sync requires clear communication
+regarding minimum and maximum refresh frequencies, dynamic range
+thresholds, and frame rate compensation support. DisplayID provides
+dedicated descriptor blocks specifically tailored for Adaptive-Sync,
+reducing handshake latency, preventing display blanking, and eliminating
+visual artifacts during rapid refresh rate transitions.</p>
+<h4 id="6-ar-vr-and-stereoscopic-formats">6. AR, VR, and Stereoscopic
+Formats</h4>
+<p>DisplayID includes explicit data structures for emerging
+visualization technologies, such as Augmented Reality (AR) and Virtual
+Reality (VR) head-mounted displays. It natively communicates
+eye-specific viewport parameters, lens distortion profiles, sub-pixel
+alignments, and specialized stereoscopic timing modes directly across
+the DisplayPort link.</p>
+<h3 id="conclusion">Conclusion</h3>
+<p>DisplayID modernizes display-to-host handshakes by replacing the
+rigid, fragmented architecture of legacy EDID with an adaptable,
+extensible protocol. Over DisplayPort, DisplayID ensures that modern
+features—such as multi-tile 8K displays, extreme refresh rates,
+Adaptive-Sync, and wide-gamut HDR—are automatically and accurately
+identified without driver instability or configuration complexity.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/what-is-display-id-and-how-does-it-improve-edid';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

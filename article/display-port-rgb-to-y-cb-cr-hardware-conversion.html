@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisplayPort RGB to YCbCr Hardware Conversion - dp</title>
+    <meta name="description" content="When a DisplayPort receiver accepts an RGB stream intended for a display panel or internal processing engine that operates in YCbCr, the hardware executes color space conversion (CSC) through dedicated, pipelined digital logic. This real-time transformati">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/display-port-rgb-to-y-cb-cr-hardware-conversion">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DisplayPort RGB to YCbCr Hardware Conversion - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/display-port-rgb-to-y-cb-cr-hardware-conversion" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="When a DisplayPort receiver accepts an RGB stream intended for a display panel or internal processing engine that operates in YCbCr, the hardware executes color space conversion (CSC) through dedicated, pipelined digital logic. This real-time transformati" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="displayport-rgb-to-ycbcr-hardware-conversion">DisplayPort RGB to
+YCbCr Hardware Conversion</h1>
+<p>When a DisplayPort receiver accepts an RGB stream intended for a
+display panel or internal processing engine that operates in YCbCr, the
+hardware executes color space conversion (CSC) through dedicated,
+pipelined digital logic. This real-time transformation occurs inside the
+DisplayPort sink controller or adjacent display scaler, utilizing
+hardware-level deserializers, matrix multipliers, digital signal
+processing (DSP) slices, and chroma subsamplers to map color coordinates
+accurately without introducing latency.</p>
+<h3 id="link-reception-and-metadata-decoding">Link Reception and
+Metadata Decoding</h3>
+<p>The process begins at the physical (PHY) and link layers of the
+DisplayPort sink. High-speed lanes deserialize the incoming bitstream
+(using 8b/10b or 128b/132b decoding) and extract the Main Stream
+Attributes (MSA) and Secondary Data Packets (SDP). The hardware parses
+metadata flags to identify:</p>
+<ul>
+<li>The source color format (RGB).</li>
+<li>Bit depth per component (e.g., 8, 10, or 12 bits per
+component).</li>
+<li>Colorimetry standard (sRGB, BT.709, or BT.2020).</li>
+<li>Dynamic range (Full Range <span class="math inline">\([0,
+255]\)</span> vs. Limited Range <span class="math inline">\([16,
+235]\)</span>).</li>
+</ul>
+<p>Once the pixel components (<span class="math inline">\(R, G,
+B\)</span>) are unpacked into native parallel digital buses, they enter
+the color processing pipeline.</p>
+<h3 id="input-normalization-and-fixed-point-conversion">Input
+Normalization and Fixed-Point Conversion</h3>
+<p>Digital RGB integers are represented as parallel binary signals.
+Before matrix transformation, the hardware normalizes these values. If
+conversion between dynamic ranges is required (such as mapping
+full-range RGB to standard studio-range YCbCr), offset logic adds or
+subtracts constant bias values. The integer values are then converted
+into internal fixed-point representations—typically maintaining 2 to 4
+guard bits of additional precision beyond the input depth—to prevent
+quantization errors, rounding noise, and color banding during
+intermediate calculations.</p>
+<h3 id="linear-matrix-multiplication-pipeline">Linear Matrix
+Multiplication Pipeline</h3>
+<p>The primary conversion from RGB to <span class="math inline">\(Y,
+C_b,\)</span> and <span class="math inline">\(C_r\)</span> is defined by
+a <span class="math inline">\(3 \times 3\)</span> affine transformation
+matrix paired with an additive offset vector:</p>
+<p><span class="math display">\[\begin{bmatrix} Y \\ C_b \\ C_r
+\end{bmatrix} = \begin{bmatrix} C_{11} &amp; C_{12} &amp; C_{13} \\
+C_{21} &amp; C_{22} &amp; C_{23} \\ C_{31} &amp; C_{32} &amp; C_{33}
+\end{bmatrix} \begin{bmatrix} R \\ G \\ B \end{bmatrix} +
+\begin{bmatrix} O_Y \\ O_{Cb} \\ O_{Cr} \end{bmatrix}\]</span></p>
+<p>In hardware, this arithmetic is handled by fixed-function
+Multiply-Accumulate (MAC) units or dedicated DSP blocks.</p>
+<ul>
+<li><strong>Coefficient Storage:</strong> The transformation
+coefficients (<span class="math inline">\(C_{xx}\)</span>) and offsets
+(<span class="math inline">\(O_x\)</span>) conform to specified
+standards (ITU-R BT.601, BT.709, or BT.2020) and are pre-programmed into
+hardware registers or look-up tables (LUTs).</li>
+<li><strong>Parallel Execution:</strong> To meet single-clock-cycle
+pixel throughput requirements at high refresh rates, nine hardware
+multipliers execute the component multiplications simultaneously across
+three parallel channels.</li>
+<li><strong>Pipelining:</strong> Adder trees sum the products and apply
+the DC offsets over distinct clock cycles, ensuring timing closure at
+high pixel clock frequencies (e.g., exceeding 600 MHz for 4K
+streams).</li>
+</ul>
+<h3 id="chroma-subsampling-optional-decimation">Chroma Subsampling
+(Optional Decimation)</h3>
+<p>The direct output of the matrix transform is YCbCr 4:4:4, where
+full-resolution chroma (<span class="math inline">\(C_b, C_r\)</span>)
+data exists for every luminance (<span class="math inline">\(Y\)</span>)
+pixel. If the downstream display engine or timing controller (TCON)
+requires YCbCr 4:2:2 or 4:2:0:</p>
+<ul>
+<li>The <span class="math inline">\(Y\)</span> channel bypasses the
+subsampling filters to preserve luma detail.</li>
+<li>The <span class="math inline">\(C_b\)</span> and <span
+class="math inline">\(C_r\)</span> channels pass through finite impulse
+response (FIR) decimation filters.</li>
+<li>These hardware filters average or blend adjacent horizontal pixels
+(for 4:2:2) or adjacent horizontal and vertical pixels (for 4:2:0) using
+low-pass polyphase filtering to eliminate high-frequency aliasing before
+dropping the redundant chroma samples.</li>
+</ul>
+<h3 id="clamping-dithering-and-output">Clamping, Dithering, and
+Output</h3>
+<p>The transformed components pass through saturation and clamping
+logic:</p>
+<ul>
+<li><strong>Clamping:</strong> Out-of-gamut or calculation-overflow
+values are hard-clamped to valid standard ranges (e.g., <span
+class="math inline">\(16–235\)</span> for 8-bit <span
+class="math inline">\(Y\)</span>, <span
+class="math inline">\(16–240\)</span> for 8-bit <span
+class="math inline">\(C_b/C_r\)</span>).</li>
+<li><strong>Rounding and Dithering:</strong> The extra guard bits used
+in the intermediate pipeline are rounded back to the target output bit
+depth. If reducing bit depth (such as processing 10-bit math down to an
+8-bit panel interface), spatial or temporal dither logic (such as
+Floyd-Steinberg or temporal frame rate control) is applied.</li>
+</ul>
+<p>The final YCbCr pixel stream is then serialized to the internal
+display interface, such as eDP, V-by-One, or direct TCON parallel
+lines.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/display-port-rgb-to-y-cb-cr-hardware-conversion';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

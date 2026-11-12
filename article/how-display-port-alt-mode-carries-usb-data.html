@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How DisplayPort Alt Mode Carries USB Data - dp</title>
+    <meta name="description" content="DisplayPort Alternate Mode (DP Alt Mode) enables a standard USB Type-C connector and cable to deliver native DisplayPort video alongside bidirectional USB data. Rather than encapsulating USB data inside DisplayPort packets, DP Alt Mode reconfigures the ph">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/how-display-port-alt-mode-carries-usb-data">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How DisplayPort Alt Mode Carries USB Data - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/how-display-port-alt-mode-carries-usb-data" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="DisplayPort Alternate Mode (DP Alt Mode) enables a standard USB Type-C connector and cable to deliver native DisplayPort video alongside bidirectional USB data. Rather than encapsulating USB data inside DisplayPort packets, DP Alt Mode reconfigures the ph" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-displayport-alt-mode-carries-usb-data">How DisplayPort Alt
+Mode Carries USB Data</h1>
+<p>DisplayPort Alternate Mode (DP Alt Mode) enables a standard USB
+Type-C connector and cable to deliver native DisplayPort video alongside
+bidirectional USB data. Rather than encapsulating USB data inside
+DisplayPort packets, DP Alt Mode reconfigures the physical layer of the
+USB-C interface. By dynamically mapping the connector’s high-speed
+differential lanes, a single cable can allocate dedicated physical
+pathways for unidirectional video transmission while preserving
+parallel, bidirectional channels for USB 2.0 and USB 3.x protocols.</p>
+<h3 id="the-usb-type-c-physical-architecture">The USB Type-C Physical
+Architecture</h3>
+<p>To understand how DP Alt Mode operates, it is necessary to examine
+the USB Type-C physical pinout. A standard full-featured USB Type-C
+receptacle contains:</p>
+<ul>
+<li><strong>Four High-Speed Differential Pairs:</strong> Configurable as
+high-speed data transmission (TX) and reception (RX) lanes.</li>
+<li><strong>One Dedicated USB 2.0 Channel:</strong> Non-multiplexed
+physical pins (<code>D+</code> and <code>D-</code>) designed
+specifically for legacy, bidirectional USB 2.0 data.</li>
+<li><strong>Two Configuration Channel (CC) Pins:</strong> Used for cable
+orientation detection, power contract negotiation, and Alternate Mode
+entry via USB Power Delivery (USB-PD).</li>
+<li><strong>Two Sideband Use (SBU) Pins:</strong> Dedicated lower-speed
+auxiliary lines.</li>
+</ul>
+<p>Because DisplayPort is inherently a unidirectional protocol
+(transmitting video from a host to a display), it repurposes the
+high-speed TX/RX lines of the USB-C cable for downstream video
+traffic.</p>
+<h3 id="dynamic-lane-allocation">Dynamic Lane Allocation</h3>
+<p>When DP Alt Mode is active, the USB-C interface negotiates the
+physical configuration through standard pin assignments. The host and
+display determine how many high-speed lanes will be allocated to
+DisplayPort video and how many will be reserved for bidirectional USB
+data.</p>
+<ol type="1">
+<li><p><strong>Four-Lane DisplayPort Mode:</strong> All four high-speed
+differential pairs on the USB-C cable are assigned to DisplayPort main
+link lanes. This provides the maximum possible bandwidth for
+high-resolution, high-refresh-rate video. In this mode, USB data cannot
+use the high-speed lanes. Instead, bidirectional USB data is carried
+exclusively over the dedicated physical <code>D+</code> and
+<code>D-</code> pins at USB 2.0 speeds (up to 480 Mbps). This provides
+sufficient bandwidth for peripherals like mice, keyboards, and basic
+audio devices while driving high-demand displays.</p></li>
+<li><p><strong>Two-Lane DisplayPort Mode (Docking Mode):</strong> The
+four high-speed lanes are split evenly between video and data. Two lanes
+are configured as DisplayPort main link lanes (carrying video
+downstream), while the remaining two lanes retain their native USB
+3.x/USB4 function—one differential pair for transmitting (TX) and one
+for receiving (RX). This configuration yields simultaneous 4K display
+output alongside full-duplex, bidirectional SuperSpeed USB data
+transfers (5 Gbps, 10 Gbps, or more). Concurrently, the dedicated
+<code>D+</code>/<code>D-</code> lines remain active for USB 2.0
+traffic.</p></li>
+</ol>
+<h3 id="sideband-and-control-traffic-management">Sideband and Control
+Traffic Management</h3>
+<p>DisplayPort requires an auxiliary (AUX) channel to negotiate
+connection parameters, read Extended Display Identification Data (EDID),
+and control display functions. In standard DisplayPort cables, the AUX
+channel is a separate physical pair.</p>
+<p>Under DP Alt Mode, the AUX channel is mapped directly to the USB-C
+cable's <code>SBU1</code> and <code>SBU2</code> pins. This completely
+isolates display management and HDCP handshakes from the USB data
+pathways, preventing control-traffic congestion on the USB-C bus.</p>
+<h3 id="negotiation-via-usb-power-delivery">Negotiation via USB Power
+Delivery</h3>
+<p>The integration of DisplayPort and bidirectional USB is established
+through the USB-PD protocol before any high-speed transmission
+occurs.</p>
+<ol type="1">
+<li><strong>Discovery:</strong> The host queries the connected device
+and cable via the CC lines using Structured Vendor Defined Messages
+(VDMs).</li>
+<li><strong>Identification:</strong> The device identifies itself as
+DisplayPort-capable and advertises supported pin assignments (e.g.,
+whether it requires 2-lane or 4-lane video).</li>
+<li><strong>Switching:</strong> Once both ends agree on an operational
+mode, internal physical multiplexers (crossbar switches) in the host and
+sink route the internal DisplayPort and USB physical layer (PHY) signals
+to the appropriate pins of the USB-C connector.</li>
+</ol>
+<p>Through physical-layer division and automated multiplexing, DP Alt
+Mode allows high-throughput, unidirectional video signals to travel
+across the same physical cable as high-speed, bidirectional USB streams
+without protocol interference.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/how-display-port-alt-mode-carries-usb-data';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

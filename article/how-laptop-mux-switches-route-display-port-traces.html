@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Laptop MUX Switches Route DisplayPort Traces - dp</title>
+    <meta name="description" content="A Multiplexer (MUX) switch is a specialized hardware component integrated onto a gaming notebook’s motherboard that grants users direct control over which graphics processor drives the internal display panel. Traditionally, laptops route all visual output">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/how-laptop-mux-switches-route-display-port-traces">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Laptop MUX Switches Route DisplayPort Traces - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/how-laptop-mux-switches-route-display-port-traces" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="A Multiplexer (MUX) switch is a specialized hardware component integrated onto a gaming notebook’s motherboard that grants users direct control over which graphics processor drives the internal display panel. Traditionally, laptops route all visual output" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-laptop-mux-switches-route-displayport-traces">How Laptop MUX
+Switches Route DisplayPort Traces</h1>
+<p>A Multiplexer (MUX) switch is a specialized hardware component
+integrated onto a gaming notebook’s motherboard that grants users direct
+control over which graphics processor drives the internal display panel.
+Traditionally, laptops route all visual output through the processor’s
+integrated graphics (iGPU) to save power, which bottlenecks discrete
+graphics card (dGPU) performance. A MUX switch bypasses this limitation
+by physically redirecting the Embedded DisplayPort (eDP) data traces
+directly from the dGPU to the screen, lowering system latency, unlocking
+higher frame rates, and enabling advanced display features like variable
+refresh rates.</p>
+<p>In standard hybrid graphic configurations (such as standard NVIDIA
+Optimus or AMD Enduro), the dGPU renders a frame, compresses it, and
+transfers it over the PCIe bus to the system RAM. The iGPU then fetches
+this frame and outputs it to the display. This "copy" operation creates
+a noticeable latency penalty and reduces peak frame rates, often by 5%
+to 20%, because the iGPU’s display engine and memory bandwidth act as a
+bottleneck.</p>
+<p>A physical MUX switch solves this architecture limitation through
+electrical routing on the motherboard printed circuit board (PCB).
+Motherboards utilize high-speed differential signal traces designed for
+the Embedded DisplayPort (eDP) standard to carry video data to the
+internal screen. In a laptop equipped with a hardware MUX, two
+independent sets of eDP differential traces are physically etched into
+the PCB layers: one set originates from the CPU/iGPU package, and the
+other originates from the dGPU package.</p>
+<p>Both sets of copper traces converge at an electronic multiplexer
+integrated circuit (IC)—typically a high-speed, multi-gigabit
+bidirectional digital switch IC. This microchip features two input banks
+(for the iGPU and dGPU trace lines) and a single output bank. The output
+bank connects to the physical display traces that route through the
+laptop's hinge ribbon cable directly into the panel's timing controller
+(T-CON).</p>
+<p>When a user switches graphics modes via the system BIOS, a
+proprietary control center, or automatically through dynamic switching
+systems like NVIDIA Advanced Optimus, an electrical control signal is
+sent from the Embedded Controller (EC) or GPU to the select pins on the
+MUX IC. This signal toggles internal solid-state Field-Effect
+Transistors (FETs) within the switch chip.</p>
+<p>By flipping these internal electronic gates, the MUX physically
+decouples the iGPU's eDP traces from the display circuit and bridges the
+dGPU's traces directly to the display output lines. Electrically, the
+iGPU is entirely removed from the transmission line. The dGPU now
+directly controls the main link lanes, auxiliary (AUX) channels, and Hot
+Plug Detect (HPD) lines of the display. This direct physical pipeline
+eliminates the PCIe transfer overhead, delivers raw uncompressed frames
+with zero copy operations, and enables proprietary panel technologies
+such as NVIDIA G-Sync that require exclusive hardware control over
+display timing.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/how-laptop-mux-switches-route-display-port-traces';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

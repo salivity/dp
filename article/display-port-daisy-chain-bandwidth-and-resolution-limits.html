@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisplayPort Daisy Chain Bandwidth and Resolution Limits - dp</title>
+    <meta name="description" content="DisplayPort daisy chaining allows users to connect multiple monitors in a series using a single video output on the host computer. However, the maximum resolution and refresh rate across all connected screens are strictly constrained by the total availabl">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/display-port-daisy-chain-bandwidth-and-resolution-limits">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DisplayPort Daisy Chain Bandwidth and Resolution Limits - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/display-port-daisy-chain-bandwidth-and-resolution-limits" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="DisplayPort daisy chaining allows users to connect multiple monitors in a series using a single video output on the host computer. However, the maximum resolution and refresh rate across all connected screens are strictly constrained by the total availabl" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1
+id="displayport-daisy-chain-bandwidth-and-resolution-limits">DisplayPort
+Daisy Chain Bandwidth and Resolution Limits</h1>
+<p>DisplayPort daisy chaining allows users to connect multiple monitors
+in a series using a single video output on the host computer. However,
+the maximum resolution and refresh rate across all connected screens are
+strictly constrained by the total available bandwidth of that single
+port. This article explains how DisplayPort lane architecture functions,
+how display configurations consume bandwidth, and why cumulative data
+requirements ultimately place a ceiling on your multi-monitor setup.</p>
+<h3 id="how-displayport-multi-stream-transport-mst-works">How
+DisplayPort Multi-Stream Transport (MST) Works</h3>
+<p>Daisy chaining relies on DisplayPort Multi-Stream Transport (MST), a
+feature introduced in DisplayPort 1.2. In an MST configuration, the host
+graphics processor packages video and audio streams for multiple
+independent monitors into a single data stream.</p>
+<p>The first monitor receives this master stream, extracts its
+designated data, and passes the remaining data along to the next monitor
+via a DisplayPort-Out connection. Because all monitors in the chain
+receive their data through the initial cable coming from the host, they
+must share the fixed, maximum transmission capacity of that single
+source port.</p>
+<h3 id="physical-lane-architecture-and-generation-caps">Physical Lane
+Architecture and Generation Caps</h3>
+<p>A standard DisplayPort cable contains four high-speed physical data
+lanes. The total data throughput depends on the transmission mode
+supported by both the host graphics card and the cable standard:</p>
+<ul>
+<li><strong>DisplayPort 1.2 (HBR2):</strong> Provides an effective
+maximum data rate of 17.28 Gbps across four lanes.</li>
+<li><strong>DisplayPort 1.4 (HBR3):</strong> Provides an effective
+maximum data rate of 25.92 Gbps across four lanes.</li>
+<li><strong>DisplayPort 2.1 (UHBR 10/13.5/20):</strong> Can deliver
+between 38.69 Gbps and 77.37 Gbps of usable payload bandwidth across
+four lanes, depending on the implementation.</li>
+</ul>
+<p>Regardless of how many monitors are in the chain, the physical limit
+remains capped at the maximum throughput of these four lanes at the
+source.</p>
+<h3 id="bandwidth-consumption-by-resolution">Bandwidth Consumption by
+Resolution</h3>
+<p>A monitor's data consumption is a mathematical product of four main
+factors: horizontal resolution, vertical resolution, refresh rate (Hz),
+and color bit depth (typically 8-bit SDR or 10-bit HDR), plus standard
+video timing overhead.</p>
+<p>For example, using uncompressed 8-bit color at 60Hz:</p>
+<ul>
+<li>A <strong>1080p (1920x1080)</strong> display requires approximately
+3.20 Gbps.</li>
+<li>A <strong>1440p (2560x1440)</strong> display requires approximately
+5.63 Gbps.</li>
+<li>A <strong>4K (3840x2160)</strong> display requires approximately
+12.54 Gbps.</li>
+</ul>
+<h3 id="the-cumulative-bottleneck">The Cumulative Bottleneck</h3>
+<p>Because MST is a shared pipeline, the sum of the bandwidth consumed
+by each display cannot exceed the maximum data rate of the host
+connection:</p>
+<p><span class="math display">\[\text{Display 1 Bandwidth} +
+\text{Display 2 Bandwidth} + \dots \le \text{Total Available Lane
+Bandwidth}\]</span></p>
+<p>On a standard DisplayPort 1.2 connection (17.28 Gbps limit),
+connecting a single 4K monitor consumes roughly 12.54 Gbps. This leaves
+less than 5 Gbps of remaining bandwidth on the lanes. Consequently,
+adding a second 4K monitor is physically impossible, as doing so would
+demand over 25 Gbps. The remaining bandwidth can only accommodate a
+display demanding 5 Gbps or less, such as a single 1080p 60Hz monitor.
+To achieve dual 1440p monitors at 60Hz, the setup requires roughly 11.26
+Gbps combined, which fits comfortably within the DP 1.2 threshold.</p>
+<h3
+id="bandwidth-mitigation-through-display-stream-compression-dsc">Bandwidth
+Mitigation Through Display Stream Compression (DSC)</h3>
+<p>DisplayPort 1.4 and 2.1 mitigate these lane saturation limits using
+Display Stream Compression (DSC). DSC is a visually lossless compression
+algorithm that can compress the video stream by up to a 3:1 ratio.</p>
+<p>When both the GPU and the monitors support DSC, the effective
+bandwidth demand of each monitor is reduced by up to two-thirds. This
+compression allows users to achieve configurations that would otherwise
+exceed physical lane limits, such as daisy-chaining two 4K displays at
+60Hz over a single DisplayPort 1.4 connection. However, if any device in
+the chain lacks DSC support, the system falls back to uncompressed
+stream rates, enforcing strict standard lane limits.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/display-port-daisy-chain-bandwidth-and-resolution-limits';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

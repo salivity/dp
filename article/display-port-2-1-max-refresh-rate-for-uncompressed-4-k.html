@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DisplayPort 2.1 Max Refresh Rate for Uncompressed 4K - dp</title>
+    <meta name="description" content="DisplayPort 2.1 provides sufficient bandwidth to drive a 4K resolution (3840 × 2160) display at a native, uncompressed refresh rate of 240 Hz using 10-bit color (HDR), with theoretical ceilings reaching up to 360 Hz at 8-bit color (SDR). By leveraging the">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/display-port-2-1-max-refresh-rate-for-uncompressed-4-k">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DisplayPort 2.1 Max Refresh Rate for Uncompressed 4K - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/display-port-2-1-max-refresh-rate-for-uncompressed-4-k" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="DisplayPort 2.1 provides sufficient bandwidth to drive a 4K resolution (3840 × 2160) display at a native, uncompressed refresh rate of 240 Hz using 10-bit color (HDR), with theoretical ceilings reaching up to 360 Hz at 8-bit color (SDR). By leveraging the" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="displayport-21-max-refresh-rate-for-uncompressed-4k">DisplayPort
+2.1 Max Refresh Rate for Uncompressed 4K</h1>
+<p>DisplayPort 2.1 provides sufficient bandwidth to drive a 4K
+resolution (3840 × 2160) display at a native, uncompressed refresh rate
+of 240 Hz using 10-bit color (HDR), with theoretical ceilings reaching
+up to 360 Hz at 8-bit color (SDR). By leveraging the standard's highest
+transmission profile—UHBR20—monitors can achieve these ultra-fast
+refresh rates without relying on Display Stream Compression (DSC) or
+chroma subsampling.</p>
+<h3 id="bandwidth-and-transmission-limits">Bandwidth and Transmission
+Limits</h3>
+<p>DisplayPort 2.1 achieves these refresh rates using the Ultra-High Bit
+Rate (UHBR) transmission modes. The maximum configuration, UHBR20,
+delivers a raw bandwidth of 80 Gbps across four lanes.</p>
+<p>After accounting for 128b/132b channel encoding efficiency, UHBR20
+yields a maximum effective payload bandwidth of 77.37 Gbps. This
+substantial data throughput eliminates the transmission bottlenecks that
+previously limited DisplayPort 1.4 to 4K at 120 Hz without
+compression.</p>
+<h3 id="uncompressed-4k-refresh-rates-by-color-depth">Uncompressed 4K
+Refresh Rates by Color Depth</h3>
+<p>The maximum uncompressed refresh rate depends directly on color depth
+and blanking intervals (typically calculated using the VESA CVT-RBv2
+standard):</p>
+<ul>
+<li><strong>10-bit Color (HDR, 30 bpp, 4:4:4):</strong> The highest
+official native refresh rate is <strong>240 Hz</strong>. At 3840 × 2160,
+a 240 Hz signal requires approximately 68 Gbps to 71 Gbps of data
+throughput depending on blanking overhead, fitting comfortably within
+UHBR20’s 77.37 Gbps ceiling.</li>
+<li><strong>8-bit Color (SDR, 24 bpp, 4:4:4):</strong> The mathematical
+upper limit over UHBR20 is roughly <strong>360 Hz</strong>. Transmitting
+3840 × 2160 at 360 Hz requires approximately 75.2 Gbps using tight
+reduced-blanking timings. While 240 Hz is the standard commercial
+deployment, 360 Hz represents the physical limit of the uncompressed
+pipeline.</li>
+</ul>
+<h3
+id="requirements-for-achieving-maximum-uncompressed-speeds">Requirements
+for Achieving Maximum Uncompressed Speeds</h3>
+<p>To operate an uncompressed 4K monitor at 240 Hz or higher, the entire
+hardware chain must support the full DisplayPort 2.1 standard:</p>
+<ol type="1">
+<li><strong>UHBR20 Support:</strong> Both the host GPU and the display
+scaler must support the full 20 Gbps per lane specification. Mid-tier DP
+2.1 modes, such as UHBR10 (38.69 Gbps effective) and UHBR13.5 (52.22
+Gbps effective), top out at 120 Hz and 144 Hz respectively for
+uncompressed 10-bit 4K.</li>
+<li><strong>DP80-Certified Cabling:</strong> Achieving the full 77.37
+Gbps data rate requires DP80-certified cables, which are tested to
+handle the signal integrity requirements of 20 Gbps per lane.</li>
+<li><strong>Full RGB / 4:4:4 Sampling:</strong> The monitor and source
+must be configured to full uncompressed RGB, ensuring no chroma
+subsampling (such as 4:2:2 or 4:2:0) is introduced to artificially lower
+the bandwidth footprint.</li>
+</ol></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/display-port-2-1-max-refresh-rate-for-uncompressed-4-k';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

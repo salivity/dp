@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How 128b/132b Encoding Reduces DisplayPort Overhead - dp</title>
+    <meta name="description" content="DisplayPort standards prior to version 2.0 relied on legacy 8b/10b encoding, a scheme that consumed a significant portion of physical bandwidth purely for signal transmission management. With the introduction of DisplayPort 2.0 and 2.1, the standard shift">
+    <link rel="canonical" href="https://salivity.github.io/dp/article/how-128-b-132-b-encoding-reduces-display-port-overhead">
+    <link rel="search" type="application/opensearchdescription+xml" title="dp" href="/dp/opensearch.xml">
+    <link rel="icon" href="/dp/favicon.ico">
+    <link rel="stylesheet" href="/dp/css/style.css">
+    <link media="print" rel="stylesheet" href="/dp/css/print.css">
+    <script src="/dp/js/fuse.min.js"></script>
+    <script src="/dp/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <script src="/monetize/monetize.js"></script>
+    <script src="/social/social.js"></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How 128b/132b Encoding Reduces DisplayPort Overhead - dp" />
+    <meta property="og:url" content="https://salivity.github.io/dp/article/how-128-b-132-b-encoding-reduces-display-port-overhead" />
+    <meta property="og:image" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/dp/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="DisplayPort standards prior to version 2.0 relied on legacy 8b/10b encoding, a scheme that consumed a significant portion of physical bandwidth purely for signal transmission management. With the introduction of DisplayPort 2.0 and 2.1, the standard shift" />
+    <link rel="manifest" href="/dp/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/dp/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>dp</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="/dp/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+    <div class="article-layout">
+        <aside id="profile-sidebar" class="profile-column" aria-label="Author Profile"></aside>
+        <div class="article-main-column">
+            <article><h1 id="how-128b132b-encoding-reduces-displayport-overhead">How
+128b/132b Encoding Reduces DisplayPort Overhead</h1>
+<p>DisplayPort standards prior to version 2.0 relied on legacy 8b/10b
+encoding, a scheme that consumed a significant portion of physical
+bandwidth purely for signal transmission management. With the
+introduction of DisplayPort 2.0 and 2.1, the standard shifted to
+128b/132b channel encoding for its Ultra-High Bit Rate (UHBR)
+transmission modes. This architectural change cuts protocol transmission
+overhead from 20% down to approximately 3%, dramatically increasing the
+usable payload bandwidth available for higher resolutions, faster
+refresh rates, and uncompressed color depth.</p>
+<h3 id="the-problem-with-legacy-8b10b-encoding">The Problem with Legacy
+8b/10b Encoding</h3>
+<p>In legacy DisplayPort standards (up to DisplayPort 1.4a), data
+transmission relies on 8b/10b line coding. To maintain DC balance
+(ensuring an equal number of ones and zeros) and to guarantee enough
+signal transitions for the receiver's clock recovery circuit, every
+8-bit byte of data is mapped to a 10-bit symbol.</p>
+<p>Because two extra bits are added to every single byte, the
+transmission overhead is fixed at 20%:</p>
+<p><span class="math display">\[\text{Overhead} = \frac{10 - 8}{10} =
+\frac{2}{10} = 20\%\]</span></p>
+<p>Under an 8b/10b scheme, a connection operating at a raw physical
+layer bandwidth of 32.4 Gbps (like DisplayPort 1.4 HBR3 across four
+lanes) yields only 25.92 Gbps of actual payload capacity. One-fifth of
+the entire physical capacity is lost strictly to link maintenance.</p>
+<h3 id="how-128b132b-encoding-operates">How 128b/132b Encoding
+Operates</h3>
+<p>DisplayPort's UHBR modes replace byte-by-byte encoding with a
+block-based structure. Instead of encoding individual 8-bit units, the
+transmitter groups data into massive 128-bit payloads and prepends a
+4-bit header, producing a 132-bit transmission block.</p>
+<p>The 4-bit header identifies the block type (such as control data or
+pixel data) and provides frame synchronization. Because 128 bits of
+actual data are delivered in every 132-bit packet, the overhead drops
+significantly:</p>
+<p><span class="math display">\[\text{Overhead} = \frac{132 - 128}{132}
+= \frac{4}{132} \approx 3.03\%\]</span></p>
+<p>This shifts the efficiency of the physical link from 80% under 8b/10b
+to approximately 96.97% under 128b/132b.</p>
+<h3
+id="maintaining-signal-integrity-without-added-bit-overhead">Maintaining
+Signal Integrity Without Added Bit Overhead</h3>
+<p>Legacy 8b/10b encoding uses its extra 2 bits per byte to prevent long
+strings of identical bits (consecutive zeros or ones) and to keep the
+direct current (DC) bias of the cable neutral.</p>
+<p>To achieve the same reliability without adding massive bit overhead,
+128b/132b encoding decouples framing from signal conditioning:</p>
+<ul>
+<li><strong>Hardware Scrambling:</strong> Before framing, data is
+processed using a Pseudo-Random Binary Sequence (PRBS) scrambler. This
+mathematical scrambling randomizes the bit patterns, effectively
+preventing long runs of identical bits and eliminating DC bias without
+inflating packet size.</li>
+<li><strong>Header Synchronization:</strong> The 4-bit header is
+purposefully structured with distinct transition states so the receiver
+can lock onto block boundaries reliably.</li>
+</ul>
+<h3 id="real-world-bandwidth-impact">Real-World Bandwidth Impact</h3>
+<p>The transition to 128b/132b encoding directly dictates how much raw
+wire speed is translated into display performance:</p>
+<ul>
+<li><strong>UHBR 10:</strong> Features a raw link rate of 40 Gbps across
+four lanes. With 128b/132b encoding, it delivers roughly 38.69 Gbps of
+usable throughput. Under the old 8b/10b standard, that same raw rate
+would only deliver 32.0 Gbps.</li>
+<li><strong>UHBR 20:</strong> Reaches an 80 Gbps raw link rate. After
+applying 128b/132b overhead, the interface delivers roughly 77.37 Gbps
+of usable payload bandwidth, losing less than 3 Gbps to overhead.</li>
+</ul>
+<p>By utilizing larger data blocks and algorithmic scrambling instead of
+per-byte symbol expansion, 128b/132b encoding reclaims nearly 17% of
+total link capacity, enabling DisplayPort to drive ultra-high-resolution
+setups such as uncompressed 8K at 60Hz or multi-monitor configurations
+over a single cable.</p></article>
+        <div id='disqus_thread'></div>
+        <script>
+
+            var disqus_config = function () {
+                this.page.url =         'https://salivity.github.io/dp/article/how-128-b-132-b-encoding-reduces-display-port-overhead';  
+                //this.page.identifier =  PAGE_IDENTIFIER; 
+            };
+            
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://salivity-github-io.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+        </div>
+    </div>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="social-links">
+            </ul>
+        </nav>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="https://smvc.dev/contact">Contact</a></li>
+                <li><a href="/dp/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/dp/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>
